@@ -22,7 +22,14 @@ version  : 见文件尾端
 
 #endif
 
-
+/***************************************************************
+	*
+	*Function Name:void CheckRun()
+	*Function : 
+	*Input Ref: NO
+	*Return Ref: No
+	*
+***************************************************************/
 void  CheckRun()
 {
 	switch(RunMode)
@@ -30,99 +37,100 @@ void  CheckRun()
 
 	case 2:
 	{
-		switch(RunStep)
-		{
-		case 0:
-		{
-
-		}
-		break;
-
-		case 1:
-		{
-
-			SetXMotor(2,20,40,1,2,20,40,1);
-			SetMotorcm(2,1000);
-			RunStep=2;
-			RunMs=0;
-		}
-		break;
-		case 2:
-
-			if((GroundDp[0]>GroundMin)||(GroundDp[1]>GroundMin)||(GroundDp[2]>GroundMin))
+	  switch(RunStep)
+	  {
+		  	case 0:
 			{
-			 AllStop();
-			 //SetXMotor(1,20,1,1,1,20,1,1);
-			  RunStep=3;
-			 RunMs=0;			
-			}
-			if((RightMoveMotorData.Flag==1)||(LeftMoveMotorData.Flag==1))
-			{
-				SetXMotor(1,20,40,1,1,20,40,1);
-				SetMotorcm(1,1000);			
-			}
-			
-			if(RunMs>3000)
-			{
-			 AllStop();
-			 //SetXMotor(1,20,1,1,1,20,1,1);
-			RunStep=3;
-			RunMs=0;	
-			}
-			
-			break;
-		case 3:
-		{
-		   if(RunMs>20)
-		   {
-			SetXMotor(1,20,40,1,1,20,40,1);
-			SetMotorcm(1,1000);
-			RunStep=4;		   
-		   }
-		}
-		break;
-		case 4:
-			if(RunMs>120)
-			{
-				AllStop();
-				//SetXMotor(2,20,1,1,2,20,1,1);
-				RunMs=0;
-				RunStep=5;
+
 			}
 			break;
-	    case 5:
-		  {
-			if(RunMs>20)
+
+			case 1:
 			{
-				SetXMotor(2,20,40,1,1,20,40,1);
-			    SetMotorcm(3,9000);
-				RunMs=0;
-				RunStep=6;
-			}		  
-		  }
-		break;
-		case 6:
-			if(RunMs>100)
-			{
-				AllStop();
-				//SetXMotor(2,20,1,1,1,20,1,1);
-				RunMs=0;
-				RunStep=7;
-			}
-			break;
-		case 7:
-			if(RunMs>20)
-			{
+
 				SetXMotor(2,20,40,1,2,20,40,1);
-			    SetMotorcm(2,1000);
-				RunMs=0;
+				SetMotorcm(2,1000);
 				RunStep=2;
+				RunMs=0;
 			}
 			break;
+			
+			case 2:
+
+				if((GroundDp[0]>GroundMin)||(GroundDp[1]>GroundMin)||(GroundDp[2]>GroundMin))
+				{
+				 AllStop();
+				 //SetXMotor(1,20,1,1,1,20,1,1);
+				  RunStep=3;
+				 RunMs=0;			
+				}
+				if((RightMoveMotorData.Flag==1)||(LeftMoveMotorData.Flag==1))
+				{
+					SetXMotor(1,20,40,1,1,20,40,1);
+					SetMotorcm(1,1000);			
+				}
+				
+				if(RunMs>3000)
+				{
+				 AllStop();
+				 //SetXMotor(1,20,1,1,1,20,1,1);
+				RunStep=3;
+				RunMs=0;	
+				}
+				
+				break;
+			case 3:
+			{
+			   if(RunMs>20)
+			   {
+				SetXMotor(1,20,40,1,1,20,40,1);
+				SetMotorcm(1,1000);
+				RunStep=4;		   
+			   }
+			}
+			break;
+			case 4:
+				if(RunMs>120)
+				{
+					AllStop();
+					//SetXMotor(2,20,1,1,2,20,1,1);
+					RunMs=0;
+					RunStep=5;
+				}
+				break;
+		    case 5:
+			  {
+				if(RunMs>20)
+				{
+					SetXMotor(2,20,40,1,1,20,40,1); //
+				    SetMotorcm(3,9000); // 不确定值，（时间），
+					RunMs=0;
+					RunStep=6;
+				}		  
+			  }
+			break;
+			case 6:
+				if(RunMs>100)
+				{
+					AllStop();
+					//SetXMotor(2,20,1,1,1,20,1,1);
+					RunMs=0;
+					RunStep=7;
+				}
+				break;
+			case 7:
+				if(RunMs>20)
+				{
+					SetXMotor(2,20,40,1,2,20,40,1);
+				    SetMotorcm(2,1000);
+					RunMs=0;
+					RunStep=2;
+				}
+				break;
 
 
 
-	}
+		}
 	}
   }
 }
@@ -244,7 +252,7 @@ void CheckMode(INT8U Key)
 			  ADCtl=1;
 
 			  
-			  RunMode=2; //
+			  RunMode=2; //motor Run 
 			  RunStep=4; //执行 4步
 			  ADCtl=1;
 				SetXMotor(1,6,40,1,1,6,40,1);

@@ -27,16 +27,23 @@ void Init_MotorSpeed()
 	P3M5 = 0x68;			        	//P35设置为带SMT上拉输入,检测速度马达
 
 							//INT16	17
- 	PITS4 = 0x0F;						
+ 	PITS4 = 0x0F;	       //外部寄存器，中断电平选择寄存器，双沿触发中断					
 
     PINTE2 = 0x03;						//使能INT17 16
 	IE2 |= 0x01;						//打开INT8-17中断
 	EA=1;
-	P3_4=1;
-	P3_5=1;
+	P3_4=1;  //
+	P3_5=1; //
 	PINTE1=0;
 }
-
+/**************************************************************
+	 *
+	 *Function Name:void InitMotorIO(void)
+	 *Function : 马达驱动GPIO 初始化函数 
+	 *Input Ref:NO
+	 *Retrun Ref:NO
+	 *
+**************************************************************/
 void InitMotorIO(void)
 {
 
@@ -52,44 +59,24 @@ void InitMotorIO(void)
   P1_6=0;
 
 }
-
+/**************************************************************
+	 *
+	 *Function Name:void InitFanEdgeIO(void)
+	 *Function : 喷水马达GPIO 初始化函数 
+	 *Input Ref:NO
+	 *Retrun Ref:NO
+	 *
+**************************************************************/
 void InitFanEdgeIO(void)
 {
     P3M3 = 0xC2;                        //P33设置为推挽输出,喷水马达，
-    P3_3=1;
-	PWM1_MAP = 0x33;					//PWM1通道映射P33口
-
-    PWM1C = 0x00;						//PWM1高有效，PWM11高有效，时钟8分频 
-    PWMM |= 0x10;						//PWM1工作于						
-
-	//独立模式下，PWM0和PWM01共用一个周期寄存器
-	//PWM0的占空比调节使用			PWM0组的占空比寄存器
-	//PWM01的占空比调节使用			PWM0组的死区寄存器
-
-	//周期计算 	= 0x03ff / (Fosc / PWM分频系数)		（Fosc见系统时钟配置的部分）
-	//			= 0x03ff / (16000000 / 8)			
-	// 			= 1023   /2000000
-	//			= 511.5us		   		约1.955kHz
-
-	PWM1PH = 0x01;						//周期高4位设置为0x03
-	PWM1PL = 0x0;						//周期低8位设置为0xFF
-
-	//占空比计算= 0x0155 / (Fosc / PWM分频系数)		（Fosc见系统时钟配置的部分）
-	//			= 0x0155 / (16000000 / 8)			
-	// 			= 341 	 / 2000000
-	//			= 170.5us		   占空比为 170.5/511.5 = 33.3%
-
-	PWM1DH = 0x00;						//PWM1高4位占空比0x01
-	PWM1DL = 0x00;						//PWM1低8位占空比0x55													    
-
-	PWMEN |= 0x02;						//使能PWM1以及PWM11
-
+    P3_3 =0;
 }
 
 
 void SetEdge(INT8U status)
 {
-   PWM1DL = status; //PWM占空比寄存器
+   PWM1DL = status; //PWM占空比寄存器，低8位
 }
 /**************************************************************
 	 *
@@ -275,6 +262,12 @@ void RightStop()
     P1_2=0;
 
 }
+void WaterPumpStop(void)
+{
+   PWMEN &= 0xe5;
+   P3_3 =0;
+}
+
 
 void AllStop()
 {
@@ -334,15 +327,15 @@ void ReadLeftPulsed(void)
 }
 /********************************************************************
 	*
-	*
-	*
+	*Function Name:void ReadRightPulsed(void)
+	*Function : 在中断中读取 NowPlused ++
 	*
 	*
 	*
 ********************************************************************/
 void ReadRightPulsed(void)
 {
-	if((RightMoveMotorData.MotorMode&0x03)==1)
+	if((RightMoveMotorData.MotorMode&0x03)==1) //right motor RunMode =3
 	{
 		RightMoveMotorData.NowPulsed++;
 		/*
@@ -393,7 +386,7 @@ void CheckLeftMotorSpeed(void)
 
 	static INT8U i;
 
-	if(LeftMoveMotorData.MotorMode==1)
+	if(LeftMoveMotorData.MotorMode==1) //left motor RunMode == 1 
 	{
 		if(LeftMoveMotorData.NowPulsed>=LeftMoveMotorData.LastPulsed)
 			LeftMoveMotorData.NowSpeed[i]=LeftMoveMotorData.NowPulsed-LeftMoveMotorData.LastPulsed;
@@ -432,26 +425,24 @@ void CheckLeftMotorSpeed(void)
 				//	if(LeftMoveMotorData.OutPWM<0X20)
 				//		LeftMoveMotorData.OutPWM=0X20;
 			   ///*
-				{
-
-          if((LeftMoveMotorData.AvgSpeed-LeftMoveMotorData.RunSpeed)>3)
+				if((LeftMoveMotorData.AvgSpeed-LeftMoveMotorData.RunSpeed)>3)
 					{
-             LeftMoveMotorData.OutPWM-=4;
-					if(LeftMoveMotorData.OutPWM<0X20)
-						LeftMoveMotorData.OutPWM=0X20;
+	             		LeftMoveMotorData.OutPWM-=4;
+						if(LeftMoveMotorData.OutPWM<0X20)
+							LeftMoveMotorData.OutPWM=0X20;
 					}					
 					else 
 					if((LeftMoveMotorData.AvgSpeed-LeftMoveMotorData.RunSpeed)>2)
 					{
-             LeftMoveMotorData.OutPWM-=3;
-					if(LeftMoveMotorData.OutPWM<0X20)
-						LeftMoveMotorData.OutPWM=0X20;						
+	             		LeftMoveMotorData.OutPWM-=3;
+						if(LeftMoveMotorData.OutPWM<0X20)
+							LeftMoveMotorData.OutPWM=0X20;						
 					}					
 					else if((LeftMoveMotorData.AvgSpeed-LeftMoveMotorData.RunSpeed)>1)
 					{
 
 						LeftMoveMotorData.OutPWM-=2;
-					if(LeftMoveMotorData.OutPWM<0X20)
+						if(LeftMoveMotorData.OutPWM<0X20)
 						LeftMoveMotorData.OutPWM=0X20;						
 					}
 					else
@@ -467,7 +458,7 @@ void CheckLeftMotorSpeed(void)
 
 					}
          
-				}
+				
 			  //*/
 			}
 			else if(LeftMoveMotorData.AvgSpeed<LeftMoveMotorData.RunSpeed)
@@ -503,7 +494,7 @@ void CheckLeftMotorSpeed(void)
 					if(LeftMoveMotorData.OutPWM>0xfb)
 						LeftMoveMotorData.OutPWM=0xfb;
 					else 
-            LeftMoveMotorData.OutPWM+=2;						
+            			LeftMoveMotorData.OutPWM+=2;						
 				}
 				else
 				{
@@ -513,11 +504,7 @@ void CheckLeftMotorSpeed(void)
 					
 
 				}
-		   
-    
-
-
-			}
+		   }
 
 		}
 		else
@@ -546,12 +533,12 @@ void CheckRightMotorSpeed(void)
 
 	static INT8U i;
 
-	if(RightMoveMotorData.MotorMode==1)
+	if(RightMoveMotorData.MotorMode==1) //前进
 	{
 		if(RightMoveMotorData.NowPulsed>=RightMoveMotorData.LastPulsed)
 			RightMoveMotorData.NowSpeed[i]=RightMoveMotorData.NowPulsed-RightMoveMotorData.LastPulsed;
 	}
-	else if(RightMoveMotorData.MotorMode==2)
+	else if(RightMoveMotorData.MotorMode==2) //后退
 	{
 		if(RightMoveMotorData.LastPulsed>=RightMoveMotorData.NowPulsed)
 			RightMoveMotorData.NowSpeed[i]=RightMoveMotorData.LastPulsed-RightMoveMotorData.NowPulsed;
@@ -586,8 +573,8 @@ void CheckRightMotorSpeed(void)
 				{
 					
           if((RightMoveMotorData.AvgSpeed-RightMoveMotorData.RunSpeed)>3)
-					{
-             RightMoveMotorData.OutPWM-=4;
+			   {
+             		RightMoveMotorData.OutPWM-=4;
 					if(RightMoveMotorData.OutPWM<0X20)
 						RightMoveMotorData.OutPWM=0X20;						
 					}					
@@ -615,7 +602,7 @@ void CheckRightMotorSpeed(void)
 
 					}
 
-				}
+			    }
 			  
 			}
 			else if(RightMoveMotorData.AvgSpeed<RightMoveMotorData.RunSpeed)
@@ -665,7 +652,7 @@ void CheckRightMotorSpeed(void)
 			RightMoveMotorData.OutPWM=0;
     
 	   if(RightMoveMotorData.MotorMode>0)
-		 PWM0DTL=RightMoveMotorData.OutPWM;
+		    PWM0DTL=RightMoveMotorData.OutPWM;   //R motor puty = outPWM.
 	   else
 		 RightStop();
 		 
@@ -676,8 +663,9 @@ void CheckRightMotorSpeed(void)
 /**************************************************************
 	   *
 	   *Function Name:void SetXMotor()
-	   *Function : motor return run
-	   *Input Ref:NO
+	   *Function : 配置L,R motor puty of value 
+	   *Input Ref:1.leftmotor =1 正传 ,2.leftStartSpeed,3leftEndSpeed,4.left slope
+	   *            leftmotor =2 反转
 	   *Retrn Ref: NO
 	   *
 **************************************************************/
@@ -711,7 +699,7 @@ void SetXMotor(
 	{
 
 	}
-	else if(LeftStartSpeed==0XF8)
+	else if(LeftStartSpeed==0XF8) // 248 
 	{
 		if(LeftMoveMotorData.EndSpeed<20)
 			LeftMoveMotorData.EndSpeed++;
@@ -730,7 +718,7 @@ void SetXMotor(
 			{
 				InitMotorLeftForward();
 				LeftMoveMotorData.OutPWM=0Xa0;
-				PWM0DL=LeftMoveMotorData.OutPWM;
+				PWM0DL=LeftMoveMotorData.OutPWM; // L motor puty = 0xa0;
 
 
 			}
@@ -745,7 +733,7 @@ void SetXMotor(
 			{
 				InitMotorLeftRetreat();
 				LeftMoveMotorData.OutPWM=0Xa0;
-				PWM0DL=LeftMoveMotorData.OutPWM;
+				PWM0DL=LeftMoveMotorData.OutPWM;//L motor puty = 0xa0;
 			}
 			LeftMoveMotorData.MotorMode=Leftmotor;
 			LeftMoveMotorData.LastPulsed=0;
@@ -785,7 +773,7 @@ void SetXMotor(
 			{
 				InitMotorRightForward();
 				RightMoveMotorData.OutPWM=0Xa0;
-				PWM0DTL=RightMoveMotorData.OutPWM;
+				PWM0DTL=RightMoveMotorData.OutPWM; //R motor puty = 0xa0;
 
 			}
 		
@@ -800,7 +788,7 @@ void SetXMotor(
 			{
 				InitMotorRightRetreat();
 				RightMoveMotorData.OutPWM=0Xa0;
-				PWM0DTL=RightMoveMotorData.OutPWM;
+				PWM0DTL=RightMoveMotorData.OutPWM; //R motor puty = 0xa0;
 
 			}
 		
@@ -916,5 +904,48 @@ void SetMotorcm(INT8U mode,INT16U Setcm)
      }
 	 break;
   }
+}
+/**************************************************************
+	   *
+	   *Function Name:void WaterPump()
+	   *Function : 水泵电机工作
+	   *Input Ref: NO
+	   *Retrn Ref: NO
+	   *
+**************************************************************/
+void WaterPump(void)
+{
+   P3M3 = 0xC2;                        //P33设置为推挽输出,喷水马达，
+  // P3_3=1; //喷水
+   #if 1
+   PWM1_MAP = 0x33;					//PWM1通道映射P33口
+
+    PWM1C = 0x01;//WT.EDIT	//0x00					//PWM1高有效，PWM11高有效，时钟8分频 
+    PWMM |= 0x10;						//PWM1工作于						
+
+	//独立模式下，PWM0和PWM01共用一个周期寄存器
+	//PWM0的占空比调节使用			PWM0组的占空比寄存器
+	//PWM01的占空比调节使用			PWM0组的死区寄存器
+
+	//周期计算 	= 0x03ff / (Fosc / PWM分频系数)		（Fosc见系统时钟配置的部分）
+	//			= 0x03ff / (16000000 / 8)			
+	// 			= 1023   /2000000
+	//			= 511.5us		   		约1.955kHz
+
+	PWM1PH = 0x03;						//周期高4位设置为0x03
+	PWM1PL = 0xff;						//周期低8位设置为0xFF
+
+	//占空比计算= 0x0155 / (Fosc / PWM分频系数)		（Fosc见系统时钟配置的部分）
+	//			= 0x0155 / (16000000 / 8)			
+	// 			= 341 	 / 2000000
+	//			= 170.5us		   占空比为 170.5/511.5 = 33.3%
+
+	PWM1DH = 0x01;						//PWM1高4位占空比0x01
+	PWM1DL = 0xff;	//WT.EDIT					//PWM1低8位占空比0x55													    
+
+	PWMEN |= 0x02;						//使能PWM1以及PWM11
+
+   #endif 
+
 }
 

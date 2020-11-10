@@ -119,14 +119,14 @@ void ReadAD5ms()
   static INT8U i=0;
   static INT8U chanel=5;
   static INT16U ADtemp[5];  
-  ADtemp[i]=ADCR; //ADC 转换结果寄存器
+  ADtemp[i]=ADCR; //ADC 转换结果寄存器,ADCC[7]={2,3,4,5,6,7,13};
   i++;
   if(i>2)
   {
      i=0;
 	 AD5ms[chanel]= (ADtemp[1]+ADtemp[2])/2; // IR_MID_WALL
 	 chanel++;
-	 if(chanel>6) //AN3 ,AN4, AN5 rIR input
+	 if(chanel>6) //AN3 ,AN4, AN5 rIR input 
 	 {
 	
 	   if(ADCtl)
@@ -206,9 +206,9 @@ void CheckGround()
  {
    if(ADFlag)
    {
-   	   GroundAD[0][0]=(AD5ms[2]>>4);
-	   GroundAD[1][0]=(AD5ms[1]>>4);
-	   GroundAD[2][0]=(AD5ms[3]>>4);
+   	   GroundAD[0][0]=(AD5ms[2]>>4); // L_WALL ADtemp[i]=ADCR; //ADC 转换结果寄存器,ADCC[7]={2,3,4,5,6,7,13};
+	   GroundAD[1][0]=(AD5ms[1]>>4); //M_WALL IR_WALL 判断值
+	   GroundAD[2][0]=(AD5ms[3]>>4); //R_WALL 
 	   ADFlashFlag=0;
 	 //SBUF=GroundAD[0][0];
     if(GroundAD[0][1]>GroundAD[0][0])
@@ -243,8 +243,8 @@ void CheckGround()
 
    }
    //SBUF=AD5ms[5]/16;
-   	LCurrentAD[ADTime]=AD5ms[4];
-	RCurrentAD[ADTime]=AD5ms[5];
+   	LCurrentAD[ADTime]=AD5ms[4]; //L_speed
+	RCurrentAD[ADTime]=AD5ms[5]; //R_speed
 	  
    }
    else

@@ -70,7 +70,7 @@ void main(void)
 	Init_MotorSpeed();
     InitMotorIO();
 	Init_Usart1();
-	InitFanEdgeIO();
+	InitFanEdgeIO(); //喷水马达
 	InitLed();
 	InitKey();
 	InitPowerIn();
@@ -78,7 +78,7 @@ void main(void)
 
 	ADCtl=1;
 	LedBlueON();
-	RunMode=0;
+	RunMode=0;  //运行模式
 	RunStep=0;
 	RunSecond=0;
 	LCurrent=0;
@@ -95,11 +95,14 @@ void main(void)
 	while(1)
 	{
 
+       WaterPump();
+	  #if 0
 	   CheckGround();
 	   CheckRun();
 
 	   kk=ReadKey();
        CheckMode(kk);
+	 #endif 
 	}
 
 }
