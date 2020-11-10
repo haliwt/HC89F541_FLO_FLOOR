@@ -96,6 +96,10 @@ void main(void)
 	{
 
        WaterPump();
+	   Delay_ms(500);
+	   WaterPumpStop();
+	   while(1);
+	   
 	  #if 0
 	   CheckGround();
 	   CheckRun();

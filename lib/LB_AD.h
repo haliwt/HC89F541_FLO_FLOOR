@@ -64,4 +64,5 @@ KAKA_AD_EXT	void CheckVoltage();
 KAKA_AD_EXT	void CheckEdgeCurrent();
 KAKA_AD_EXT	void CheckGround();
 
+
 #endif
