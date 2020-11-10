@@ -76,7 +76,8 @@ void MidIR_Count(void)
 
 void Read_MidIR(void)
 {
-	Mid_ReadIR.NowVoltage=P1_6; //马达运行速度值，检测值
+	Mid_ReadIR.NowVoltage=P1_6; //马达运行速度值检测值--供电
+
 	if(
 	    (Mid_ReadIR.NowVoltage==0)&&(Mid_ReadIR.ReadIRFlag==0) //马达没有
 	)

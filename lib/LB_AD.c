@@ -30,19 +30,33 @@ void Delay_2us(unsigned int fui_i)
 	while(fui_i--);	
 }
 
-
+/*************************************************************
+	*
+	*Function Name:void CheckEdgeCurrent()
+	*Function :
+	*Input Ref: NO
+	*Return Ref: NO
+	*
+*************************************************************/
 void InitADIO(void)
 {
-	P0M2 = 0x02;				        //P02设置为模拟输入
-	P0M3 = 0x02;				        //P03设置为模拟输入
-	P0M4 = 0x02;				        //P04设置为模拟输入
-	P0M5 = 0x02;				        //P05设置为模拟输入
-	P0M6 = 0x02;				        //P06设置为模拟输入
-	P0M7 = 0x02;				        //P07设置为模拟输入
-	P2M5 = 0x02;				        //P25设置为模拟输入
-	P0M1 = 0X80;
+	P0M2 = 0x02;				        //P02设置为模拟输入---
+	P0M3 = 0x02;				        //P03设置为模拟输入---IR_MID_WALL 中间IR
+	P0M4 = 0x02;				        //P04设置为模拟输入---IR_L_WALL
+	P0M5 = 0x02;				        //P05设置为模拟输入---IR_R_WALL
+	P0M6 = 0x02;				        //P06设置为模拟输入---MOTOR_L_CURRENT_
+	P0M7 = 0x02;				        //P07设置为模拟输入---MOTOR_R_CURRENT
+	P2M5 = 0x02;				        //P25设置为模拟输入---洒水MOTOR_CURRENT
+	P0M1 = 0X80;                        //IR_WALL_PW 输出GPIO 
 }
-
+/*************************************************************
+	*
+	*Function Name:void SeleADChanel(INT8U ADChanel)
+	*Function :
+	*Input Ref: ADChannel
+	*Return Ref: NO
+	*
+*************************************************************/
 void SeleADChanel(INT8U ADChanel)
 {
 	ADCC0 = 0x81;						//打开ADC转换电源
@@ -50,19 +64,41 @@ void SeleADChanel(INT8U ADChanel)
 	ADCC2 = 0x4f;						//转换结果12位数据，数据右对齐，ADC时钟16分频
 
 }
-
+/*************************************************************
+	*
+	*Function Name:void CheckEdgeCurrent()
+	*Function :
+	*Input Ref: NO
+	*Return Ref: NO
+	*
+*************************************************************/
 void StartAD()
 {
 	ADCC0&=0XDF;
 	ADCC0 |= 0x40;					//启动ADC转换
 }
+/*************************************************************
+	*
+	*Function Name:void CheckEdgeCurrent()
+	*Function :
+	*Input Ref: NO
+	*Return Ref: NO
+	*
+*************************************************************/
 void SetADINT(void)
 {
     EADC = 1;                                   //使能ADC中断
     EA = 1;
 }
 
-
+/*************************************************************
+	*
+	*Function Name:void CheckEdgeCurrent()
+	*Function :
+	*Input Ref: NO
+	*Return Ref: NO
+	*
+*************************************************************/
 void  SetAD(INT8U ADChanel)
 {
   code INT8U ADCC[7]={2,3,4,5,6,7,13};
@@ -70,40 +106,48 @@ void  SetAD(INT8U ADChanel)
   SetADINT();
   StartAD();
 }
+/*************************************************************
+	*
+	*Function Name:void ReadAD5ms()
+	*Function :读取接收IR的值
+	*Input Ref: NO
+	*Return Ref: NO
+	*
+*************************************************************/
 void ReadAD5ms()
 {
   static INT8U i=0;
   static INT8U chanel=5;
   static INT16U ADtemp[5];  
-  ADtemp[i]=ADCR;
+  ADtemp[i]=ADCR; //ADC 转换结果寄存器
   i++;
   if(i>2)
   {
      i=0;
-	 AD5ms[chanel]= (ADtemp[1]+ADtemp[2])/2;
+	 AD5ms[chanel]= (ADtemp[1]+ADtemp[2])/2; // IR_MID_WALL
 	 chanel++;
-	 if(chanel>6)
+	 if(chanel>6) //AN3 ,AN4, AN5 rIR input
 	 {
 	
 	   if(ADCtl)
 	   {
-	   if(ADFlag)
-	   {
-		 P0_1 = 1;
-		 ADFlag=0;
-		 ADFlashFlag=1;
-	   }
-	  else
-	  {
-		 P0_1 = 0;
-		 ADFlag=1;
-		 ADFlashFlag=1;
-	  }
+		   if(ADFlag)
+		   {
+			 P0_1 = 1; //IR_WALL_PW ,IR_POWER output +5V IR works
+			 ADFlag=0;
+			 ADFlashFlag=1;
+		   }
+		  else
+		  {
+			 P0_1 = 0; // IR don't works
+			 ADFlag=1;
+			 ADFlashFlag=1;
+		  }
 	  }
 	  else
 	  
 	  {
-	  	 P0_1 = 0;
+	  	 P0_1 = 0;// IR don't works
 	  }
 		//SBUF=(AD5ms[1]>>4);
 	 chanel=0;
@@ -114,6 +158,14 @@ void ReadAD5ms()
   	 SetAD(chanel);
   }
 }
+/*************************************************************
+	*
+	*Function Name:INT8U ReadGroundDp(INT8U *p)
+	*Function :
+	*Input Ref: *P
+	*Return Ref: NO
+	*
+*************************************************************/
 INT8U ReadGroundDp(INT8U *p)
 {
   INT8U i;
@@ -140,7 +192,14 @@ INT8U ReadGroundDp(INT8U *p)
   
   return(temp/8);
 }
-
+/*************************************************************
+	*
+	*Function Name:INT8U ReadGroundDp(INT8U *p)
+	*Function :
+	*Input Ref: *P
+	*Return Ref: NO
+	*
+*************************************************************/
 void CheckGround()
 {
  if(ADFlashFlag)
@@ -200,6 +259,14 @@ void CheckGround()
 
  }
 }
+/*************************************************************
+	*
+	*Function Name:void CheckEdgeCurrent()
+	*Function :
+	*Input Ref: NO
+	*Return Ref: NO
+	*
+*************************************************************/
 void CheckEdgeCurrent()
 {
 
@@ -220,7 +287,14 @@ void CheckEdgeCurrent()
  }
 }
 
-
+/*************************************************************
+	*
+	*Function Name:void CheckEdgeCurrent()
+	*Function :
+	*Input Ref: NO
+	*Return Ref: NO
+	*
+*************************************************************/
 void CheckLCurrent()
 {
  INT16U	LCurrentADAvg;
@@ -238,7 +312,14 @@ void CheckRCurrent()
  //5000/4096/0.1
  
 }
-
+/*************************************************************
+	*
+	*Function Name:void CheckEdgeCurrent()
+	*Function :
+	*Input Ref: NO
+	*Return Ref: NO
+	*
+*************************************************************/
 void CheckVoltage()
 {
    Voltage=(Voltage*19+(AD5ms[0]/2.56))/20;

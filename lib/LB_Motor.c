@@ -91,15 +91,22 @@ void SetEdge(INT8U status)
 {
    PWM1DL = status; //PWM占空比寄存器
 }
-
- void InitMotorLeftForward(void)
+/**************************************************************
+	 *
+	 *Function Name:void InitMotorRightForward(void)
+	 *Function : motor run forward 
+	 *
+	 *
+	 *
+**************************************************************/
+void InitMotorLeftForward(void)
 {
 
     P1_3=0; //IN2
     P1_4=0; //IN1 
 	///*
 	PWM0_MAP = 0x14;					//PWM0通道映射P14口
-    PWM0C = 0x00;						//PWM0高有效，PWM01高有效，时钟8分频 
+    PWM0C = 0x01 ; //WT.EDIT 11.10//0x00; //motor 快						//PWM0高有效，PWM01高有效，时钟8分频 
     PWMM |= 0x10;						//PWM0工作于互补模式						
 
 	//独立模式下，PWM0和PWM01共用一个周期寄存器
@@ -139,7 +146,7 @@ void SetEdge(INT8U status)
     P1_2=0; //IN1 
 	///*
 	PWM01_MAP = 0x11;					//PWM01通道映射P11口
-    PWM0C = 0x00;						//PWM0高有效，PWM01高有效，时钟8分频 
+    PWM0C = 0x01;//WT.EDIT //0x00;						//PWM0高有效，PWM01高有效，时钟8分频 
     PWMM |= 0x10;						//PWM0工作于互补模式						
 
 	//独立模式下，PWM0和PWM01共用一个周期寄存器
@@ -166,14 +173,14 @@ void SetEdge(INT8U status)
    	//*/
 	//P1_1=1;
 }
- /**************************************************************
+/**************************************************************
 	 *
 	 *Function Name:void InitMotorLeftRetreat(void)
 	 *Function : motor return run
 	 *
 	 *
 	 *
- **************************************************************/
+**************************************************************/
 void InitMotorLeftRetreat(void)
 {
 
@@ -181,8 +188,8 @@ void InitMotorLeftRetreat(void)
     P1_4=0; //IN1
 	///*
 	PWM0_MAP = 0x13;					//PWM0通道映射P13口
-    PWM0C = 0x00;						//PWM0高有效，PWM01高有效，时钟8分频 
-    PWMM |= 0x10;						//PWM0工作于互补模式						
+    PWM0C = 0x01;//WT.EDIT//0x00;						//PWM0高有效，PWM01高有效，时钟8分频 
+    PWMM |= 0x10;						//PWM0工作于独立模式			
 
 	//独立模式下，PWM0和PWM01共用一个周期寄存器
 	//PWM0的占空比调节使用			PWM0组的占空比寄存器
@@ -221,7 +228,7 @@ void InitMotorRightRetreat(void)
     P1_2=0; //IN1  ---forward 
 	///*
 	PWM01_MAP = 0x12;					//PWM01通道映射P12口
-    PWM0C = 0x00;						//PWM0高有效，PWM01高有效，时钟8分频 
+    PWM0C = 0x01 ;                      //WT.EDIT 2020.22.20//0x00; //PWM0高有效，PWM01高有效，时钟8分频 
     PWMM |= 0x10;						//PWM0工作于互补模式						
 
 	//独立模式下，PWM0和PWM01共用一个周期寄存器
@@ -373,7 +380,6 @@ void ReadRightPulsed(void)
 	  *
 	  *
 **************************************************************/
-
 void CheckLeftMotorSpeed(void)
 {
 
@@ -445,9 +451,9 @@ void CheckLeftMotorSpeed(void)
 
 						{
 
-								LeftMoveMotorData.OutPWM--;
-					if(LeftMoveMotorData.OutPWM<0X20)
-						LeftMoveMotorData.OutPWM=0X20;								
+							LeftMoveMotorData.OutPWM--;
+							if(LeftMoveMotorData.OutPWM<0X20)
+								LeftMoveMotorData.OutPWM=0X20;								
 					
 						}
 

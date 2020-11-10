@@ -54,12 +54,12 @@ void  CheckRun()
 			 AllStop();
 			 //SetXMotor(1,20,1,1,1,20,1,1);
 			  RunStep=3;
-			RunMs=0;			
+			 RunMs=0;			
 			}
 			if((RightMoveMotorData.Flag==1)||(LeftMoveMotorData.Flag==1))
 			{
-			SetXMotor(1,20,40,1,1,20,40,1);
-			SetMotorcm(1,1000);			
+				SetXMotor(1,20,40,1,1,20,40,1);
+				SetMotorcm(1,1000);			
 			}
 			
 			if(RunMs>3000)
