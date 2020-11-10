@@ -1,0 +1,144 @@
+/*
+
+---------- file information -----------------------------------------------
+file name: 
+define   : <文件说明>
+version  : 见文件尾端
+---------------------------------------------------------------------------
+*/
+
+//全局变量声明
+#define  KAKA_Led_GB
+
+#ifdef   CodeC_Includes
+#include "PJ_Includes.h"
+#else
+//#include "LB_hc89f003_IO.h"
+#include "..\include\HC89F0541.h"
+#include "..\include\PJ_TypeRedefine.h"
+#include "LB_Led.h"
+
+#endif
+
+void InitT1(void)
+{
+	TCON1 = 0x00;						//T1定时器时钟为Fosc
+	TMOD = 0x00;						//16位重装载定时器/计数器
+
+	//Tim1计算时间 	= (65536 - 0xFACB) * (1 / (Fosc /Timer分频系数))
+	//				= 1333 / (16000000 / 12)
+	//				= 1 ms
+
+	//定时0.1ms
+	//反推初值 	= 65536 - ((1/10000) / (1/(Fosc / Timer分频系数)))
+	//		   	= 65536 - ((1/10000) / (1/(16000000 / 12)))
+	//			= 65536 - 133
+	//			= 0xFf78
+	TH1 = 0xFf;
+	TL1 = 0x78;
+	IE |= 0x08;							//打开T1中断
+	TCON |= 0x40;						//使能T1
+    
+	EA = 1;	
+
+}
+
+void InitLed(void)
+{
+  P3M2=0XC2;
+  P3M1=0XC2;
+  P3_2=1;
+  P3_1=1;
+}
+
+
+
+void LedBlueON()
+{
+  P3_2=0;
+}
+
+
+void LedBlueOff()
+{
+  P3_2=1;
+}
+
+void LedRedON()
+{
+  P3_1=0;
+}
+
+
+void LedRedOff()
+{
+  P3_1=1;
+}
+
+
+void InitKey(void)
+{
+  P0M0 = 0x68;                        //P00设置为施密特数字带上拉输入
+  P0_0=1;
+
+}
+
+
+INT8U ReadKey(void)
+{
+
+  static INT16U  abc;
+
+  if(P0_0==0)
+  {
+    // LedBlueON();
+    if(abc<200)
+   	 abc++;
+  }
+  else	
+  {	  
+    //LedBlueOff();
+   	abc=0;
+  }
+
+  if((abc>190)&&(abc<200))
+  {
+    //
+    abc=201;
+	//LedBlueON();
+    return(1);
+
+  }
+  else 
+  {
+   //LedBlueOff();
+   return(0);
+  }  
+}
+void InitPowerIn(void)
+{
+  P1M0 = 0x58;                        //P10设置为施密特数字带上拉输入
+  P1_0=1;
+
+}
+void InitPowerStatus(void)
+{
+  P1M7 = 0x58;                        //P10设置为施密特数字带上拉输入
+  P1_7=1;
+
+  	PITS3 = 0xc0;						
+
+    PINTE1 = 0x80;						//使能INT15
+	IE2 |= 0x01;						//打开INT8-17中断
+	EA=1;
+
+
+}
+ INT8U ReadPowerDCIn(void)
+{
+  return(P1_0);
+}
+ INT8U ReadPowerStatus(void)
+{
+  return(P1_7);
+}
