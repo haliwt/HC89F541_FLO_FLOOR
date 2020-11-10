@@ -332,6 +332,14 @@ void ReadLeftPulsed(void)
 		*/
 	}
 }
+/********************************************************************
+	*
+	*
+	*
+	*
+	*
+	*
+********************************************************************/
 void ReadRightPulsed(void)
 {
 	if((RightMoveMotorData.MotorMode&0x03)==1)
@@ -376,8 +384,8 @@ void ReadRightPulsed(void)
 	  *
 	  *Function Name:void ReadLeftPulsed(void)
 	  *Function : motor return run
-	  *
-	  *
+	  *Input Ref: NO
+	  *Retrun Ref: NO
 	  *
 **************************************************************/
 void CheckLeftMotorSpeed(void)

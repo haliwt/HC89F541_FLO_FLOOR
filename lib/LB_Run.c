@@ -126,43 +126,47 @@ void  CheckRun()
 	}
   }
 }
+/***************************************************************
+	*
+	*Function Name:void CheckMode(INT8U Key)
+	*Function :
+	*Input Ref: Key
+	*Return Ref: No
+	*
+***************************************************************/
 void CheckMode(INT8U Key)
 {
-
-
-  if(Key==1)
+ if(Key==1)
   {
     
-    if(Mode==0)
+    if(Mode==0) //开机
 	{
 	  //唤醒
 	  Mode=1;
 	  Step=1;
 	 
 	}
-	else 
-	 {
-	  if(Step==0)
-	  {
-	    //20
-	  	Step=1;
-	    ADCtl=1;
-        RunSecond=0;
-	  }
-	  else	if(Step<20)
-	  {
-	  //LedBlueON();
-	  Mode=1;
-	  Step=0;
-	  RunSecond=0;
-	  AllStop();
+	else{
+		  if(Step==0)
+		  {
+		    //20
+		  	Step=1;
+		    ADCtl=1;
+	        RunSecond=0;
+		  }
+		  else	if(Step<20)
+		  {
+		  //LedBlueON();
+		  Mode=1;
+		  Step=0;
+		  RunSecond=0;
+		  AllStop();
 
-	  SetEdge(0);
-	  RunStep=0;
-	  //SetBuzzerTime(2);
-	  }
-	 
-	 }
+		  SetEdge(0);
+		  RunStep=0;
+		  //SetBuzzerTime(2);
+		  }
+	}
   }
  
   switch(Mode)
@@ -204,6 +208,7 @@ void CheckMode(INT8U Key)
 	  }
 	}
 	break;
+	
 	case 1:
 	{
 	   switch(Step)
@@ -234,13 +239,13 @@ void CheckMode(INT8U Key)
 		 {
 		   if(RunSecond>0)
 		   {
-		   	  Step=2;
+		   	  Step=2; //Next run 2
 			   LedBlueON();
 			  ADCtl=1;
 
 			  
-			  RunMode=2;
-			  RunStep=4;
+			  RunMode=2; //
+			  RunStep=4; //执行 4步
 			  ADCtl=1;
 				SetXMotor(1,6,40,1,1,6,40,1);
 			    SetMotorcm(1,1000);
@@ -250,48 +255,44 @@ void CheckMode(INT8U Key)
 		   }
 		 }
 		 break;
+		 
 		 case 2:
-		 {
+		    if(Voltage<960)
+				{
 
-		  
-		  if(Voltage<960)
-			{
+			     ADCtl=0;
+			     RunStep=0;
+			  	 AllStop();
 
-		     ADCtl=0;
-		     RunStep=0;
-		  	 AllStop();
+				 SetEdge(0);
 
-			 SetEdge(0);
+				 Step=8;
+			 
+				} 
+			else  if(ReadPowerDCIn())
+			  {
+			     ADCtl=0;
+			     RunStep=0;
+			  	 AllStop();
 
-			 Step=8;
-		 
-			} 
-			
-		 
-		 else  if(ReadPowerDCIn())
-		  {
-		     ADCtl=0;
-		     RunStep=0;
-		  	 AllStop();
+				 SetEdge(0);
 
-			 SetEdge(0);
-
-			 Step=5;
+				 Step=5;
 
 
-		  }
-		  if(NoImpSecond==40)
-		  {
-		    SetEdge(50);
-			NoImpSecond=41;
-		  }
-		 if(NoImpSecond==45)
-		 {
-		    SetEdge(0);
-			NoImpSecond=0;		 
-		 }
-		  
-		 }
+			  }
+			  if(NoImpSecond==40)
+			  {
+			    SetEdge(50);
+				NoImpSecond=41;
+			  }
+			 if(NoImpSecond==45)
+			 {
+			    SetEdge(0);
+				NoImpSecond=0;		 
+			 }
+			  
+			 
 		 break;
 		 //电量不足时，灯光闪频率2Hz
 
@@ -333,7 +334,7 @@ void CheckMode(INT8U Key)
 			 RunSecond=0;
 		   }
 		   
-          if(ReadPowerDCIn())
+          if(ReadPowerDCIn()) //电池检测GPIO ==1 ,电池电量不够
 		  {
 		     ADCtl=0;
 		     RunStep=5;

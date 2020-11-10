@@ -79,7 +79,7 @@ void StartAD()
 }
 /*************************************************************
 	*
-	*Function Name:void CheckEdgeCurrent()
+	*Function Name:void SetADINT(void)
 	*Function :
 	*Input Ref: NO
 	*Return Ref: NO
@@ -93,9 +93,9 @@ void SetADINT(void)
 
 /*************************************************************
 	*
-	*Function Name:void CheckEdgeCurrent()
+	*Function Name:void  SetAD(INT8U ADChanel)
 	*Function :
-	*Input Ref: NO
+	*Input Ref: ADChanel
 	*Return Ref: NO
 	*
 *************************************************************/
@@ -194,9 +194,9 @@ INT8U ReadGroundDp(INT8U *p)
 }
 /*************************************************************
 	*
-	*Function Name:INT8U ReadGroundDp(INT8U *p)
+	*Function Name:void CheckGround()
 	*Function :
-	*Input Ref: *P
+	*Input Ref: NO
 	*Return Ref: NO
 	*
 *************************************************************/
@@ -289,7 +289,7 @@ void CheckEdgeCurrent()
 
 /*************************************************************
 	*
-	*Function Name:void CheckEdgeCurrent()
+	*Function Name:void CheckLCurrent()
 	*Function :
 	*Input Ref: NO
 	*Return Ref: NO

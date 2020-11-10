@@ -118,13 +118,13 @@ INT8U ReadKey(void)
 void InitPowerIn(void)
 {
   P1M0 = 0x58;                        //P10设置为施密特数字带上拉输入
-  P1_0=1;
+  P1_0=1; //电池电压检查，是否电池电压低于5V
 
 }
 void InitPowerStatus(void)
 {
   P1M7 = 0x58;                        //P10设置为施密特数字带上拉输入
-  P1_7=1;
+  P1_7=1;  //电池充电状态 
 
   	PITS3 = 0xc0;						
 
@@ -136,9 +136,9 @@ void InitPowerStatus(void)
 }
  INT8U ReadPowerDCIn(void)
 {
-  return(P1_0);
+  return(P1_0); // 充电检查输入GPIO值
 }
  INT8U ReadPowerStatus(void)
 {
-  return(P1_7);
+  return(P1_7); //电池充点状态值
 }

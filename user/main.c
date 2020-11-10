@@ -95,7 +95,6 @@ void main(void)
 	while(1)
 	{
 
-	   	
 	   CheckGround();
 	   CheckRun();
 
@@ -104,9 +103,12 @@ void main(void)
 	}
 
 }
-
-
-
+/***********************************************************
+	**
+	*中断程序:每0.1ms ，进入中断一次
+	*
+	**
+***********************************************************/
 void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
 {
   static INT8U idata t_20ms;
@@ -115,15 +117,15 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
   t_20ms++;
   ReadAD5ms();
 
-  if(t_20ms>99)
+  if(t_20ms>99) //10ms
   {
   	t_20ms=0;
 	t_100ms++;
 	t_1s++;
 	RunMs++;
- 	 CheckLeftMotorSpeed();
+ 	 CheckLeftMotorSpeed(); //控制一定速度
 	 CheckRightMotorSpeed();
-	AdjustSpeed();
+	AdjustSpeed(); //调节速度
 	if(t_100ms>9)
 	{
 	  if(ReadPowerStatus())
@@ -199,13 +201,13 @@ void WDT_Rpt() interrupt WDT_VECTOR
 ***************************************************************************************/
 void INT8_17_Rpt() interrupt INT8_17_VECTOR 
 {
-	if(PINTF2&0x01)						//判断INT16中断标志位
+	if(PINTF2&0x01)						//判断INT16中断标志位----L MOTOR SPEED
 	{
 	  PINTF2 &=0XFE;				//清除INT16中断标志位		
 	  ReadLeftPulsed();
 	  
 	}
-	else if(PINTF2&0x02)			//判断INT17中断标志位
+	else if(PINTF2&0x02)			//判断INT17中断标志位 -----R motor SPEED
 	{
 	  PINTF2 &=0XFD;				//清除INT17中断标志位		
 	  ReadRightPulsed();
@@ -213,7 +215,7 @@ void INT8_17_Rpt() interrupt INT8_17_VECTOR
 	}
 	else if(PINTF1&0x80)						//判断INT15中断标志位
 	{
-	  PINTF1 &=0X7f;				//清除INT15中断标志位		
+	  PINTF1 &=0X7f;				//清除INT15中断标志位---电池充电状态值		
 	  PowerCountErr++;
 	  PowerCountOK=0;
 	}
