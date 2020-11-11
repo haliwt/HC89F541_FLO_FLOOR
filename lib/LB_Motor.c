@@ -32,8 +32,8 @@ void Init_MotorSpeed()
     PINTE2 = 0x03;						//使能INT17 16
 	IE2 |= 0x01;						//打开INT8-17中断
 	EA=1;
-	P3_4=1;  //
-	P3_5=1; //
+	P3_4=1;  //motor Light speed dected
+	P3_5=1; //motor Right speed dected
 	PINTE1=0;
 }
 /**************************************************************
@@ -93,7 +93,7 @@ void InitMotorLeftForward(void)
     P1_4=0; //IN1 
 	///*
 	PWM0_MAP = 0x14;					//PWM0通道映射P14口
-    PWM0C = 0x01 ; //WT.EDIT 11.10//0x00; //motor 快						//PWM0高有效，PWM01高有效，时钟8分频 
+    PWM0C = 0x00;   //motor 快			//PWM0高有效，PWM01高有效，00: 1分频 01：时钟8分频 
     PWMM |= 0x10;						//PWM0工作于互补模式						
 
 	//独立模式下，PWM0和PWM01共用一个周期寄存器
@@ -104,8 +104,9 @@ void InitMotorLeftForward(void)
 	//			= 0x03ff / (16000000 / 8)			
 	// 			= 1023   /2000000
 	//			= 511.5us		   		约1.955kHz
+	//      0x100 / 16000000 /1 = 1.6 * 10^(-5)us 6.25Mhz
 
-	PWM0PH = 0x01;						//周期高4位设置为0x03
+	PWM0PH = 0x01;						//周期高4位设置为0x03 //周期是256
 	PWM0PL = 0x0;						//周期低8位设置为0xFF
 
 	//占空比计算= 0x0155 / (Fosc / PWM分频系数)		（Fosc见系统时钟配置的部分）
@@ -133,7 +134,7 @@ void InitMotorLeftForward(void)
     P1_2=0; //IN1 
 	///*
 	PWM01_MAP = 0x11;					//PWM01通道映射P11口
-    PWM0C = 0x01;//WT.EDIT //0x00;						//PWM0高有效，PWM01高有效，时钟8分频 
+    PWM0C = 0x00;						//PWM0高有效，PWM01高有效，时钟8分频 
     PWMM |= 0x10;						//PWM0工作于互补模式						
 
 	//独立模式下，PWM0和PWM01共用一个周期寄存器
@@ -175,7 +176,7 @@ void InitMotorLeftRetreat(void)
     P1_4=0; //IN1
 	///*
 	PWM0_MAP = 0x13;					//PWM0通道映射P13口
-    PWM0C = 0x01;//WT.EDIT//0x00;						//PWM0高有效，PWM01高有效，时钟8分频 
+    PWM0C = 0x00;						//PWM0高有效，PWM01高有效，时钟8分频 
     PWMM |= 0x10;						//PWM0工作于独立模式			
 
 	//独立模式下，PWM0和PWM01共用一个周期寄存器
@@ -248,7 +249,8 @@ void InitMotorRightRetreat(void)
 void LeftStop()
 {
 
-   PWMEN &= 0xfe;
+   //PWMEN &= 0xfe;
+   PWMEN &= 0xe5; //WT.EDIT 
 
     P1_3=0;
     P1_4=0;
@@ -257,18 +259,33 @@ void LeftStop()
 void RightStop()
 {
 
-   PWMEN &= 0xef;
+   //PWMEN &= 0xef;
+   PWMEN &= 0xe5; //WT.EDIT
     P1_1=0;
     P1_2=0;
 
 }
+/**************************************************************
+	  *
+	  *Function Name:void WaterPumpStop(void)
+	  *Function : motor return run
+	  *
+	  *
+	  *
+**************************************************************/
 void WaterPumpStop(void)
 {
    PWMEN &= 0xe5;
    P3_3 =0;
 }
-
-
+/**************************************************************
+	  *
+	  *Function Name:void WaterPumpStop(void)
+	  *Function : motor return run
+	  *
+	  *
+	  *
+**************************************************************/
 void AllStop()
 {
    PWMEN &= 0xee;
@@ -281,7 +298,7 @@ void AllStop()
 /**************************************************************
 	  *
 	  *Function Name:void ReadLeftPulsed(void)
-	  *Function : motor return run
+	  *Function : 检测左马达-脉冲 前进和后退
 	  *
 	  *
 	  *
@@ -289,9 +306,10 @@ void AllStop()
 void ReadLeftPulsed(void)
 {
 
-	if((LeftMoveMotorData.MotorMode&0x03)==1)
+	if((LeftMoveMotorData.MotorMode&0x03)==1) //forword
 	{
 		LeftMoveMotorData.NowPulsed++;
+		//LmotorSpeedNum ++ ; //WT.EDIT
 		/*
 		if(LeftMoveMotorData.NowPulsed>=(LeftMoveMotorData.MovePulsed+19))
 		{
@@ -306,9 +324,10 @@ void ReadLeftPulsed(void)
 		}
 	   */
 	}
-	else if((LeftMoveMotorData.MotorMode&0x03)==2)
+	else if((LeftMoveMotorData.MotorMode&0x03)==2) //retreat
 	{
 		LeftMoveMotorData.NowPulsed--;
+		//LmotorSpeedNum -- ; //WT.EDIT 
 		/*
 		if(LeftMoveMotorData.NowPulsed<=(LeftMoveMotorData.MovePulsed-19))
 		{
@@ -328,7 +347,7 @@ void ReadLeftPulsed(void)
 /********************************************************************
 	*
 	*Function Name:void ReadRightPulsed(void)
-	*Function : 在中断中读取 NowPlused ++
+	*Function : 检测右马达脉冲，前进和后退
 	*
 	*
 	*
@@ -338,6 +357,7 @@ void ReadRightPulsed(void)
 	if((RightMoveMotorData.MotorMode&0x03)==1) //right motor RunMode =3
 	{
 		RightMoveMotorData.NowPulsed++;
+	//	RmotorSpeedNum ++; //WT.EDIT 
 		/*
 		if(RightMoveMotorData.NowPulsed>=(RightMoveMotorData.MovePulsed+19))
 		{
@@ -353,9 +373,10 @@ void ReadRightPulsed(void)
 		}
 		*/
 	}
-	else 
+	else if((RightMoveMotorData.MotorMode&0x03)==2) //WT.EDIT //retreat//else 
 	{
 		RightMoveMotorData.NowPulsed--;
+		//RmotorSpeedNum --; //WT.EDIT
 		/*
 		if(RightMoveMotorData.NowPulsed<=(RightMoveMotorData.MovePulsed-19))
 		{
@@ -386,12 +407,12 @@ void CheckLeftMotorSpeed(void)
 
 	static INT8U i;
 
-	if(LeftMoveMotorData.MotorMode==1) //left motor RunMode == 1 
+	if(LeftMoveMotorData.MotorMode==1) // forword CW
 	{
 		if(LeftMoveMotorData.NowPulsed>=LeftMoveMotorData.LastPulsed)
 			LeftMoveMotorData.NowSpeed[i]=LeftMoveMotorData.NowPulsed-LeftMoveMotorData.LastPulsed;
 	}
-	else if(LeftMoveMotorData.MotorMode==2)
+	else if(LeftMoveMotorData.MotorMode==2) //retreat CCW
 	{
 		if(LeftMoveMotorData.LastPulsed>=LeftMoveMotorData.NowPulsed)
 			LeftMoveMotorData.NowSpeed[i]=LeftMoveMotorData.LastPulsed-LeftMoveMotorData.NowPulsed;
@@ -411,13 +432,12 @@ void CheckLeftMotorSpeed(void)
    	  	
 		if(LeftMoveMotorData.MotorMode<0x80)
 		{
-			if(0==LeftMoveMotorData.RunSpeed)
+			if(0==LeftMoveMotorData.RunSpeed) //刹车
 			{
 				LeftMoveMotorData.OutPWM=0;
 				LeftMoveMotorData.MotorMode|=0x80;
 			}
- 
-			else if(LeftMoveMotorData.AvgSpeed>LeftMoveMotorData.RunSpeed)
+ 			else if(LeftMoveMotorData.AvgSpeed>LeftMoveMotorData.RunSpeed)
 			{
 
 				 //if(LeftMoveMotorData.AvgSpeedLast<=LeftMoveMotorData.AvgSpeed)
@@ -431,8 +451,7 @@ void CheckLeftMotorSpeed(void)
 						if(LeftMoveMotorData.OutPWM<0X20)
 							LeftMoveMotorData.OutPWM=0X20;
 					}					
-					else 
-					if((LeftMoveMotorData.AvgSpeed-LeftMoveMotorData.RunSpeed)>2)
+					else if((LeftMoveMotorData.AvgSpeed-LeftMoveMotorData.RunSpeed)>2)
 					{
 	             		LeftMoveMotorData.OutPWM-=3;
 						if(LeftMoveMotorData.OutPWM<0X20)
@@ -443,7 +462,7 @@ void CheckLeftMotorSpeed(void)
 
 						LeftMoveMotorData.OutPWM-=2;
 						if(LeftMoveMotorData.OutPWM<0X20)
-						LeftMoveMotorData.OutPWM=0X20;						
+						LeftMoveMotorData.OutPWM=0X20;	//32					
 					}
 					else
 					{
@@ -451,7 +470,7 @@ void CheckLeftMotorSpeed(void)
 						{
 
 							LeftMoveMotorData.OutPWM--;
-							if(LeftMoveMotorData.OutPWM<0X20)
+							if(LeftMoveMotorData.OutPWM<0X20) //最小值设置
 								LeftMoveMotorData.OutPWM=0X20;								
 					
 						}
@@ -472,23 +491,21 @@ void CheckLeftMotorSpeed(void)
 				{
          
 			
-					if(LeftMoveMotorData.OutPWM>0xfb)
-						LeftMoveMotorData.OutPWM=0xfb;
+					if(LeftMoveMotorData.OutPWM>0xfb) //PWM_T =256 ;
+						LeftMoveMotorData.OutPWM=0xfb; //
 					else 
                     LeftMoveMotorData.OutPWM+=4;	 					
 				}
-				else
-				if((LeftMoveMotorData.RunSpeed-LeftMoveMotorData.AvgSpeed)>2)
+				else if((LeftMoveMotorData.RunSpeed-LeftMoveMotorData.AvgSpeed)>2)
 				{
 
 				
 					if(LeftMoveMotorData.OutPWM>0xfb)
 						LeftMoveMotorData.OutPWM=0xfb;
 					else 
-            LeftMoveMotorData.OutPWM+=3;							
+            		LeftMoveMotorData.OutPWM+=3;							
 				}
-				else
-				if((LeftMoveMotorData.RunSpeed-LeftMoveMotorData.AvgSpeed)>1)
+				else if((LeftMoveMotorData.RunSpeed-LeftMoveMotorData.AvgSpeed)>1)
 				{
 
 					if(LeftMoveMotorData.OutPWM>0xfb)
@@ -499,8 +516,8 @@ void CheckLeftMotorSpeed(void)
 				else
 				{
 					   LeftMoveMotorData.OutPWM++;
-					if(LeftMoveMotorData.OutPWM>0xfb)
-						LeftMoveMotorData.OutPWM=0xfb;	
+						if(LeftMoveMotorData.OutPWM>0xfb)//PWM_T =256 ;
+							LeftMoveMotorData.OutPWM=0xfb;	 //
 					
 
 				}
@@ -511,7 +528,7 @@ void CheckLeftMotorSpeed(void)
 			LeftMoveMotorData.OutPWM=0;
     
 	   if(LeftMoveMotorData.MotorMode>0)
-		 PWM0DL=LeftMoveMotorData.OutPWM;
+		   PWM0DL=LeftMoveMotorData.OutPWM; //L motor duty = OutPWM= 0xfb(251)
 	   else
 		 LeftStop();
 	 	 
@@ -522,7 +539,7 @@ void CheckLeftMotorSpeed(void)
 
 /**************************************************************
 	  *
-	  *Function Name:void ReadLeftPulsed(void)
+	  *Function Name:void CheckRightMotorSpeed(void)
 	  *Function : motor return run
 	  *
 	  *
@@ -670,11 +687,11 @@ void CheckRightMotorSpeed(void)
 	   *
 **************************************************************/
 void SetXMotor(
-    INT8U Leftmotor,
+    INT8U Leftmotor,   /* 左马达 方向*/
     INT8U LeftStartSpeed,
     INT8U LeftEndSpeed,
 	INT8U LeftSlope,
-    INT8U Rightmotor,
+    INT8U Rightmotor,   /* 右马达   方向 */
     INT8U RightStartSpeed,
     INT8U RightEndSpeed,
 	INT8U RightSlope
@@ -699,26 +716,26 @@ void SetXMotor(
 	{
 
 	}
-	else if(LeftStartSpeed==0XF8) // 248 
+	else if(LeftStartSpeed==0XF8) // 248 //PWM_T = 0x10 =256
 	{
-		if(LeftMoveMotorData.EndSpeed<20)
+		if(LeftMoveMotorData.EndSpeed<20) //最小值
 			LeftMoveMotorData.EndSpeed++;
 	}
-	else if(LeftStartSpeed==0XF0)
+	else if(LeftStartSpeed==0XF0) //240 //PWM_T = 0x10 =256
 	{
-		if(LeftMoveMotorData.EndSpeed>2)
+		if(LeftMoveMotorData.EndSpeed>2) //
 			LeftMoveMotorData.EndSpeed--;
 	}
 	else 
 	{
 
-		if(Leftmotor==1)
+		if(Leftmotor==1)  //CW 电机方向
 		{
 			//if(LeftMoveMotorData.MotorMode!=Leftmotor)
 			{
 				InitMotorLeftForward();
-				LeftMoveMotorData.OutPWM=0Xa0;
-				PWM0DL=LeftMoveMotorData.OutPWM; // L motor puty = 0xa0;
+				LeftMoveMotorData.OutPWM=0Xa0; // 160 
+				PWM0DL=LeftMoveMotorData.OutPWM; // L motor puty = 0xa0/0x10=62.5%;
 
 
 			}
@@ -727,13 +744,13 @@ void SetXMotor(
 			LeftMoveMotorData.NowPulsed=0;
 
 		}
-		else if(Leftmotor==2)
+		else if(Leftmotor==2) //CCW 马达方向
 		{
 			//if(LeftMoveMotorData.MotorMode!=Leftmotor)
 			{
 				InitMotorLeftRetreat();
 				LeftMoveMotorData.OutPWM=0Xa0;
-				PWM0DL=LeftMoveMotorData.OutPWM;//L motor puty = 0xa0;
+				PWM0DL=LeftMoveMotorData.OutPWM;//L motor puty = 0xa0/0x10 =62.5%;
 			}
 			LeftMoveMotorData.MotorMode=Leftmotor;
 			LeftMoveMotorData.LastPulsed=0;
@@ -749,17 +766,17 @@ void SetXMotor(
 
 	}
 
-
+    //Right motor run state value
 	if(RightStartSpeed==0XFF)
 	{
 
 	}
-	else if(RightStartSpeed==0XF8)
+	else if(RightStartSpeed==0XF8)//248
 	{
 		if(RightMoveMotorData.EndSpeed<20)
 			RightMoveMotorData.EndSpeed++;
 	}
-	else if(RightStartSpeed==0XF0)
+	else if(RightStartSpeed==0XF0)//240
 	{
 		if(RightMoveMotorData.EndSpeed>2)
 			RightMoveMotorData.EndSpeed--;
@@ -767,13 +784,13 @@ void SetXMotor(
 	else 
 	{
 
-		if(Rightmotor==1)
+		if(Rightmotor==1) //motor CW 
 		{
 			//if(RightMoveMotorData.MotorMode!=Rightmotor)
 			{
 				InitMotorRightForward();
 				RightMoveMotorData.OutPWM=0Xa0;
-				PWM0DTL=RightMoveMotorData.OutPWM; //R motor puty = 0xa0;
+				PWM0DTL=RightMoveMotorData.OutPWM; //R motor puty = 0xa0/0x10 =62.5%;
 
 			}
 		
@@ -782,13 +799,13 @@ void SetXMotor(
 			RightMoveMotorData.NowPulsed=0;
 			RightMoveMotorData.MovePulsed=0;
 		}
-		else if(Rightmotor==2)
+		else if(Rightmotor==2) //motor CCW 
 		{
 			//if(RightMoveMotorData.MotorMode!=Rightmotor)
 			{
 				InitMotorRightRetreat();
 				RightMoveMotorData.OutPWM=0Xa0;
-				PWM0DTL=RightMoveMotorData.OutPWM; //R motor puty = 0xa0;
+				PWM0DTL=RightMoveMotorData.OutPWM; //R motor puty = 0xa0/0x10 = 62.5%;
 
 			}
 		
@@ -818,6 +835,87 @@ void SetXMotor(
 void AdjustSpeed()
 {
 
+ if(LeftMoveMotorData.RunSpeed>LeftMoveMotorData.EndSpeed)
+ {
+  LeftMoveMotorData.SlopeTime++;
+  if(LeftMoveMotorData.SlopeTime>LeftMoveMotorData.Slope)
+  {
+   LeftMoveMotorData.SlopeTime=0;
+   if(LeftMoveMotorData.RunSpeed>0)
+    LeftMoveMotorData.RunSpeed--;
+  }
+ }
+ else if(LeftMoveMotorData.RunSpeed<LeftMoveMotorData.EndSpeed)
+ {
+  LeftMoveMotorData.SlopeTime++;
+  if(LeftMoveMotorData.SlopeTime>LeftMoveMotorData.Slope)
+  {
+   LeftMoveMotorData.SlopeTime=0;
+   LeftMoveMotorData.RunSpeed++;
+  }
+ }
+ if(RightMoveMotorData.RunSpeed>RightMoveMotorData.EndSpeed)
+ {
+  RightMoveMotorData.SlopeTime++;
+  if(RightMoveMotorData.SlopeTime>RightMoveMotorData.Slope)
+  {
+   RightMoveMotorData.SlopeTime=0;
+   if(RightMoveMotorData.RunSpeed>0)
+    RightMoveMotorData.RunSpeed--;
+  }
+ }
+ else if(RightMoveMotorData.RunSpeed<RightMoveMotorData.EndSpeed)
+ {
+  RightMoveMotorData.SlopeTime++;
+  if(RightMoveMotorData.SlopeTime>RightMoveMotorData.Slope)
+  {
+   RightMoveMotorData.SlopeTime=0;
+   RightMoveMotorData.RunSpeed++;
+  }
+ }
+ ///*
+ if(LeftMoveMotorData.RMode==1)
+ {
+ if(RightMoveMotorData.NowPulsed>(LeftMoveMotorData.NowPulsed+100))
+ {
+   RightMoveMotorData.RunSpeed=LeftMoveMotorData.RunSpeed-4;
+ }
+ else if(RightMoveMotorData.NowPulsed>(LeftMoveMotorData.NowPulsed+50))
+ {
+   RightMoveMotorData.RunSpeed=LeftMoveMotorData.RunSpeed-3;
+ }
+ else if(RightMoveMotorData.NowPulsed>(LeftMoveMotorData.NowPulsed+30))
+ {
+   RightMoveMotorData.RunSpeed=LeftMoveMotorData.RunSpeed-2;
+ }
+ else if(RightMoveMotorData.NowPulsed>(LeftMoveMotorData.NowPulsed+10))
+ {
+  RightMoveMotorData.RunSpeed=LeftMoveMotorData.RunSpeed-1;
+ }
+ else if(LeftMoveMotorData.NowPulsed>(RightMoveMotorData.NowPulsed+100))
+ {
+   LeftMoveMotorData.RunSpeed=RightMoveMotorData.RunSpeed-4;
+ }
+ else if(LeftMoveMotorData.NowPulsed>(RightMoveMotorData.NowPulsed+50))
+ {
+   LeftMoveMotorData.RunSpeed=RightMoveMotorData.RunSpeed-3;
+ }
+ else if(LeftMoveMotorData.NowPulsed>(RightMoveMotorData.NowPulsed+30))
+ {
+   LeftMoveMotorData.RunSpeed=RightMoveMotorData.RunSpeed-2;
+ }
+ else if(LeftMoveMotorData.NowPulsed>(RightMoveMotorData.NowPulsed+10))
+ {
+   LeftMoveMotorData.RunSpeed=RightMoveMotorData.RunSpeed-1;
+ }
+
+    }
+}
+
+#if 0
+void AdjustSpeed()
+{
+
 	if(LeftMoveMotorData.RunSpeed>LeftMoveMotorData.EndSpeed)
 	{
 		LeftMoveMotorData.SlopeTime++;
@@ -837,7 +935,8 @@ void AdjustSpeed()
 			LeftMoveMotorData.RunSpeed++;
 		}
 	}
-	if(RightMoveMotorData.RunSpeed>RightMoveMotorData.EndSpeed)
+	
+   if(RightMoveMotorData.RunSpeed>RightMoveMotorData.EndSpeed)
 	{
 		RightMoveMotorData.SlopeTime++;
 		if(RightMoveMotorData.SlopeTime>RightMoveMotorData.Slope)
@@ -858,11 +957,11 @@ void AdjustSpeed()
 	}
 
 }
-
+#endif 
 /**************************************************************
 	   *
 	   *Function Name:void SetMotorcm(INT8U mode,INT16U Setcm)
-	   *Function : motor return run
+	   *Function : 马达移动的距离设置
 	   *Input Ref: mode,Setcm
 	   *Retrn Ref: NO
 	   *
@@ -873,6 +972,7 @@ void SetMotorcm(INT8U mode,INT16U Setcm)
   {
      case 1:
 	 {
+        LeftMoveMotorData.RMode=1;
 	   LeftMoveMotorData.RunCm=0;
        RightMoveMotorData.RunCm=0;
        LeftMoveMotorData.SetCm=Setcm;
@@ -881,6 +981,8 @@ void SetMotorcm(INT8U mode,INT16U Setcm)
 	 break;
 	 case 2:
 	 {
+	   LeftMoveMotorData.RMode=2;
+
 	   LeftMoveMotorData.RunCm=0;
        RightMoveMotorData.RunCm=0;
        LeftMoveMotorData.SetCm=LeftMoveMotorData.RunCm-Setcm;
@@ -889,6 +991,7 @@ void SetMotorcm(INT8U mode,INT16U Setcm)
 	 break;
 	 case 3:
 	 {
+		LeftMoveMotorData.RMode=3;
 	   LeftMoveMotorData.RunCm=0;
        RightMoveMotorData.RunCm=0;
        LeftMoveMotorData.SetCm=LeftMoveMotorData.RunCm-Setcm/6;
@@ -897,6 +1000,7 @@ void SetMotorcm(INT8U mode,INT16U Setcm)
 	 break;
 	 case 4:
 	 {
+		LeftMoveMotorData.RMode=4;
 	   LeftMoveMotorData.RunCm=0;
        RightMoveMotorData.RunCm=0;
        LeftMoveMotorData.SetCm=Setcm/6;

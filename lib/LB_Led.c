@@ -42,7 +42,13 @@ void InitT1(void)
 	EA = 1;	
 
 }
-
+/************************************************
+	*
+	*Function Name:void InitLed(void)
+	*Function :LED GPIO initial 
+	*
+	*
+************************************************/
 void InitLed(void)
 {
   P3M2=0XC2;
@@ -50,9 +56,13 @@ void InitLed(void)
   P3_2=1;
   P3_1=1;
 }
-
-
-
+/************************************************
+	*
+	*Function Name:void LedBlueON()
+	*Function :LED GPIO initial 
+	*
+	*
+************************************************/
 void LedBlueON()
 {
   P3_2=0;
@@ -75,15 +85,28 @@ void LedRedOff()
   P3_1=1;
 }
 
-
+/************************************************
+	*
+	*Function Name:void InitKey(void)
+	*Function : key initial
+	*Input Ref:NO
+	*Return Ref:NO
+	*
+************************************************/
 void InitKey(void)
 {
   P0M0 = 0x68;                        //P00设置为施密特数字带上拉输入
   P0_0=1;
 
 }
-
-
+/************************************************
+	*
+	*Function Name:void InitKey(void)
+	*Function : key initial
+	*Input Ref:NO
+	*Return Ref:NO
+	*
+************************************************/
 INT8U ReadKey(void)
 {
 
@@ -115,6 +138,14 @@ INT8U ReadKey(void)
    return(0);
   }  
 }
+/************************************************
+	*
+	*Function Name:void InitKey(void)
+	*Function : key initial
+	*Input Ref:NO
+	*Return Ref:NO
+	*
+************************************************/
 void InitPowerIn(void)
 {
   P1M0 = 0x58;                        //P10设置为施密特数字带上拉输入
@@ -124,7 +155,7 @@ void InitPowerIn(void)
 void InitPowerStatus(void)
 {
   P1M7 = 0x58;                        //P10设置为施密特数字带上拉输入
-  P1_7=1;  //电池充电状态 
+  P1_7=1;  //电池充电管理，GPIO ,判断是否需要充电 
 
   	PITS3 = 0xc0;						
 
@@ -136,9 +167,9 @@ void InitPowerStatus(void)
 }
  INT8U ReadPowerDCIn(void)
 {
-  return(P1_0); // 充电检查输入GPIO值
+  return(P1_0); // 检查电池掉电，电池电量低于5V.
 }
  INT8U ReadPowerStatus(void)
 {
-  return(P1_7); //电池充点状态值
+  return(P1_7); //电池充电判断,是否需要充电
 }

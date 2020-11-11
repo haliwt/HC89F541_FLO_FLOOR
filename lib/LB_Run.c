@@ -45,10 +45,11 @@ void  CheckRun()
 			}
 			break;
 
-			case 1:
+			case 1: 
 			{
+				//SetXMotor(ldir,startspeed,endspeed,slope,Rdir,startspeed,endspeed,slope)
 
-				SetXMotor(2,20,40,1,2,20,40,1);
+				SetXMotor(2,20,40,1,2,20,40,1); //CCW dir =2
 				SetMotorcm(2,1000);
 				RunStep=2;
 				RunMs=0;
@@ -66,31 +67,32 @@ void  CheckRun()
 				}
 				if((RightMoveMotorData.Flag==1)||(LeftMoveMotorData.Flag==1))
 				{
-					SetXMotor(1,20,40,1,1,20,40,1);
+					SetXMotor(1,20,40,1,1,20,40,1); //CW DIR=1
 					SetMotorcm(1,1000);			
 				}
 				
-				if(RunMs>3000)
+				if(RunMs>3000) //3000 * 0.1ms =300ms
 				{
-				 AllStop();
-				 //SetXMotor(1,20,1,1,1,20,1,1);
-				RunStep=3;
-				RunMs=0;	
+					 AllStop();
+					 //SetXMotor(1,20,1,1,1,20,1,1);
+					RunStep=3;
+					RunMs=0;	
 				}
 				
 				break;
 			case 3:
 			{
-			   if(RunMs>20)
+			   if(RunMs>20) //20 * 0.1ms =2ms
 			   {
-				SetXMotor(1,20,40,1,1,20,40,1);
+			    //motor DIR CW 
+				SetXMotor(1,20,40,1,1,20,40,1); //CW DIR=1 
 				SetMotorcm(1,1000);
 				RunStep=4;		   
 			   }
 			}
 			break;
 			case 4:
-				if(RunMs>120)
+				if(RunMs>120) //120 * 0.1ms = 12ms
 				{
 					AllStop();
 					//SetXMotor(2,20,1,1,2,20,1,1);
@@ -100,17 +102,17 @@ void  CheckRun()
 				break;
 		    case 5:
 			  {
-				if(RunMs>20)
+				if(RunMs>20) //20 * 0.1ms = 2ms
 				{
-					SetXMotor(2,20,40,1,1,20,40,1); //
-				    SetMotorcm(3,9000); // 不确定值，（时间），
+					SetXMotor(2,20,40,1,1,20,40,1); //CCW DIR=2
+				    SetMotorcm(3,9000); // mode=3，（时间），
 					RunMs=0;
 					RunStep=6;
 				}		  
 			  }
 			break;
 			case 6:
-				if(RunMs>100)
+				if(RunMs>100) //100 * 0.1=10ms
 				{
 					AllStop();
 					//SetXMotor(2,20,1,1,1,20,1,1);
@@ -119,9 +121,9 @@ void  CheckRun()
 				}
 				break;
 			case 7:
-				if(RunMs>20)
+				if(RunMs>20) //20 * 0.1ms =2ms
 				{
-					SetXMotor(2,20,40,1,2,20,40,1);
+					SetXMotor(2,20,40,1,2,20,40,1); //CCW DIR =2
 				    SetMotorcm(2,1000);
 					RunMs=0;
 					RunStep=2;
@@ -147,15 +149,15 @@ void CheckMode(INT8U Key)
  if(Key==1)
   {
     
-    if(Mode==0) //开机
+    if(Mode==0) 
 	{
 	  //唤醒
 	  Mode=1;
 	  Step=1;
 	 
 	}
-	else{
-		  if(Step==0)
+	else{ //开机 Mode =1 
+		  if(Step==0) //开机 Step =0 
 		  {
 		    //20
 		  	Step=1;
@@ -164,15 +166,15 @@ void CheckMode(INT8U Key)
 		  }
 		  else	if(Step<20)
 		  {
-		  //LedBlueON();
-		  Mode=1;
-		  Step=0;
-		  RunSecond=0;
-		  AllStop();
+			  //LedBlueON();
+			  Mode=1;
+			  Step=0;
+			  RunSecond=0;
+			  AllStop();
 
-		  SetEdge(0);
-		  RunStep=0;
-		  //SetBuzzerTime(2);
+			  SetEdge(0);
+			  RunStep=0;
+			  //SetBuzzerTime(2);
 		  }
 	}
   }
@@ -217,16 +219,16 @@ void CheckMode(INT8U Key)
 	}
 	break;
 	
-	case 1:
+	case 1:  //开机工作 Mode =1
 	{
-	   switch(Step)
+	   switch(Step) //step =1
 	   {
 	     //开机提示音1秒响2次
 	   	 case 0:
 		 {
 		   //ADCtl=1;
 		 //5秒没有按键输入,进入休眠
-		   if(RunSecond>15)
+		   if(RunSecond>15) //16 * 1s = 16s
 		   {
 		     //Step=0;
 			 //Mode=0;
@@ -357,7 +359,7 @@ void CheckMode(INT8U Key)
 		// 充电中灯光频率 0.5Hz
 		 case 5:
 		 {
-		   if(RunSecond>1)
+		   if(RunSecond>1) //2 * 1s =2s
 		   {
 			 LedBlueON();  
 			 Step=6;
@@ -445,7 +447,7 @@ void CheckMode(INT8U Key)
 
 		 case 10:
 		 {
-		   if(NoImpSecond>0)
+		   if(NoImpSecond>0)//100ms
 		   {
 			  LedBlueON();
 		   	 

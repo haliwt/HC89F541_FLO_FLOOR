@@ -34,6 +34,7 @@ typedef struct
 	
 	INT8U   AvgSpeed;
 	INT8U   AvgSpeedLast;
+	INT8U   RMode ;
 	INT8U   MotorMode;                 //?¨ª¡ä??¡ê¨º?,¨ª¡ê?1,?¡ã??,o¨®¨ª?
 	INT8U   NowSpeed[5];                  //?¨ª¡ä?¦Ì¡À?¡ã?¨´?¨¨
 	INT8U   RunSpeed;                  //?¨ª¡ä???DD?¨´?¨¨	

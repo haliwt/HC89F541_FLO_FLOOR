@@ -95,18 +95,19 @@ void main(void)
 	while(1)
 	{
 
-       WaterPump();
+	 #if 0
+	   WaterPump();
 	   Delay_ms(500);
 	   WaterPumpStop();
-	   while(1);
+	   Delay_ms(500);
 	   
-	  #if 0
+	 #endif 
 	   CheckGround();
 	   CheckRun();
 
 	   kk=ReadKey();
        CheckMode(kk);
-	 #endif 
+	 
 	}
 
 }
@@ -118,42 +119,43 @@ void main(void)
 ***********************************************************/
 void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
 {
-  static INT8U idata t_20ms;
+  static INT8U idata t_10ms;
   static INT8U idata t_100ms;
   static INT8U idata t_1s;
-  t_20ms++;
-  ReadAD5ms();
+  t_10ms++;
+  ReadAD5ms();//检测IR 障碍物
 
-  if(t_20ms>99) //10ms
+  if(t_10ms>99) //10ms
   {
-  	t_20ms=0;
+  	t_10ms=0;
 	t_100ms++;
 	t_1s++;
 	RunMs++;
  	 CheckLeftMotorSpeed(); //控制一定速度
-	 CheckRightMotorSpeed();
-	AdjustSpeed(); //调节速度
-	if(t_100ms>9)
+	 CheckRightMotorSpeed(); //
+	 AdjustSpeed(); //调节速度
+	if(t_100ms>9)//10 *10ms =100ms
 	{
-	  if(ReadPowerStatus())
+	  if(ReadPowerStatus()) //P1_7 ==1 OK 电池管理芯片，
 	    PowerCountOK++;
 	  t_100ms=0;
 	  CheckLCurrent();
 	  CheckRCurrent();
 	  NoImpSecond++;
 	}
+	
 	CheckEdgeCurrent();
 	CheckVoltage();
-	if(t_1s>99)
+	if(t_1s>99) //100 * 10ms = 1000ms =1s
 	{
 	  t_1s=0;
 
-			 RunSecond++;
+	   RunSecond++;
 	  ///*
 	  
-	  Usart1Send[0]=15;
-	  Usart1Send[1]=Voltage/100;
-	  Usart1Send[2]=Voltage%100;
+	  Usart1Send[0]=15; //printf 15 number output
+	  Usart1Send[1]=0x0A;//Voltage/100;
+	  Usart1Send[2]=0x0B;//Voltage%100;
 	  Usart1Send[3]=GroundDp[0];
 	  Usart1Send[4]=GroundDp[1];
 	  Usart1Send[5]=GroundDp[2];
@@ -210,17 +212,19 @@ void INT8_17_Rpt() interrupt INT8_17_VECTOR
 {
 	if(PINTF2&0x01)						//判断INT16中断标志位----L MOTOR SPEED
 	{
-	  PINTF2 &=0XFE;				//清除INT16中断标志位		
+	  //LmotorSpeedNum ++ ;
+	  PINTF2 &=0XFE;				//清除INT16中断标志位	--motor L speed 检测	
 	  ReadLeftPulsed();
 	  
 	}
 	else if(PINTF2&0x02)			//判断INT17中断标志位 -----R motor SPEED
 	{
-	  PINTF2 &=0XFD;				//清除INT17中断标志位		
+	  //RmotorSpeedNum ++ ;
+	  PINTF2 &=0XFD;				//清除INT17中断标志位	--马达 R speed 检测	
 	  ReadRightPulsed();
 	  
 	}
-	else if(PINTF1&0x80)						//判断INT15中断标志位
+	else if(PINTF1&0x80)			 //判断INT15中断标志位--电池充电
 	{
 	  PINTF1 &=0X7f;				//清除INT15中断标志位---电池充电状态值		
 	  PowerCountErr++;

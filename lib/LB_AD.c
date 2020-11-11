@@ -40,13 +40,16 @@ void Delay_2us(unsigned int fui_i)
 *************************************************************/
 void InitADIO(void)
 {
-	P0M2 = 0x02;				        //P02设置为模拟输入---
+	P0M2 = 0x02;				        //P02设置为模拟输入---电池电压检测（电池本体）
+
 	P0M3 = 0x02;				        //P03设置为模拟输入---IR_MID_WALL 中间IR
 	P0M4 = 0x02;				        //P04设置为模拟输入---IR_L_WALL
 	P0M5 = 0x02;				        //P05设置为模拟输入---IR_R_WALL
+
 	P0M6 = 0x02;				        //P06设置为模拟输入---MOTOR_L_CURRENT_
 	P0M7 = 0x02;				        //P07设置为模拟输入---MOTOR_R_CURRENT
 	P2M5 = 0x02;				        //P25设置为模拟输入---洒水MOTOR_CURRENT
+
 	P0M1 = 0X80;                        //IR_WALL_PW 输出GPIO 
 }
 /*************************************************************
@@ -124,7 +127,7 @@ void ReadAD5ms()
   if(i>2)
   {
      i=0;
-	 AD5ms[chanel]= (ADtemp[1]+ADtemp[2])/2; // IR_MID_WALL
+	 AD5ms[chanel]= (ADtemp[1]+ADtemp[2])/2; // IR_MID_WALL + IR_L_WALL
 	 chanel++;
 	 if(chanel>6) //AN3 ,AN4, AN5 rIR input 
 	 {
@@ -144,18 +147,16 @@ void ReadAD5ms()
 			 ADFlashFlag=1;
 		  }
 	  }
-	  else
-	  
-	  {
+	  else{
 	  	 P0_1 = 0;// IR don't works
 	  }
 		//SBUF=(AD5ms[1]>>4);
-	 chanel=0;
-	 }
+	    chanel=0;
+	}
   }
   else
   {
-  	 SetAD(chanel);
+  	 SetAD(chanel); //ADC转换
   }
 }
 /*************************************************************
@@ -206,12 +207,12 @@ void CheckGround()
  {
    if(ADFlag)
    {
-   	   GroundAD[0][0]=(AD5ms[2]>>4); // L_WALL ADtemp[i]=ADCR; //ADC 转换结果寄存器,ADCC[7]={2,3,4,5,6,7,13};
+   	   GroundAD[0][0]=(AD5ms[2]>>4); // L_WALL //ADtemp[i]=ADCR; //ADC 转换结果寄存器,ADCC[7]={2,3,4,5,6,7,13};
 	   GroundAD[1][0]=(AD5ms[1]>>4); //M_WALL IR_WALL 判断值
 	   GroundAD[2][0]=(AD5ms[3]>>4); //R_WALL 
 	   ADFlashFlag=0;
 	 //SBUF=GroundAD[0][0];
-    if(GroundAD[0][1]>GroundAD[0][0])
+    if(GroundAD[0][1]>GroundAD[0][0]) //
 	{
        GroundAD100Ms[0][ADTime]=GroundAD[0][1]-GroundAD[0][0];
 	}
