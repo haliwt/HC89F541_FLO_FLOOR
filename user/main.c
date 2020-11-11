@@ -212,14 +212,14 @@ void INT8_17_Rpt() interrupt INT8_17_VECTOR
 {
 	if(PINTF2&0x01)						//判断INT16中断标志位----L MOTOR SPEED
 	{
-	  //LmotorSpeedNum ++ ;
+	  LmotorSpeedNum ++ ;
 	  PINTF2 &=0XFE;				//清除INT16中断标志位	--motor L speed 检测	
 	  ReadLeftPulsed();
 	  
 	}
 	else if(PINTF2&0x02)			//判断INT17中断标志位 -----R motor SPEED
 	{
-	  //RmotorSpeedNum ++ ;
+	  RmotorSpeedNum ++ ;
 	  PINTF2 &=0XFD;				//清除INT17中断标志位	--马达 R speed 检测	
 	  ReadRightPulsed();
 	  

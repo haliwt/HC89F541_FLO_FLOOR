@@ -17,8 +17,10 @@ version  : 见文件尾端
 #include "..\include\HC89F0541.h"
 #include "..\include\PJ_TypeRedefine.h"
 #include "LB_Motor.h"
-
+#include "LB_Run.h"
 #endif
+
+#define abs(x)  (x >0 ? x ：-x)
 
 void Init_MotorSpeed()
 {
@@ -216,7 +218,7 @@ void InitMotorRightRetreat(void)
     P1_2=0; //IN1  ---forward 
 	///*
 	PWM01_MAP = 0x12;					//PWM01通道映射P12口
-    PWM0C = 0x01 ;                      //WT.EDIT 2020.22.20//0x00; //PWM0高有效，PWM01高有效，时钟8分频 
+    PWM0C = 0x00;                      //WT.EDIT 2020.22.20//0x00; //PWM0高有效，PWM01高有效，时钟8分频 
     PWMM |= 0x10;						//PWM0工作于互补模式						
 
 	//独立模式下，PWM0和PWM01共用一个周期寄存器
@@ -309,7 +311,9 @@ void ReadLeftPulsed(void)
 	if((LeftMoveMotorData.MotorMode&0x03)==1) //forword
 	{
 		LeftMoveMotorData.NowPulsed++;
-		//LmotorSpeedNum ++ ; //WT.EDIT
+		LmotorSpeedNum ++ ; //WT.EDIT
+
+		
 		/*
 		if(LeftMoveMotorData.NowPulsed>=(LeftMoveMotorData.MovePulsed+19))
 		{
@@ -327,7 +331,7 @@ void ReadLeftPulsed(void)
 	else if((LeftMoveMotorData.MotorMode&0x03)==2) //retreat
 	{
 		LeftMoveMotorData.NowPulsed--;
-		//LmotorSpeedNum -- ; //WT.EDIT 
+		LmotorSpeedNum -- ; //WT.EDIT 
 		/*
 		if(LeftMoveMotorData.NowPulsed<=(LeftMoveMotorData.MovePulsed-19))
 		{
@@ -343,6 +347,8 @@ void ReadLeftPulsed(void)
 		}
 		*/
 	}
+
+	
 }
 /********************************************************************
 	*
@@ -357,7 +363,7 @@ void ReadRightPulsed(void)
 	if((RightMoveMotorData.MotorMode&0x03)==1) //right motor RunMode =3
 	{
 		RightMoveMotorData.NowPulsed++;
-	//	RmotorSpeedNum ++; //WT.EDIT 
+		RmotorSpeedNum ++; //WT.EDIT 
 		/*
 		if(RightMoveMotorData.NowPulsed>=(RightMoveMotorData.MovePulsed+19))
 		{
@@ -376,7 +382,7 @@ void ReadRightPulsed(void)
 	else if((RightMoveMotorData.MotorMode&0x03)==2) //WT.EDIT //retreat//else 
 	{
 		RightMoveMotorData.NowPulsed--;
-		//RmotorSpeedNum --; //WT.EDIT
+		RmotorSpeedNum --; //WT.EDIT
 		/*
 		if(RightMoveMotorData.NowPulsed<=(RightMoveMotorData.MovePulsed-19))
 		{
@@ -835,6 +841,30 @@ void SetXMotor(
 void AdjustSpeed()
 {
 
+ 
+  
+  if( (LmotorSpeedNum - RmotorSpeedNum) > 3 ){
+       //左轮 移动距离大于 右轮移动距离
+       PWM0DTL=RightMoveMotorData.OutPWM ++ ;
+  		//PWM0DL=LeftMoveMotorData.OutPWM;
+  		if( (LmotorSpeedNum - RmotorSpeedNum) < 3 && (LmotorSpeedNum - RmotorSpeedNum) >=0){
+            return ;  			
+  	     }
+  }
+
+  if((RmotorSpeedNum - LmotorSpeedNum) > 3 ){
+       //右轮 移动距离大于 左轮移动距离
+       //PWM0DTL=RightMoveMotorData.OutPWM ++ ;
+  		PWM0DL=LeftMoveMotorData.OutPWM++;
+  		if((RmotorSpeedNum - LmotorSpeedNum) < 3 && (RmotorSpeedNum - LmotorSpeedNum) >= 0) {
+            return ;  			
+  	
+     }
+
+
+  }
+
+ #if 0
  if(LeftMoveMotorData.RunSpeed>LeftMoveMotorData.EndSpeed)
  {
   LeftMoveMotorData.SlopeTime++;
@@ -910,6 +940,7 @@ void AdjustSpeed()
  }
 
     }
+ #endif 
 }
 
 #if 0
@@ -972,8 +1003,9 @@ void SetMotorcm(INT8U mode,INT16U Setcm)
   {
      case 1:
 	 {
-        LeftMoveMotorData.RMode=1;
+        LeftMoveMotorData.RMode=1; 
 	   LeftMoveMotorData.RunCm=0;
+	   
        RightMoveMotorData.RunCm=0;
        LeftMoveMotorData.SetCm=Setcm;
        RightMoveMotorData.SetCm=Setcm;
@@ -984,6 +1016,8 @@ void SetMotorcm(INT8U mode,INT16U Setcm)
 	   LeftMoveMotorData.RMode=2;
 
 	   LeftMoveMotorData.RunCm=0;
+
+	   
        RightMoveMotorData.RunCm=0;
        LeftMoveMotorData.SetCm=LeftMoveMotorData.RunCm-Setcm;
        RightMoveMotorData.SetCm=RightMoveMotorData.RunCm-Setcm;
