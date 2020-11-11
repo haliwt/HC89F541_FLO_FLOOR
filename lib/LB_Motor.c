@@ -841,23 +841,29 @@ void SetXMotor(
 void AdjustSpeed()
 {
 
- 
+  if( (LmotorSpeedNum - RmotorSpeedNum) <1 ||  (RmotorSpeedNum - LmotorSpeedNum) <1){
+       //左轮 移动距离大于 右轮移动距离
+      LmotorSpeedNum = 0;
+      RmotorSpeedNum=0;
+  }
   
-  if( (LmotorSpeedNum - RmotorSpeedNum) > 3 ){
+  if( (LmotorSpeedNum - RmotorSpeedNum) > 2 ){
        //左轮 移动距离大于 右轮移动距离
        PWM0DTL=RightMoveMotorData.OutPWM ++ ;
-  		//PWM0DL=LeftMoveMotorData.OutPWM;
-  		if( (LmotorSpeedNum - RmotorSpeedNum) < 3 && (LmotorSpeedNum - RmotorSpeedNum) >=0){
-            return ;  			
+  	   PWM0DL=LeftMoveMotorData.OutPWM--;
+  		if( (LmotorSpeedNum - RmotorSpeedNum) < 2 && (LmotorSpeedNum - RmotorSpeedNum) >=0){
+            LmotorSpeedNum = 0;
+            RmotorSpeedNum=0;			
   	     }
   }
 
-  if((RmotorSpeedNum - LmotorSpeedNum) > 3 ){
+  if((RmotorSpeedNum - LmotorSpeedNum) > 2 ){
        //右轮 移动距离大于 左轮移动距离
-       //PWM0DTL=RightMoveMotorData.OutPWM ++ ;
+        PWM0DTL=RightMoveMotorData.OutPWM -- ;
   		PWM0DL=LeftMoveMotorData.OutPWM++;
-  		if((RmotorSpeedNum - LmotorSpeedNum) < 3 && (RmotorSpeedNum - LmotorSpeedNum) >= 0) {
-            return ;  			
+  		if((RmotorSpeedNum - LmotorSpeedNum) < 2 && (RmotorSpeedNum - LmotorSpeedNum) >= 0) {
+           LmotorSpeedNum = 0;
+           RmotorSpeedNum=0; 			
   	
      }
 
