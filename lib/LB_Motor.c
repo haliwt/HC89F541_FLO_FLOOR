@@ -417,11 +417,13 @@ void CheckLeftMotorSpeed(void)
 	{
 		if(LeftMoveMotorData.NowPulsed>=LeftMoveMotorData.LastPulsed)
 			LeftMoveMotorData.NowSpeed[i]=LeftMoveMotorData.NowPulsed-LeftMoveMotorData.LastPulsed;
+		
 	}
 	else if(LeftMoveMotorData.MotorMode==2) //retreat CCW
 	{
 		if(LeftMoveMotorData.LastPulsed>=LeftMoveMotorData.NowPulsed)
 			LeftMoveMotorData.NowSpeed[i]=LeftMoveMotorData.LastPulsed-LeftMoveMotorData.NowPulsed;
+		
 	}
 
 	i++;
@@ -540,6 +542,8 @@ void CheckLeftMotorSpeed(void)
 	 	 
 	}
 
+	//AdjustSpeed(); //WT.EDIT 2020.11.11
+
 }
 
 
@@ -560,11 +564,13 @@ void CheckRightMotorSpeed(void)
 	{
 		if(RightMoveMotorData.NowPulsed>=RightMoveMotorData.LastPulsed)
 			RightMoveMotorData.NowSpeed[i]=RightMoveMotorData.NowPulsed-RightMoveMotorData.LastPulsed;
+			
 	}
 	else if(RightMoveMotorData.MotorMode==2) //后退
 	{
 		if(RightMoveMotorData.LastPulsed>=RightMoveMotorData.NowPulsed)
 			RightMoveMotorData.NowSpeed[i]=RightMoveMotorData.LastPulsed-RightMoveMotorData.NowPulsed;
+			
 	}
 
 	i++;
@@ -680,6 +686,8 @@ void CheckRightMotorSpeed(void)
 		 RightStop();
 		 
 	}
+
+	
 
 }
 
@@ -827,6 +835,7 @@ void SetXMotor(
 		RightMoveMotorData.EndSpeed=RightEndSpeed;
 
 	}
+	
 
 }
 
@@ -840,31 +849,35 @@ void SetXMotor(
 **************************************************************/
 void AdjustSpeed()
 {
+ // INT16U tempV;
 
-  if( (LmotorSpeedNum - RmotorSpeedNum) <1 ||  (RmotorSpeedNum - LmotorSpeedNum) <1){
+  if(( (LmotorSpeedNum - RmotorSpeedNum) < 5 && (LmotorSpeedNum - RmotorSpeedNum) >=0) ||  ((RmotorSpeedNum - LmotorSpeedNum) <5&&((RmotorSpeedNum - LmotorSpeedNum)>=0))){
        //左轮 移动距离大于 右轮移动距离
       LmotorSpeedNum = 0;
       RmotorSpeedNum=0;
+     // return ;
   }
   
-  if( (LmotorSpeedNum - RmotorSpeedNum) > 2 ){
+  if( (LmotorSpeedNum - RmotorSpeedNum) > 5 ){//左边速度大
        //左轮 移动距离大于 右轮移动距离
        PWM0DTL=RightMoveMotorData.OutPWM ++ ;
-  	   PWM0DL=LeftMoveMotorData.OutPWM--;
-  		if( (LmotorSpeedNum - RmotorSpeedNum) < 2 && (LmotorSpeedNum - RmotorSpeedNum) >=0){
+  	   PWM0DL=LeftMoveMotorData.OutPWM-20;
+      
+  		if( (LmotorSpeedNum - RmotorSpeedNum) < 5 && (LmotorSpeedNum - RmotorSpeedNum) >=0){
             LmotorSpeedNum = 0;
-            RmotorSpeedNum=0;			
+            RmotorSpeedNum=0;	
+		   
   	     }
   }
 
-  if((RmotorSpeedNum - LmotorSpeedNum) > 2 ){
+  if((RmotorSpeedNum - LmotorSpeedNum) > 5 ){ 
        //右轮 移动距离大于 左轮移动距离
-        PWM0DTL=RightMoveMotorData.OutPWM -- ;
+        PWM0DTL=RightMoveMotorData.OutPWM --    ;
   		PWM0DL=LeftMoveMotorData.OutPWM++;
-  		if((RmotorSpeedNum - LmotorSpeedNum) < 2 && (RmotorSpeedNum - LmotorSpeedNum) >= 0) {
+  		if((RmotorSpeedNum - LmotorSpeedNum) < 5 && (RmotorSpeedNum - LmotorSpeedNum) >= 0) {
            LmotorSpeedNum = 0;
-           RmotorSpeedNum=0; 			
-  	
+           RmotorSpeedNum=0; 	
+		 
      }
 
 
