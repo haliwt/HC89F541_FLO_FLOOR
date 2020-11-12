@@ -32,6 +32,7 @@ version  : 见文件尾端
 ***************************************************************/
 void  CheckRun()
 {
+	static unsigned char i=0;
 	switch(RunMode)
 	{
 
@@ -45,90 +46,283 @@ void  CheckRun()
 			}
 			break;
 
-			case 1: 
-			{
-				//SetXMotor(ldir,startspeed,endspeed,slope,Rdir,startspeed,endspeed,slope)
+		case 1:
+		{
 
-				SetXMotor(2,20,40,1,2,20,40,1); //CCW dir =2
-				SetMotorcm(2,1000);
-				RunStep=2;
-				RunMs=0;
-			}
-			break;
+			SetXMotor(1,20,40,1,1,20,40,1);
+			SetMotorcm(1,5000);
+			RunStep=2;
+			RunMs=0;
+		}
+		break;
+		case 2:
+        {
 			
-			case 2:
-
-				if((GroundDp[0]>GroundMin)||(GroundDp[1]>GroundMin)||(GroundDp[2]>GroundMin))
-				{
+	ground:			if((GroundDp[0]>GroundMin)||(GroundDp[1]>GroundMin)||(GroundDp[2]>GroundMin))
+			{
 				 AllStop();
 				 //SetXMotor(1,20,1,1,1,20,1,1);
 				  RunStep=3;
-				 RunMs=0;			
-				}
-				if((RightMoveMotorData.Flag==1)||(LeftMoveMotorData.Flag==1))
-				{
-					SetXMotor(1,20,40,1,1,20,40,1); //CW DIR=1
-					SetMotorcm(1,1000);			
-				}
-				
-				if(RunMs>3000) //3000 * 0.1ms =300ms
-				{
-					 AllStop();
-					 //SetXMotor(1,20,1,1,1,20,1,1);
-					RunStep=3;
-					RunMs=0;	
-				}
-				
-				break;
-			case 3:
+				RunMs=0;			
+			}
+			if((RightMoveMotorData.Flag==1)||(LeftMoveMotorData.Flag==1))
 			{
-			   if(RunMs>20) //20 * 0.1ms =2ms
-			   {
-			    //motor DIR CW 
-				SetXMotor(1,20,40,1,1,20,40,1); //CW DIR=1 
-				SetMotorcm(1,1000);
-				RunStep=4;		   
-			   }
+				SetXMotor(1,20,40,1,1,20,40,1);  //直行
+				SetMotorcm(1,5000);			
+			}
+			
+			if(RunMs>3000)
+			{
+				 AllStop();
+				 //SetXMotor(1,20,1,1,1,20,1,1);
+				RunStep=3;
+				RunMs=0;	
+			}
+			
+			
+			
+		}
+			break;
+		case 3:
+		{
+		   if(RunMs>20)
+		   {
+			SetXMotor(2,20,40,1,2,20,40,1); //左转
+			SetMotorcm(2,1000);
+			RunStep=4;		   
+		   }
+		}
+		break;
+		case 4:
+		{
+			if(RunMs>120)
+			{
+				AllStop();
+				//SetXMotor(2,20,1,1,2,20,1,1);
+				RunMs=0;
+				RunStep=5;
+			}
+		}
+			break;
+	    case 5:
+		  {
+			if(RunMs>20)
+			{
+				SetXMotor(2,20,40,1,1,20,40,1); //右转
+			    SetMotorcm(3,9000);
+				RunMs=0;
+				RunStep=6;
+			}		  
+		  }
+		break;
+		case 6:
+			if(RunMs>100)
+			{
+				AllStop();
+				//SetXMotor(2,20,1,1,1,20,1,1);
+				RunMs=0;
+				RunStep=7;
 			}
 			break;
-			case 4:
-				if(RunMs>120) //120 * 0.1ms = 12ms
-				{
-					AllStop();
-					//SetXMotor(2,20,1,1,2,20,1,1);
+		case 7:
+			
+			if(RunMs>20) //20 * 10ms =200ms
+			{
+				SetXMotor(1,20,25,1,1,20,60,1);//SetXMotor(1,20,25,1,1,20,40,1);//SetXMotor(1,20,25,1,1,20,40,1); //直行
+			    SetMotorcm(1,5000);
+				RunMs=0;
+				RunStep=2;//直线 //RunStep=12;
+				
+                
+				#if 0  //左右移动
+					SetXMotor(1,20,25,1,1,20,40,1);
+				    SetMotorcm(1,5000);
 					RunMs=0;
-					RunStep=5;
-				}
-				break;
-		    case 5:
-			  {
-				if(RunMs>20) //20 * 0.1ms = 2ms
-				{
-					SetXMotor(2,20,40,1,1,20,40,1); //CCW DIR=2
-				    SetMotorcm(3,9000); // mode=3，（时间），
-					RunMs=0;
-					RunStep=6;
-				}		  
-			  }
+					RunStep=12;
+				 
+				#endif 
+			}
+			if(i==0){
+			        i=3 ;
+			        PumpTime =0;
+					WaterPump();
+				    Delay_ms(500);
+				    WaterPumpStop();
+					SetXMotor(2,20,40,1,1,20,40,1);
+			        SetMotorcm(3,9000); //转圈
+				    
+				    RunMs=0;
+				    RunStep=2;//直线 //RunStep=12;
+				     goto ground;
+			}
+			if(PumpTime >59){
+
+					
+				    PumpTime =0;
+					WaterPump();
+				    Delay_ms(10);
+				    WaterPumpStop();
+					SetXMotor(2,20,40,1,1,20,40,1);
+			        SetMotorcm(3,9000); //转圈
+				   
+				    RunMs=0;
+				    RunStep=2;//直线 //RunStep=12;
+				    goto ground;
+		    }
+			
 			break;
-			case 6:
-				if(RunMs>100) //100 * 0.1=10ms
-				{
-					AllStop();
-					//SetXMotor(2,20,1,1,1,20,1,1);
-					RunMs=0;
-					RunStep=7;
-				}
-				break;
-			case 7:
-				if(RunMs>20) //20 * 0.1ms =2ms
-				{
-					SetXMotor(2,20,40,1,2,20,40,1); //CCW DIR =2
-				    SetMotorcm(2,1000);
-					RunMs=0;
-					RunStep=2;
-				}
-				break;
+		
+
+		case 12:
+        {
+			if((GroundDp[0]>GroundMin)||(GroundDp[1]>GroundMin)||(GroundDp[2]>GroundMin))
+			{
+			 AllStop();
+			 //SetXMotor(1,20,1,1,1,20,1,1);
+			  RunStep=13;
+			RunMs=0;			
+			}
+			if((RightMoveMotorData.Flag==1)||(LeftMoveMotorData.Flag==1))
+			{
+			SetXMotor(1,20,25,1,1,20,40,1);
+			SetMotorcm(1,5000);			
+			}
+			
+			if(RunMs>3000)
+			{
+			 AllStop();
+			 //SetXMotor(1,20,1,1,1,20,1,1);
+			RunStep=13;
+			RunMs=0;	
+			}
+		}
+			break;
+		case 13:
+		{
+		   if(RunMs>20)
+		   {
+			SetXMotor(2,20,40,1,2,20,40,1);
+			SetMotorcm(2,1000);
+			RunStep=14;		   
+		   }
+		}
+		break;
+		case 14:
+		{
+			if(RunMs>120)
+			{
+				AllStop();
+				//SetXMotor(2,20,1,1,2,20,1,1);
+				RunMs=0;
+				RunStep=15;
+			}
+		}
+			break;
+	    case 15:
+		  {
+			if(RunMs>20)
+			{
+				SetXMotor(2,20,40,1,1,20,40,1);
+			    SetMotorcm(3,9000); //转圈
+				RunMs=0;
+				RunStep=16;
+			}		  
+		  }
+		break;
+		case 16:
+			if(RunMs>100)
+			{
+				AllStop();
+				//SetXMotor(2,20,1,1,1,20,1,1);
+				RunMs=0;
+				RunStep=17;
+			}
+			break;
+		case 17:
+			if(RunMs>20)
+			{
+				SetXMotor(1,20,40,1,1,20,25,1);
+			    SetMotorcm(1,5000);
+				RunMs=0;
+				RunStep=22;
+			}
+			break;			
+			
+
+		case 22:
+        {
+			if((GroundDp[0]>GroundMin)||(GroundDp[1]>GroundMin)||(GroundDp[2]>GroundMin))
+			{
+			 AllStop();
+			 //SetXMotor(1,20,1,1,1,20,1,1);
+			  RunStep=3;
+			RunMs=0;			
+			}
+			if((RightMoveMotorData.Flag==1)||(LeftMoveMotorData.Flag==1))
+			{
+			SetXMotor(1,20,40,1,1,20,25,1);
+			SetMotorcm(1,5000);			
+			}
+			
+			if(RunMs>3000)
+			{
+			 AllStop();
+			 //SetXMotor(1,20,1,1,1,20,1,1);
+			RunStep=23;
+			RunMs=0;	
+			}
+		}
+			break;
+		case 23:
+		{
+		   if(RunMs>20)
+		   {
+			SetXMotor(2,20,40,1,2,20,40,1);
+			SetMotorcm(2,1000);
+			RunStep=24;		   
+		   }
+		}
+		break;
+		case 24:
+		{
+			if(RunMs>120)
+			{
+				AllStop();
+				//SetXMotor(2,20,1,1,2,20,1,1);
+				RunMs=0;
+				RunStep=25;
+			}
+		}
+			break;
+	    case 25:
+		  {
+			if(RunMs>20)
+			{
+				SetXMotor(2,20,40,1,1,20,40,1);
+			    SetMotorcm(3,9000);
+				RunMs=0;
+				RunStep=26;
+			}		  
+		  }
+		break;
+		case 26:
+			if(RunMs>100)
+			{
+				AllStop();
+				//SetXMotor(2,20,1,1,1,20,1,1);
+				RunMs=0;
+				RunStep=27;
+			}
+			break;
+		case 27:
+			if(RunMs>20)
+			{
+				SetXMotor(1,20,40,1,1,20,40,1);
+			    SetMotorcm(1,5000);
+				RunMs=0;
+				RunStep=2;
+			}
+			break;			
 
 
 
@@ -156,21 +350,22 @@ void CheckMode(INT8U Key)
 	  Step=1;
 	 
 	}
-	else{ //开机 Mode =1 
-		  if(Step==0) //开机 Step =0 
-		  {
-		    //20
-		  	Step=1;
-		    ADCtl=1;
-	        RunSecond=0;
-		  }
-		  else	if(Step<20)
-		  {
-			  //LedBlueON();
-			  Mode=1;
-			  Step=0;
-			  RunSecond=0;
-			  AllStop();
+	else 
+	 {
+	  if(Step==0)
+	  {
+	    //20
+	  	Step=1;
+	    ADCtl=1;
+        RunSecond=0;
+	  }
+	  else	if(Step<20)
+	  {
+	  //LedBlueON();
+	  Mode=1;
+	  Step=0;
+	  RunSecond=0;
+	  AllStop();
 
 			  SetEdge(0);
 			  RunStep=0;
@@ -254,11 +449,10 @@ void CheckMode(INT8U Key)
 			  ADCtl=1;
 
 			  
-			  RunMode=2; //motor Run 
-			  RunStep=4; //执行 4步
+			  RunMode=2;
+			  RunStep=1;
 			  ADCtl=1;
-				SetXMotor(1,6,40,1,1,6,40,1);
-			    SetMotorcm(1,1000);
+
 				RunMs=0;
 			  NoImpSecond=0;
 
@@ -267,8 +461,11 @@ void CheckMode(INT8U Key)
 		 break;
 		 
 		 case 2:
-		    if(Voltage<960)
-				{
+		 {
+
+		  
+		  if(Voltage<960)
+			{
 
 			     ADCtl=0;
 			     RunStep=0;
@@ -302,7 +499,7 @@ void CheckMode(INT8U Key)
 				NoImpSecond=0;		 
 			 }
 			  
-			 
+			 }
 		 break;
 		 //电量不足时，灯光闪频率2Hz
 

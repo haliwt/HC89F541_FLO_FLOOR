@@ -83,6 +83,7 @@ void main(void)
 	RunSecond=0;
 	LCurrent=0;
 	RCurrent=0;
+	
 
 
 	Mode=1;
@@ -95,19 +96,12 @@ void main(void)
 	while(1)
 	{
 
-	 #if 0
-	   WaterPump();
-	   Delay_ms(500);
-	   WaterPumpStop();
-	   Delay_ms(500);
-	   
-	 #endif 
+	   	
 	   CheckGround();
 	   CheckRun();
 
 	   kk=ReadKey();
        CheckMode(kk);
-	 
 	}
 
 }
@@ -124,7 +118,7 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
   static INT8U idata t_1s;
   t_10ms++;
   ReadAD5ms();//检测IR 障碍物
- // AdjustSpeed(); //WT.EDIT 2020.11.12
+//  AdjustSpeed(); //WT.EDIT 2020.11.12
 
   if(t_10ms>99) //10ms
   {
@@ -150,6 +144,7 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
 	if(t_1s>99) //100 * 10ms = 1000ms =1s
 	{
 	  t_1s=0;
+	  PumpTime++;
 
 	   RunSecond++;
 	  ///*
@@ -213,7 +208,7 @@ void INT8_17_Rpt() interrupt INT8_17_VECTOR
 {
 	if(PINTF2&0x01)						//判断INT16中断标志位----L MOTOR SPEED
 	{
-	  LmotorSpeedNum ++ ;
+	 // LmotorSpeedNum ++ ;
 	  PINTF2 &=0XFE;				//清除INT16中断标志位	--motor L speed 检测	
 	  ReadLeftPulsed();
 	  

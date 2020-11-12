@@ -251,8 +251,7 @@ void InitMotorRightRetreat(void)
 void LeftStop()
 {
 
-   //PWMEN &= 0xfe;
-   PWMEN &= 0xe5; //WT.EDIT 
+   PWMEN &= 0xfe;
 
     P1_3=0;
     P1_4=0;
@@ -261,8 +260,7 @@ void LeftStop()
 void RightStop()
 {
 
-   //PWMEN &= 0xef;
-   PWMEN &= 0xe5; //WT.EDIT
+   PWMEN &= 0xef;
     P1_1=0;
     P1_2=0;
 
@@ -453,13 +451,16 @@ void CheckLeftMotorSpeed(void)
 				//	if(LeftMoveMotorData.OutPWM<0X20)
 				//		LeftMoveMotorData.OutPWM=0X20;
 			   ///*
-				if((LeftMoveMotorData.AvgSpeed-LeftMoveMotorData.RunSpeed)>3)
+				{
+
+          if((LeftMoveMotorData.AvgSpeed-LeftMoveMotorData.RunSpeed)>3)
 					{
 	             		LeftMoveMotorData.OutPWM-=4;
 						if(LeftMoveMotorData.OutPWM<0X20)
 							LeftMoveMotorData.OutPWM=0X20;
 					}					
-					else if((LeftMoveMotorData.AvgSpeed-LeftMoveMotorData.RunSpeed)>2)
+					else 
+					if((LeftMoveMotorData.AvgSpeed-LeftMoveMotorData.RunSpeed)>2)
 					{
 	             		LeftMoveMotorData.OutPWM-=3;
 						if(LeftMoveMotorData.OutPWM<0X20)
@@ -485,7 +486,7 @@ void CheckLeftMotorSpeed(void)
 
 					}
          
-				
+				}
 			  //*/
 			}
 			else if(LeftMoveMotorData.AvgSpeed<LeftMoveMotorData.RunSpeed)
@@ -504,7 +505,8 @@ void CheckLeftMotorSpeed(void)
 					else 
                     LeftMoveMotorData.OutPWM+=4;	 					
 				}
-				else if((LeftMoveMotorData.RunSpeed-LeftMoveMotorData.AvgSpeed)>2)
+				else
+				if((LeftMoveMotorData.RunSpeed-LeftMoveMotorData.AvgSpeed)>2)
 				{
 
 				
@@ -513,7 +515,8 @@ void CheckLeftMotorSpeed(void)
 					else 
             		LeftMoveMotorData.OutPWM+=3;							
 				}
-				else if((LeftMoveMotorData.RunSpeed-LeftMoveMotorData.AvgSpeed)>1)
+				else
+				if((LeftMoveMotorData.RunSpeed-LeftMoveMotorData.AvgSpeed)>1)
 				{
 
 					if(LeftMoveMotorData.OutPWM>0xfb)
@@ -847,9 +850,11 @@ void SetXMotor(
 	   *Retrn Ref: NO
 	   *
 **************************************************************/
+#if 0
 void AdjustSpeed()
 {
  // INT16U tempV;
+
 
   if(( (LmotorSpeedNum - RmotorSpeedNum) < 5 && (LmotorSpeedNum - RmotorSpeedNum) >=0) ||  ((RmotorSpeedNum - LmotorSpeedNum) <5&&((RmotorSpeedNum - LmotorSpeedNum)>=0))){
        //左轮 移动距离大于 右轮移动距离
@@ -891,8 +896,12 @@ void AdjustSpeed()
 
   }
 
- #if 0
- if(LeftMoveMotorData.RunSpeed>LeftMoveMotorData.EndSpeed)
+ #endif 
+/**********************DEFAULT***************************************/
+#if 1
+void AdjustSpeed()
+{
+  if(LeftMoveMotorData.RunSpeed>LeftMoveMotorData.EndSpeed)
  {
   LeftMoveMotorData.SlopeTime++;
   if(LeftMoveMotorData.SlopeTime>LeftMoveMotorData.Slope)
@@ -930,89 +939,6 @@ void AdjustSpeed()
    RightMoveMotorData.RunSpeed++;
   }
  }
- ///*
- if(LeftMoveMotorData.RMode==1)
- {
- if(RightMoveMotorData.NowPulsed>(LeftMoveMotorData.NowPulsed+100))
- {
-   RightMoveMotorData.RunSpeed=LeftMoveMotorData.RunSpeed-4;
- }
- else if(RightMoveMotorData.NowPulsed>(LeftMoveMotorData.NowPulsed+50))
- {
-   RightMoveMotorData.RunSpeed=LeftMoveMotorData.RunSpeed-3;
- }
- else if(RightMoveMotorData.NowPulsed>(LeftMoveMotorData.NowPulsed+30))
- {
-   RightMoveMotorData.RunSpeed=LeftMoveMotorData.RunSpeed-2;
- }
- else if(RightMoveMotorData.NowPulsed>(LeftMoveMotorData.NowPulsed+10))
- {
-  RightMoveMotorData.RunSpeed=LeftMoveMotorData.RunSpeed-1;
- }
- else if(LeftMoveMotorData.NowPulsed>(RightMoveMotorData.NowPulsed+100))
- {
-   LeftMoveMotorData.RunSpeed=RightMoveMotorData.RunSpeed-4;
- }
- else if(LeftMoveMotorData.NowPulsed>(RightMoveMotorData.NowPulsed+50))
- {
-   LeftMoveMotorData.RunSpeed=RightMoveMotorData.RunSpeed-3;
- }
- else if(LeftMoveMotorData.NowPulsed>(RightMoveMotorData.NowPulsed+30))
- {
-   LeftMoveMotorData.RunSpeed=RightMoveMotorData.RunSpeed-2;
- }
- else if(LeftMoveMotorData.NowPulsed>(RightMoveMotorData.NowPulsed+10))
- {
-   LeftMoveMotorData.RunSpeed=RightMoveMotorData.RunSpeed-1;
- }
-
-    }
- #endif 
-}
-
-#if 0
-void AdjustSpeed()
-{
-
-	if(LeftMoveMotorData.RunSpeed>LeftMoveMotorData.EndSpeed)
-	{
-		LeftMoveMotorData.SlopeTime++;
-		if(LeftMoveMotorData.SlopeTime>LeftMoveMotorData.Slope)
-		{
-			LeftMoveMotorData.SlopeTime=0;
-			if(LeftMoveMotorData.RunSpeed>0)
-				LeftMoveMotorData.RunSpeed--;
-		}
-	}
-	else if(LeftMoveMotorData.RunSpeed<LeftMoveMotorData.EndSpeed)
-	{
-		LeftMoveMotorData.SlopeTime++;
-		if(LeftMoveMotorData.SlopeTime>LeftMoveMotorData.Slope)
-		{
-			LeftMoveMotorData.SlopeTime=0;
-			LeftMoveMotorData.RunSpeed++;
-		}
-	}
-	
-   if(RightMoveMotorData.RunSpeed>RightMoveMotorData.EndSpeed)
-	{
-		RightMoveMotorData.SlopeTime++;
-		if(RightMoveMotorData.SlopeTime>RightMoveMotorData.Slope)
-		{
-			RightMoveMotorData.SlopeTime=0;
-			if(RightMoveMotorData.RunSpeed>0)
-				RightMoveMotorData.RunSpeed--;
-		}
-	}
-	else if(RightMoveMotorData.RunSpeed<RightMoveMotorData.EndSpeed)
-	{
-		RightMoveMotorData.SlopeTime++;
-		if(RightMoveMotorData.SlopeTime>RightMoveMotorData.Slope)
-		{
-			RightMoveMotorData.SlopeTime=0;
-			RightMoveMotorData.RunSpeed++;
-		}
-	}
 
 }
 #endif 
@@ -1030,7 +956,6 @@ void SetMotorcm(INT8U mode,INT16U Setcm)
   {
      case 1:
 	 {
-        LeftMoveMotorData.RMode=1; 
 	   LeftMoveMotorData.RunCm=0;
 	   
        RightMoveMotorData.RunCm=0;
@@ -1040,7 +965,6 @@ void SetMotorcm(INT8U mode,INT16U Setcm)
 	 break;
 	 case 2:
 	 {
-	   LeftMoveMotorData.RMode=2;
 
 	   LeftMoveMotorData.RunCm=0;
 
@@ -1052,7 +976,6 @@ void SetMotorcm(INT8U mode,INT16U Setcm)
 	 break;
 	 case 3:
 	 {
-		LeftMoveMotorData.RMode=3;
 	   LeftMoveMotorData.RunCm=0;
        RightMoveMotorData.RunCm=0;
        LeftMoveMotorData.SetCm=LeftMoveMotorData.RunCm-Setcm/6;
@@ -1061,7 +984,6 @@ void SetMotorcm(INT8U mode,INT16U Setcm)
 	 break;
 	 case 4:
 	 {
-		LeftMoveMotorData.RMode=4;
 	   LeftMoveMotorData.RunCm=0;
        RightMoveMotorData.RunCm=0;
        LeftMoveMotorData.SetCm=Setcm/6;
@@ -1082,7 +1004,7 @@ void WaterPump(void)
 {
    P3M3 = 0xC2;                        //P33设置为推挽输出,喷水马达，
   // P3_3=1; //喷水
-   #if 1
+  
    PWM1_MAP = 0x33;					//PWM1通道映射P33口
 
     PWM1C = 0x01;//WT.EDIT	//0x00					//PWM1高有效，PWM11高有效，时钟8分频 
@@ -1110,7 +1032,7 @@ void WaterPump(void)
 
 	PWMEN |= 0x02;						//使能PWM1以及PWM11
 
-   #endif 
+    
 
 }
 /**
@@ -1123,6 +1045,11 @@ void Delay_ms(unsigned int fui_i)
 {
 	unsigned int fui_j;
 	for(;fui_i > 0;fui_i --)
-	for(fui_j = 1596;fui_j > 0;fui_j --);
+	for(fui_j = 1596;fui_j > 0;fui_j --)
+	{
+		;
+	}
 }
+
+
 
