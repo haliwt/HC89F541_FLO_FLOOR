@@ -92,7 +92,7 @@ void InitMotorLeftForward(void)
 {
 
     P1_3=0; //IN2
-    P1_4=0; //IN1 
+    P1_4=0; //IN1 //Left motor
 	///*
 	PWM0_MAP = 0x14;					//PWM0通道映射P14口
     PWM0C = 0x00;   //motor 快			//PWM0高有效，PWM01高有效，00: 1分频 01：时钟8分频 
@@ -116,7 +116,7 @@ void InitMotorLeftForward(void)
 	// 			= 341 	 / 2000000
 	//			= 170.5us		   占空比为 170.5/511.5 = 33.3%
 
-	PWM0DH = 0x00;						//PWM0高4位占空比0x01
+	PWM0DH = 0x00;		//left				//PWM0高4位占空比0x01
 	PWM0DL = 0x60;						//PWM0低8位占空比0x55
 	PWMEN |= 0x01;						//使能PWM0以及PWM01
    //*/
@@ -858,10 +858,15 @@ void AdjustSpeed()
      // return ;
   }
   
-  if( (LmotorSpeedNum - RmotorSpeedNum) > 5 ){//左边速度大
+  if( (LmotorSpeedNum - RmotorSpeedNum) > 5 ){//左边速度大,
        //左轮 移动距离大于 右轮移动距离
+       
+	   PWM0DH = 0x00;		//left motor
+	   PWM0DL=  0       ; //LeftMoveMotorData.OutPWM-200;
+  
+       PWM0DTH = 0x00; //right motor
        PWM0DTL=RightMoveMotorData.OutPWM ++ ;
-  	   PWM0DL=LeftMoveMotorData.OutPWM-20;
+  	  
       
   		if( (LmotorSpeedNum - RmotorSpeedNum) < 5 && (LmotorSpeedNum - RmotorSpeedNum) >=0){
             LmotorSpeedNum = 0;
@@ -872,7 +877,10 @@ void AdjustSpeed()
 
   if((RmotorSpeedNum - LmotorSpeedNum) > 5 ){ 
        //右轮 移动距离大于 左轮移动距离
+        PWM0DTH = 0x00; //right motor
         PWM0DTL=RightMoveMotorData.OutPWM --    ;
+	   
+	    PWM0DH = 0x00;		//left motor
   		PWM0DL=LeftMoveMotorData.OutPWM++;
   		if((RmotorSpeedNum - LmotorSpeedNum) < 5 && (RmotorSpeedNum - LmotorSpeedNum) >= 0) {
            LmotorSpeedNum = 0;
