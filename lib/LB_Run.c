@@ -80,7 +80,29 @@ void  CheckRun()
 				RunStep=3;
 				RunMs=0;	
 			}
-		
+			if(PumpTime >59 && PumpTime < 69){
+
+					WaterPump();
+				
+					SetXMotor(2,20,40,1,1,20,40,1);
+			        SetMotorcm(3,1000); //转圈
+			       
+			        RunStep=3;
+				   RunMs=0;	
+		    	}
+			 if(PumpTime > 69){
+                PumpTime =0;
+                WaterPumpStop();
+			    RunStep=3;
+				RunMs=0;	
+			 }
+		     if(i==3){
+
+				i++;
+				 WaterPumpStop();
+			    RunStep=3;
+				RunMs=0;	
+			 }
 			
 			
 		}
@@ -89,7 +111,7 @@ void  CheckRun()
 		{
 		   if(RunMs>20)
 		   {
-			SetXMotor(2,20,40,1,2,20,40,1); //左转
+			SetXMotor(2,20,40,1,2,20,40,1); //左转 90度
 			SetMotorcm(2,1000);
 			RunStep=4;		   
 		   }
@@ -151,10 +173,9 @@ void  CheckRun()
 					
 			        PumpTime =0;
 					WaterPump();
-				    Delay_ms(500);
-				    WaterPumpStop();
-					//SetXMotor(2,20,40,1,1,20,40,1);
-			       // SetMotorcm(3,1000); //转圈
+				 //   WaterPumpStop();
+					SetXMotor(2,20,40,1,1,20,40,1);
+			        SetMotorcm(3,1000); //转圈
 					RunMs=0;
 				    RunStep=2;//直线 //RunStep=12;
 				   // goto ground;
@@ -172,11 +193,13 @@ void  CheckRun()
 			        // AllStop();
 			         RunMs=0;
 				    RunStep=2;//直线 //RunStep=12;
-				    //goto ground;
+				    
 		    	}
 			 if(PumpTime > 69){
                 PumpTime =0;
-               WaterPumpStop();
+                WaterPumpStop();
+			    RunMs=0;
+				RunStep=2;//直线 //RunStep=12;
 			 }
 			#endif 
 			break;
