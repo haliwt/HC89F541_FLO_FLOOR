@@ -61,6 +61,7 @@ void InitSysclk(INT8U SYS)
 ***************************************************************************************/
 void main(void)
 {
+
 	INT8U kk;
 	INT8U  abc;
 	InitSysclk(1);
@@ -96,13 +97,15 @@ void main(void)
 	while(1)
 	{
 
-	   	
+	   
 	   CheckGround();
 	   CheckRun();
+	   
 
 	   kk=ReadKey();
        CheckMode(kk);
-	}
+	  
+	  }
 
 }
 /***********************************************************

@@ -33,6 +33,8 @@ version  : 见文件尾端
 void  CheckRun()
 {
 	static unsigned char i=0;
+
+   
 	switch(RunMode)
 	{
 
@@ -58,7 +60,7 @@ void  CheckRun()
 		case 2:
         {
 			
-	ground:			if((GroundDp[0]>GroundMin)||(GroundDp[1]>GroundMin)||(GroundDp[2]>GroundMin))
+         if((GroundDp[0]>GroundMin)||(GroundDp[1]>GroundMin)||(GroundDp[2]>GroundMin))
 			{
 				 AllStop();
 				 //SetXMotor(1,20,1,1,1,20,1,1);
@@ -71,14 +73,14 @@ void  CheckRun()
 				SetMotorcm(1,5000);			
 			}
 			
-			if(RunMs>3000)
+			if(RunMs>2000)//if(RunMs>3000)
 			{
 				 AllStop();
 				 //SetXMotor(1,20,1,1,1,20,1,1);
 				RunStep=3;
 				RunMs=0;	
 			}
-			
+		
 			
 			
 		}
@@ -141,36 +143,44 @@ void  CheckRun()
 					RunStep=12;
 				 
 				#endif 
+				
 			}
+			#if 1
 			if(i==0){
 			        i=3 ;
+					
 			        PumpTime =0;
 					WaterPump();
 				    Delay_ms(500);
 				    WaterPumpStop();
-					SetXMotor(2,20,40,1,1,20,40,1);
-			        SetMotorcm(3,9000); //转圈
-				    
-				    RunMs=0;
+					//SetXMotor(2,20,40,1,1,20,40,1);
+			       // SetMotorcm(3,1000); //转圈
+					RunMs=0;
 				    RunStep=2;//直线 //RunStep=12;
-				     goto ground;
+				   // goto ground;
 			}
-			if(PumpTime >59){
+			if(PumpTime >59 && PumpTime < 69){
 
 					
-				    PumpTime =0;
+					
+					//PumpTime =0;
 					WaterPump();
-				    Delay_ms(10);
-				    WaterPumpStop();
+				   // Delay_ms(500);
+				   // WaterPumpStop();
 					SetXMotor(2,20,40,1,1,20,40,1);
-			        SetMotorcm(3,9000); //转圈
-				   
-				    RunMs=0;
+			        SetMotorcm(3,1000); //转圈
+			        // AllStop();
+			         RunMs=0;
 				    RunStep=2;//直线 //RunStep=12;
-				    goto ground;
-		    }
-			
+				    //goto ground;
+		    	}
+			 if(PumpTime > 69){
+                PumpTime =0;
+               WaterPumpStop();
+			 }
+			#endif 
 			break;
+		
 		
 
 		case 12:
