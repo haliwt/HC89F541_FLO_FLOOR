@@ -733,12 +733,12 @@ void SetXMotor(
 	{
 
 	}
-	else if(LeftStartSpeed==0XF8) // 248 //PWM_T = 0x10 =256
+	else if(LeftStartSpeed==0XF8) // 248 //PWM_T = 0x100 =256
 	{
 		if(LeftMoveMotorData.EndSpeed<20) //最小值
 			LeftMoveMotorData.EndSpeed++;
 	}
-	else if(LeftStartSpeed==0XF0) //240 //PWM_T = 0x10 =256
+	else if(LeftStartSpeed==0XF0) //240 //PWM_T = 0x100 =256
 	{
 		if(LeftMoveMotorData.EndSpeed>2) //
 			LeftMoveMotorData.EndSpeed--;
@@ -806,8 +806,8 @@ void SetXMotor(
 			//if(RightMoveMotorData.MotorMode!=Rightmotor)
 			{
 				InitMotorRightForward();
-				RightMoveMotorData.OutPWM=0Xa0;
-				PWM0DTL=RightMoveMotorData.OutPWM; //R motor puty = 0xa0/0x10 =62.5%;
+				RightMoveMotorData.OutPWM=0Xa0; //160  /motor PWM_T = 0x100 =256
+				PWM0DTL=RightMoveMotorData.OutPWM; //R motor puty = 0xa0/0x100 =62.5%;
 
 			}
 		
@@ -850,55 +850,36 @@ void SetXMotor(
 	   *Retrn Ref: NO
 	   *
 **************************************************************/
-#if 0
+#if 1
 void AdjustSpeed()
 {
  // INT16U tempV;
+    
 
-
-  if(( (LmotorSpeedNum - RmotorSpeedNum) < 5 && (LmotorSpeedNum - RmotorSpeedNum) >=0) ||  ((RmotorSpeedNum - LmotorSpeedNum) <5&&((RmotorSpeedNum - LmotorSpeedNum)>=0))){
-       //左轮 移动距离大于 右轮移动距离
-      LmotorSpeedNum = 0;
-      RmotorSpeedNum=0;
-     // return ;
-  }
-  
-  if( (LmotorSpeedNum - RmotorSpeedNum) > 5 ){//左边速度大,
-       //左轮 移动距离大于 右轮移动距离
-       
-	   PWM0DH = 0x00;		//left motor
-	   PWM0DL=  0       ; //LeftMoveMotorData.OutPWM-200;
-  
-       PWM0DTH = 0x00; //right motor
-       PWM0DTL=RightMoveMotorData.OutPWM ++ ;
-  	  
+  if((RmotorSpeedNum - LmotorSpeedNum) > 20 ){
       
-  		if( (LmotorSpeedNum - RmotorSpeedNum) < 5 && (LmotorSpeedNum - RmotorSpeedNum) >=0){
-            LmotorSpeedNum = 0;
-            RmotorSpeedNum=0;	
-		   
-  	     }
+      return ;
   }
-
-  if((RmotorSpeedNum - LmotorSpeedNum) > 5 ){ 
+  else{
+  
        //右轮 移动距离大于 左轮移动距离
         PWM0DTH = 0x00; //right motor
-        PWM0DTL=RightMoveMotorData.OutPWM --    ;
+        PWM0DTL=RightMoveMotorData.OutPWM ++    ;
 	   
 	    PWM0DH = 0x00;		//left motor
-  		PWM0DL=LeftMoveMotorData.OutPWM++;
-  		if((RmotorSpeedNum - LmotorSpeedNum) < 5 && (RmotorSpeedNum - LmotorSpeedNum) >= 0) {
-           LmotorSpeedNum = 0;
-           RmotorSpeedNum=0; 	
+  		PWM0DL=LeftMoveMotorData.OutPWM--;
+  		if((RmotorSpeedNum - LmotorSpeedNum)  > 20 ) {
+          return ;
 		 
      }
 
 
   }
+}
 
  #endif 
 /**********************DEFAULT***************************************/
-#if 1
+#if 0
 void AdjustSpeed()
 {
   if(LeftMoveMotorData.RunSpeed>LeftMoveMotorData.EndSpeed)

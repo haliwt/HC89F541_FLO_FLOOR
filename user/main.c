@@ -121,7 +121,7 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
   static INT8U idata t_1s;
   t_10ms++;
   ReadAD5ms();//¼ì²âIR ÕÏ°­Îï
-//  AdjustSpeed(); //WT.EDIT 2020.11.12
+
 
   if(t_10ms>99) //10ms
   {
