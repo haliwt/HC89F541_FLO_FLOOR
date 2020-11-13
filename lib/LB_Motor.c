@@ -251,7 +251,7 @@ void InitMotorRightRetreat(void)
 void LeftStop()
 {
 
-   PWMEN &= 0xfe;
+   PWMEN &= 0xf5;
 
     P1_3=0;
     P1_4=0;
@@ -260,7 +260,7 @@ void LeftStop()
 void RightStop()
 {
 
-   PWMEN &= 0xef;
+   PWMEN &= 0xe5;
     P1_1=0;
     P1_2=0;
 
@@ -275,7 +275,7 @@ void RightStop()
 **************************************************************/
 void WaterPumpStop(void)
 {
-   PWMEN &= 0xee;
+   PWMEN &= 0xe5;
    P3_3 =0;
 }
 /**************************************************************
@@ -288,7 +288,7 @@ void WaterPumpStop(void)
 **************************************************************/
 void AllStop()
 {
-   PWMEN &= 0xee;
+   PWMEN &= 0xe5;
     P1_1=0;
     P1_2=0;
     P1_3=0;

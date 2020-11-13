@@ -80,29 +80,9 @@ void  CheckRun()
 				RunStep=3;
 				RunMs=0;	
 			}
-			if(PumpTime >59 && PumpTime < 69){
-
-					WaterPump();
-				
-					SetXMotor(2,20,40,1,1,20,40,1);
-			        SetMotorcm(3,1000); //转圈
-			       
-			        RunStep=3;
-				   RunMs=0;	
-		    	}
-			 if(PumpTime > 69){
-                PumpTime =0;
-                WaterPumpStop();
-			    RunStep=3;
-				RunMs=0;	
-			 }
-		     if(i==3){
-
-				i++;
-				 WaterPumpStop();
-			    RunStep=3;
-				RunMs=0;	
-			 }
+			
+			
+		     
 			
 			
 		}
@@ -111,10 +91,11 @@ void  CheckRun()
 		{
 		   if(RunMs>20)
 		   {
-			SetXMotor(2,20,40,1,2,20,40,1); //左转 90度
+			SetXMotor(2,20,40,1,2,20,40,1); //后退
 			SetMotorcm(2,1000);
 			RunStep=4;		   
 		   }
+		    
 		}
 		break;
 		case 4:
@@ -126,6 +107,7 @@ void  CheckRun()
 				RunMs=0;
 				RunStep=5;
 			}
+			
 		}
 			break;
 	    case 5:
@@ -136,17 +118,19 @@ void  CheckRun()
 			    SetMotorcm(3,9000);
 				RunMs=0;
 				RunStep=6;
-			}		  
+			}	
+			
 		  }
 		break;
 		case 6:
-			if(RunMs>100)
+			if(RunMs > 150)//if(RunMs>100)
 			{
 				AllStop();
 				//SetXMotor(2,20,1,1,1,20,1,1);
 				RunMs=0;
 				RunStep=7;
 			}
+			
 			break;
 		case 7:
 			
@@ -154,10 +138,18 @@ void  CheckRun()
 			{
 				SetXMotor(1,20,25,1,1,20,60,1);//SetXMotor(1,20,25,1,1,20,40,1);//SetXMotor(1,20,25,1,1,20,40,1); //直行
 			    SetMotorcm(1,5000);
-				RunMs=0;
-				RunStep=2;//直线 //RunStep=12;
+				if(PumpTime >59 ){
+
+					
+				   RunMs=0;
+				   RunStep=8;//直线 //RunStep=12;
+				    
+		    	}
+				else{
+					RunMs=0;
+					RunStep=2;//直线 //RunStep=12;
 				
-                
+				}
 				#if 0  //左右移动
 					SetXMotor(1,20,25,1,1,20,40,1);
 				    SetMotorcm(1,5000);
@@ -167,7 +159,7 @@ void  CheckRun()
 				#endif 
 				
 			}
-			#if 1
+			#if 0
 			if(i==0){
 			        i=3 ;
 					
@@ -180,29 +172,30 @@ void  CheckRun()
 				    RunStep=2;//直线 //RunStep=12;
 				   // goto ground;
 			}
-			if(PumpTime >59 && PumpTime < 69){
+			#endif 
+			if(PumpTime >59 ){
 
 					
-					
-					//PumpTime =0;
-					WaterPump();
-				   // Delay_ms(500);
-				   // WaterPumpStop();
-					SetXMotor(2,20,40,1,1,20,40,1);
-			        SetMotorcm(3,1000); //转圈
-			        // AllStop();
-			         RunMs=0;
-				    RunStep=2;//直线 //RunStep=12;
+				   RunMs=0;
+				   RunStep=8;//直线 //RunStep=12;
 				    
 		    	}
-			 if(PumpTime > 69){
-                PumpTime =0;
-                WaterPumpStop();
-			    RunMs=0;
-				RunStep=2;//直线 //RunStep=12;
-			 }
-			#endif 
+			
+	
 			break;
+		 case 8:
+
+
+					PumpTime =0;
+					WaterPump();
+				    SetXMotor(2,20,40,1,1,20,40,1);
+			        SetMotorcm(3,9000); //转圈
+			        if(RunMs > 5){
+						WaterPumpStop();
+				        RunMs=0;
+					    RunStep=2;//直线 //RunStep=12;
+			        }
+		 break;
 		
 		
 
