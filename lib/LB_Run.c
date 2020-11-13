@@ -32,7 +32,7 @@ version  : 见文件尾端
 ***************************************************************/
 void  CheckRun()
 {
-	static unsigned char i=0;
+	
 
    
 	switch(RunMode)
@@ -51,7 +51,10 @@ void  CheckRun()
 		case 1:
 		{
 
-			SetXMotor(1,20,40,1,1,20,40,1);
+			//SetXMotor(1,20,40,1,1,20,40,1);
+			
+			SetXMotor(1,20,25,1,1,20,40,1);//1--号机参数
+			//SetXMotor(1,20,22,1,1,20,60,1);//2--号机参数
 			SetMotorcm(1,5000);
 			RunStep=2;
 			RunMs=0;
@@ -69,7 +72,9 @@ void  CheckRun()
 			}
 			if((RightMoveMotorData.Flag==1)||(LeftMoveMotorData.Flag==1))
 			{
-				SetXMotor(1,20,40,1,1,20,40,1);  //直行
+				//SetXMotor(1,20,40,1,1,20,40,1);  //直行
+				SetXMotor(1,20,25,1,1,20,40,1);//1--号机参数
+				//SetXMotor(1,20,22,1,1,20,60,1);//2--号机参数
 				SetMotorcm(1,5000);			
 			}
 			
@@ -139,14 +144,18 @@ void  CheckRun()
 				   RunMs=0;
 				   RunStep=8;//直线 //RunStep=12;
 				   WaterPump(); 
-					SetXMotor(1,20,40,1,2,20,40,1);
+					//SetXMotor(1,20,40,1,2,20,40,1);
+					SetXMotor(1,20,25,1,1,20,40,1);//1--号机参数
+					//SetXMotor(1,20,22,1,1,20,60,1);//2--号机参数
 					SetMotorcm(4,9000); //转圈
 		    	}
 				else{
 					RunMs=0;
 					RunStep=2;//直线 //RunStep=12;
-				SetXMotor(1,20,25,1,1,20,60,1);//SetXMotor(1,20,25,1,1,20,40,1);//SetXMotor(1,20,25,1,1,20,40,1); //直行
-			    SetMotorcm(1,5000);				
+				   //SetXMotor(1,20,25,1,1,20,40,1);//SetXMotor(1,20,25,1,1,20,40,1); //直行
+                   SetXMotor(1,20,25,1,1,20,40,1);//1--号机参数
+                  // SetXMotor(1,20,22,1,1,20,60,1);//2--号机参数
+				   SetMotorcm(1,5000);				
 				}
 
 				
@@ -169,8 +178,10 @@ void  CheckRun()
 			    PumpTime=0;
 			    RunMs=0;
 			    RunStep=2; 
-				SetXMotor(1,20,25,1,1,20,60,1);//SetXMotor(1,20,25,1,1,20,40,1);//SetXMotor(1,20,25,1,1,20,40,1); //直行
-			    SetMotorcm(1,5000);		   
+				//SetXMotor(1,20,25,1,1,20,60,1);//SetXMotor(1,20,25,1,1,20,40,1);//SetXMotor(1,20,25,1,1,20,40,1); //直行
+				 SetXMotor(1,20,25,1,1,20,40,1);//1--号机参数
+				//SetXMotor(1,20,22,1,1,20,60,1);//2--号机参数
+				SetMotorcm(1,5000);		   
 		   }
 		 }
 		 break;
