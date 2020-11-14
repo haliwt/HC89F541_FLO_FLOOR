@@ -85,32 +85,28 @@ void main(void)
 	LCurrent=0;
 	RCurrent=0;
 	
-
-
 	Mode=1;
     Step=0;
 
 	abc=0;
 
-
-
 	while(1)
 	{
-
+       
+		 CheckGround();
+		 CheckRun();
 	   
-	   CheckGround();
-	   CheckRun();
+       kk=ReadKey();
 	   
-
-	   kk=ReadKey();
        CheckMode(kk);
+	   
 	  
 	  }
 
 }
 /***********************************************************
 	**
-	*中断程序:每0.1ms ，进入中断一次
+	*TIMER 1 中断程序:每0.1ms ，进入中断一次
 	*
 	**
 ***********************************************************/
@@ -120,10 +116,10 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
   static INT8U idata t_100ms;
   static INT8U idata t_1s;
   t_10ms++;
-  ReadAD5ms();//检测IR 障碍物
+  ReadAD5ms();//检测IR 障碍物, IR pmw power
 
 
-  if(t_10ms>99) //10ms
+  if(t_10ms>99) //100 * 0.1ms = 10ms
   {
   	t_10ms=0;
 	t_100ms++;
@@ -148,16 +144,15 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
 	{
 	  t_1s=0;
 	  PumpTime++;
-
-	   RunSecond++;
+      RunSecond++;
 	  ///*
 	  
 	  Usart1Send[0]=15; //printf 15 number output
-	  Usart1Send[1]=0x0A;//Voltage/100;
-	  Usart1Send[2]=0x0B;//Voltage%100;
-	  Usart1Send[3]=GroundDp[0];
-	  Usart1Send[4]=GroundDp[1];
-	  Usart1Send[5]=GroundDp[2];
+	  Usart1Send[1]=Voltage/100;
+	  Usart1Send[2]=Voltage%100;
+	  Usart1Send[3]=GroundDp[0]; //ir_L
+	  Usart1Send[4]=GroundDp[1]; //ir_M
+	  Usart1Send[5]=GroundDp[2]; //ir_R 
 	  Usart1Send[6]=LCurrent/10;
 	  Usart1Send[7]=RCurrent/10;
 
@@ -211,7 +206,7 @@ void INT8_17_Rpt() interrupt INT8_17_VECTOR
 {
 	if(PINTF2&0x01)						//判断INT16中断标志位----L MOTOR SPEED
 	{
-	 // LmotorSpeedNum ++ ;
+	  LmotorSpeedNum ++ ;
 	  PINTF2 &=0XFE;				//清除INT16中断标志位	--motor L speed 检测	
 	  ReadLeftPulsed();
 	  

@@ -63,6 +63,6 @@ KAKA_AD_EXT	void CheckRCurrent();
 KAKA_AD_EXT	void CheckVoltage();
 KAKA_AD_EXT	void CheckEdgeCurrent();
 KAKA_AD_EXT	void CheckGround();
-
+KAKA_AD_EXT void SelfChecking(void); //WT.EDIT
 
 #endif

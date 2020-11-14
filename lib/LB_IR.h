@@ -68,4 +68,5 @@ KAKA_IR_EXT void ClearAllIR();
 KAKA_IR_EXT void Read_RightIR();
 KAKA_IR_EXT void Read_MidIR();
 KAKA_IR_EXT void Read_LeftIR();	
+
 #endif

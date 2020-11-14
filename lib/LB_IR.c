@@ -73,7 +73,14 @@ void MidIR_Count(void)
 		}
 	}
 }
-
+/***********************************************************
+	*
+	*Function Name : void Read_MidIR(void)
+	*Function:
+	*Input Ref:NO
+	*Return Ref : NO 
+	*
+***********************************************************/
 void Read_MidIR(void)
 {
 	Mid_ReadIR.NowVoltage=P1_6; //马达运行速度值检测值--供电

@@ -401,7 +401,7 @@ void ReadRightPulsed(void)
 /**************************************************************
 	  *
 	  *Function Name:void ReadLeftPulsed(void)
-	  *Function : motor return run
+	  *Function : 
 	  *Input Ref: NO
 	  *Retrun Ref: NO
 	  *
@@ -545,8 +545,6 @@ void CheckLeftMotorSpeed(void)
 	 	 
 	}
 
-	//AdjustSpeed(); //WT.EDIT 2020.11.11
-
 }
 
 
@@ -554,8 +552,8 @@ void CheckLeftMotorSpeed(void)
 	  *
 	  *Function Name:void CheckRightMotorSpeed(void)
 	  *Function : motor return run
-	  *
-	  *
+	  *Input Ref: NO
+	  *Return Ref: NO
 	  *
 **************************************************************/
 void CheckRightMotorSpeed(void)
@@ -656,7 +654,7 @@ void CheckRightMotorSpeed(void)
 				{
 
 					if(RightMoveMotorData.OutPWM>0xfb)
-						RightMoveMotorData.OutPWM=0xfb;
+						RightMoveMotorData.OutPWM=0xfb; //251 
 					else
 						RightMoveMotorData.OutPWM+=3;					
 				}
@@ -752,6 +750,7 @@ void SetXMotor(
 			{
 				InitMotorLeftForward();
 				LeftMoveMotorData.OutPWM=0Xa0; // 160 
+				PWM0DH = 0x00; 
 				PWM0DL=LeftMoveMotorData.OutPWM; // L motor puty = 0xa0/0x10=62.5%;
 
 
@@ -845,35 +844,34 @@ void SetXMotor(
 /**************************************************************
 	   *
 	   *Function Name:void AdjustSpeed()
-	   *Function : motor return run
+	   *Function : Âí´ï¼ÓËÙµ÷Õû
 	   *Input Ref:NO
 	   *Retrn Ref: NO
 	   *
 **************************************************************/
 #if 1
-void AdjustSpeed()
+void AdjustSpeed(void)
 {
- // INT16U tempV;
-    
-
-  if((RmotorSpeedNum - LmotorSpeedNum) > 20 ){
-      
-      return ;
-  }
-  else{
-  
-       //ÓÒÂÖ ÒÆ¶¯¾àÀë´óÓÚ ×óÂÖÒÆ¶¯¾àÀë
-        PWM0DTH = 0x00; //right motor
-        PWM0DTL=RightMoveMotorData.OutPWM ++    ;
-	   
-	    PWM0DH = 0x00;		//left motor
-  		PWM0DL=LeftMoveMotorData.OutPWM--;
-  		if((RmotorSpeedNum - LmotorSpeedNum)  > 20 ) {
-          return ;
-		 
-     }
+  if(RightMoveMotorData.RunSpeed==40 && LeftMoveMotorData.RunSpeed==40){ 
+	  if((RmotorSpeedNum - LmotorSpeedNum) > 10 ){
+	      
+	      return ;
+	  }
+	  else{
+	  
+	       //ÓÒÂÖ ÒÆ¶¯¾àÀë´óÓÚ ×óÂÖÒÆ¶¯¾àÀë
+	        PWM0DTH = 0x00; //right motor
+	        PWM0DTL=RightMoveMotorData.OutPWM ++    ;
+		   
+		    PWM0DH = 0x00;		//left motor
+	  		PWM0DL=LeftMoveMotorData.OutPWM--;
+	  		if((RmotorSpeedNum - LmotorSpeedNum)  > 10 ){
+	          return ;
+			 
+	        }
 
 
+	  }
   }
 }
 

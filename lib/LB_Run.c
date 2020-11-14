@@ -2,12 +2,12 @@
 
 ---------- file information -----------------------------------------------
 file name:
-define   : <文件说明>
-version  : 见文件尾端
+define   : <??????>
+version  : ?????β??
 ---------------------------------------------------------------------------
 */
 
-//全局变量声明
+//??????????
 #define  KAKA_Run_GB
 
 #ifdef   CodeC_Includes
@@ -19,6 +19,7 @@ version  : 见文件尾端
 #include "LB_Run.h"
 #include "LB_AD.h"
 #include "LB_Led.h"
+#include "LB_IR.h"
 
 #endif
 
@@ -32,10 +33,7 @@ version  : 见文件尾端
 ***************************************************************/
 void  CheckRun()
 {
-	
-
-   
-	switch(RunMode)
+    switch(RunMode) //initial RunMode =0
 	{
 
 	case 2:
@@ -44,17 +42,19 @@ void  CheckRun()
 	  {
 		  	case 0:
 			{
+			     
+				
 
 			}
 			break;
 
-		case 1:
+		case 1: //power on inital RunStep =1 
 		{
 
-			//SetXMotor(1,20,40,1,1,20,40,1);
+			SetXMotor(1,20,40,1,1,20,40,1);
 			
-			//SetXMotor(1,20,25,1,1,20,40,1);//1--号机参数
-			SetXMotor(1,20,25,1,1,20,60,1);//2--号机参数
+			//SetXMotor(1,20,25,1,1,20,40,1);//1--???????
+			//SetXMotor(1,20,25,1,1,20,60,1);//2--???????
 			SetMotorcm(1,5000);
 			RunStep=2;
 			RunMs=0;
@@ -62,19 +62,19 @@ void  CheckRun()
 		break;
 		case 2:
         {
-			
-         if((GroundDp[0]>GroundMin)||(GroundDp[1]>GroundMin)||(GroundDp[2]>GroundMin))
+		   // floor Robot to touch to wall 
+          if((GroundDp[0]>GroundMin)||(GroundDp[1]>GroundMin)||(GroundDp[2]>GroundMin))
 			{
 				 AllStop();
 				 //SetXMotor(1,20,1,1,1,20,1,1);
 				  RunStep=3;
-				RunMs=0;			
+				 RunMs=0;			
 			}
 			if((RightMoveMotorData.Flag==1)||(LeftMoveMotorData.Flag==1))
 			{
-				//SetXMotor(1,20,40,1,1,20,40,1);  //直行
-				//SetXMotor(1,20,25,1,1,20,40,1);//1--号机参数
-				SetXMotor(1,20,25,1,1,20,60,1);//2--号机参数
+				SetXMotor(1,20,40,1,1,20,40,1);  //???
+				//SetXMotor(1,20,25,1,1,20,40,1);//1--???????
+				//SetXMotor(1,20,25,1,1,20,60,1);//2--???????
 				SetMotorcm(1,5000);			
 			}
 			
@@ -92,7 +92,7 @@ void  CheckRun()
 		{
 		   if(RunMs>20)
 		   {
-			SetXMotor(2,20,40,1,2,20,40,1); //后退
+			SetXMotor(2,20,40,1,2,20,40,1); //????
 			SetMotorcm(2,1000);
 			RunStep=4;		   
 		   }
@@ -115,7 +115,7 @@ void  CheckRun()
 		  {
 			if(RunMs>20)
 			{
-				SetXMotor(2,20,40,1,1,20,40,1); //右转
+				SetXMotor(2,20,40,1,1,20,40,1); //???
 			    SetMotorcm(3,9000);
 				RunMs=0;
 				RunStep=6;
@@ -142,19 +142,19 @@ void  CheckRun()
 
 					
 				   RunMs=0;
-				   RunStep=8;//直线 //RunStep=12;
+				   RunStep=8;//??? //RunStep=12;
 				   WaterPump(); 
-					//SetXMotor(1,20,40,1,2,20,40,1);
-					//SetXMotor(1,20,25,1,1,20,40,1);//1--号机参数
-					SetXMotor(1,20,25,1,1,20,60,1);//2--号机参数
-					SetMotorcm(4,9000); //转圈
+					SetXMotor(1,20,40,1,2,20,40,1);
+					//SetXMotor(1,20,25,1,1,20,40,1);//1--???????
+					//SetXMotor(1,20,25,1,1,20,60,1);//2--???????
+					SetMotorcm(4,9000); //??
 		    	}
 				else{
 					RunMs=0;
-					RunStep=2;//直线 //RunStep=12;
-				   //SetXMotor(1,20,25,1,1,20,40,1);//SetXMotor(1,20,25,1,1,20,40,1); //直行
-                  // SetXMotor(1,20,25,1,1,20,40,1);//1--号机参数
-                   SetXMotor(1,20,25,1,1,20,60,1);//2--号机参数
+					RunStep=2;//??? //RunStep=12;
+				   SetXMotor(1,20,40,1,1,20,40,1);//SetXMotor(1,20,25,1,1,20,40,1); //???
+                  // SetXMotor(1,20,25,1,1,20,40,1);//1--???????
+                   SetXMotor(1,20,25,1,1,20,60,1);//2--???????
 				   SetMotorcm(1,5000);				
 				}
 
@@ -168,7 +168,7 @@ void  CheckRun()
 			        if(RunMs > 9){
 						WaterPumpStop();
 				        RunMs=0;
-					    RunStep=9;//直线 //RunStep=12;
+					    RunStep=9;//??? //RunStep=12;
 			        }
 		 break;
 		 case 9:
@@ -178,20 +178,13 @@ void  CheckRun()
 			    PumpTime=0;
 			    RunMs=0;
 			    RunStep=2; 
-				//SetXMotor(1,20,25,1,1,20,60,1);//SetXMotor(1,20,25,1,1,20,40,1);//SetXMotor(1,20,25,1,1,20,40,1); //直行
-				// SetXMotor(1,20,25,1,1,20,40,1);//1--号机参数
-				SetXMotor(1,20,25,1,1,20,60,1);//2--号机参数
+				SetXMotor(1,20,40,1,1,20,40,1);//SetXMotor(1,20,25,1,1,20,40,1);//SetXMotor(1,20,25,1,1,20,40,1); //???
+				// SetXMotor(1,20,25,1,1,20,40,1);//1--???????
+				//SetXMotor(1,20,25,1,1,20,60,1);//2--???????
 				SetMotorcm(1,5000);		   
 		   }
 		 }
 		 break;
-		
-
-		
-			
-
-
-
 		}
 	}
   }
@@ -206,37 +199,61 @@ void  CheckRun()
 ***************************************************************/
 void CheckMode(INT8U Key)
 {
- if(Key==1)
+
+  if(Key ==2){
+
+         LedBlueON();
+		  LedRedOff();
+		 Delay_ms(500);
+ 		 LedBlueOff();
+		  LedRedON();
+		   Delay_ms(500);
+		  LedBlueON();
+		  LedRedOff();
+		 Delay_ms(500);
+ 		 LedBlueOff();
+		  LedRedON();
+		   Delay_ms(500);
+		  LedBlueON();
+		  LedRedON();
+		   Delay_ms(500);
+ 		 LedBlueOff();
+		  LedRedON();
+		   Delay_ms(500);
+		  LedBlueON();
+		  LedRedOff();
+		  Mode = 40;
+
+  }
+  else  if(Key==1)
   {
     
-    if(Mode==0) 
+    if(Mode==0)  //初始化Mode =1
 	{
-	  //唤醒
+	  //????
 	  Mode=1;
 	  Step=1;
 	 
 	}
-	else 
-	 {
+	else { //开机执行 ,初始化Step =0
 	  if(Step==0)
 	  {
 	    //20
-	  	Step=1;
+	  	Step=1; //
 	    ADCtl=1;
-        RunSecond=0;
+        RunSecond=0; //第一次，按key Power On
 	  }
 	  else	if(Step<20)
 	  {
-	  //LedBlueON();
-	  Mode=1;
-	  Step=0;
-	  RunSecond=0;
-	  AllStop();
-
-			  SetEdge(0);
-			  RunStep=0;
-			  //SetBuzzerTime(2);
-		  }
+		//LedBlueON();
+		Mode=1;
+		Step=0;
+		RunSecond=0;
+		AllStop();
+		SetEdge(0);
+		RunStep=0;
+				//SetBuzzerTime(2);
+	  }
 	}
   }
  
@@ -244,9 +261,9 @@ void CheckMode(INT8U Key)
   {
   	case 0:
 	{
-	  switch(Step)
+	  switch(Step) //Power On step =1; Mode =1
 	  {
-	     //上电检测电压,是否需要充电
+	     //???????,?????????
 	     case 0:
 		 {
 
@@ -254,7 +271,7 @@ void CheckMode(INT8U Key)
 
 		 }
 		 break;
-		 //工作完成,提示音响1次2秒加灯光闪动4次
+		 //???????,???????1??2?????????4??
 		 case 1:
 		 {
 		    //if(RunSecond==20)
@@ -280,15 +297,15 @@ void CheckMode(INT8U Key)
 	}
 	break;
 	
-	case 1:  //开机工作 Mode =1
+	case 1:  //Power On the first  Mode =1,Step =1 
 	{
 	   switch(Step) //step =1
 	   {
-	     //开机提示音1秒响2次
+	     //?????????1????2??
 	   	 case 0:
 		 {
 		   //ADCtl=1;
-		 //5秒没有按键输入,进入休眠
+		 //5????а???????,????????
 		   if(RunSecond>15) //16 * 1s = 16s
 		   {
 		     //Step=0;
@@ -299,16 +316,16 @@ void CheckMode(INT8U Key)
 		   }
 		 // ADCtl=1;
 
-	   if(ReadPowerDCIn())
-		  {
-			 Step=5;
+	   		if(ReadPowerDCIn())
+			{
+				Step=5;
 
-		  }
+			}
 		 } 
 		 break;
-		 case 1:
+		 case 1: //The first power on Step=1; RundSecond =0 
 		 {
-		   if(RunSecond>0)
+		   if(RunSecond>0)  //在TIMER 1 中，0.1ms interrupt
 		   {
 		   	  Step=2; //Next run 2
 			   LedBlueON();
@@ -367,7 +384,7 @@ void CheckMode(INT8U Key)
 			  
 			 }
 		 break;
-		 //电量不足时，灯光闪频率2Hz
+		 //???????????????????2Hz
 
 		 case 3:
 		 {
@@ -407,7 +424,7 @@ void CheckMode(INT8U Key)
 			 RunSecond=0;
 		   }
 		   
-          if(ReadPowerDCIn()) //电池检测GPIO ==1 ,电池电量不够
+          if(ReadPowerDCIn()) //?????GPIO ==1 ,??????????
 		  {
 		     ADCtl=0;
 		     RunStep=5;
@@ -419,7 +436,7 @@ void CheckMode(INT8U Key)
 
 		 }
 		 break;
-		// 充电中灯光频率 0.5Hz
+		// ????е????? 0.5Hz
 		 case 5:
 		 {
 		   if(RunSecond>1) //2 * 1s =2s
@@ -458,7 +475,7 @@ void CheckMode(INT8U Key)
 		   }
 		 }
 		 break;
-		 //满电不闪
+		 //???粻??
 		 case 7:
 		 if(0==ReadPowerDCIn())
 		   {
@@ -544,6 +561,21 @@ void CheckMode(INT8U Key)
 
 	   }
 	}
+	break;
+	
+      
+	case 40 :
+
+          ADFlag=1;
+		  AllStop();
+	       RunStep=0;
+		  LedBlueON();
+		  LedRedON();
+		 CheckGround();
+	     SelfChecking();
+		
+
+
 	break;
 
   }

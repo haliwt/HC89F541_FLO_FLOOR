@@ -17,6 +17,7 @@ version  : 见文件尾端
 #include "..\include\PJ_TypeRedefine.h"
 #include "..\lib\LB_Led.h"
 #include "LB_AD.h"
+#include "LB_Motor.h"
 
 #endif
 /**
@@ -33,7 +34,8 @@ void Delay_2us(unsigned int fui_i)
 /*************************************************************
 	*
 	*Function Name:void CheckEdgeCurrent()
-	*Function :
+	*Function :
+
 	*Input Ref: NO
 	*Return Ref: NO
 	*
@@ -55,7 +57,8 @@ void InitADIO(void)
 /*************************************************************
 	*
 	*Function Name:void SeleADChanel(INT8U ADChanel)
-	*Function :
+	*Function :
+
 	*Input Ref: ADChannel
 	*Return Ref: NO
 	*
@@ -70,7 +73,8 @@ void SeleADChanel(INT8U ADChanel)
 /*************************************************************
 	*
 	*Function Name:void CheckEdgeCurrent()
-	*Function :
+	*Function :
+
 	*Input Ref: NO
 	*Return Ref: NO
 	*
@@ -83,7 +87,8 @@ void StartAD()
 /*************************************************************
 	*
 	*Function Name:void SetADINT(void)
-	*Function :
+	*Function :
+
 	*Input Ref: NO
 	*Return Ref: NO
 	*
@@ -97,14 +102,15 @@ void SetADINT(void)
 /*************************************************************
 	*
 	*Function Name:void  SetAD(INT8U ADChanel)
-	*Function :
+	*Function :
+
 	*Input Ref: ADChanel
 	*Return Ref: NO
 	*
 *************************************************************/
 void  SetAD(INT8U ADChanel)
 {
-  code INT8U ADCC[7]={2,3,4,5,6,7,13};
+  code INT8U ADCC[7]={2,3,4,5,6,7,13};//batter,M_IR,L_IR,R_IR,L_curretn,R_cu,Pump_cuuretn
   SeleADChanel(ADCC[ADChanel]);
   SetADINT();
   StartAD();
@@ -112,7 +118,8 @@ void  SetAD(INT8U ADChanel)
 /*************************************************************
 	*
 	*Function Name:void ReadAD5ms()
-	*Function :读取接收IR的值
+	*Function :
+读取接收IR的值
 	*Input Ref: NO
 	*Return Ref: NO
 	*
@@ -121,29 +128,29 @@ void ReadAD5ms()
 {
   static INT8U i=0;
   static INT8U chanel=5;
-  static INT16U ADtemp[5];  
+  static INT16U ADtemp[5];                        
   ADtemp[i]=ADCR; //ADC 转换结果寄存器,ADCC[7]={2,3,4,5,6,7,13};
   i++;
   if(i>2)
   {
      i=0;
-	 AD5ms[chanel]= (ADtemp[1]+ADtemp[2])/2; // IR_MID_WALL + IR_L_WALL
+	 AD5ms[chanel]= (ADtemp[1]+ADtemp[2])/2; // (IR_MID_WALL + IR_L_WALL)
 	 chanel++;
 	 if(chanel>6) //AN3 ,AN4, AN5 rIR input 
 	 {
 	
-	   if(ADCtl)
+	   if(ADCtl) // power on initial value ADCtl = 1;
 	   {
-		   if(ADFlag)
+		   if(ADFlag) //IR turn on _ turn off 
 		   {
-			 P0_1 = 1; //IR_WALL_PW ,IR_POWER output +5V IR works
-			 ADFlag=0;
+			 P0_1 = 1; //IR 供电GPIO  ,IR_POWER output +5V IR works
+			 ADFlag=0; //IR_WorksFlag =1
 			 ADFlashFlag=1;
 		   }
-		  else
+		  else //turn off //T = 0.2ms
 		  {
 			 P0_1 = 0; // IR don't works
-			 ADFlag=1;
+			 ADFlag=1;  //IR_WorksFlag =1
 			 ADFlashFlag=1;
 		  }
 	  }
@@ -162,7 +169,8 @@ void ReadAD5ms()
 /*************************************************************
 	*
 	*Function Name:INT8U ReadGroundDp(INT8U *p)
-	*Function :
+	*Function :
+
 	*Input Ref: *P
 	*Return Ref: NO
 	*
@@ -196,14 +204,15 @@ INT8U ReadGroundDp(INT8U *p)
 /*************************************************************
 	*
 	*Function Name:void CheckGround()
-	*Function :
+	*Function :
+
 	*Input Ref: NO
 	*Return Ref: NO
 	*
 *************************************************************/
 void CheckGround()
 {
- if(ADFlashFlag)
+ if(ADFlashFlag)//IR of works flag bit.
  {
    if(ADFlag)
    {
@@ -212,21 +221,21 @@ void CheckGround()
 	   GroundAD[2][0]=(AD5ms[3]>>4); //R_WALL 
 	   ADFlashFlag=0;
 	 //SBUF=GroundAD[0][0];
-    if(GroundAD[0][1]>GroundAD[0][0]) //
+    if(GroundAD[0][1]>GroundAD[0][0]) // IR_M_WALL 
 	{
        GroundAD100Ms[0][ADTime]=GroundAD[0][1]-GroundAD[0][0];
 	}
 	else
        GroundAD100Ms[0][ADTime]=GroundAD[0][0]-GroundAD[0][1];
 
-    if(GroundAD[1][1]>GroundAD[1][0])
+    if(GroundAD[1][1]>GroundAD[1][0]) //IR_L_WALL
 	{
        GroundAD100Ms[1][ADTime]=GroundAD[1][1]-GroundAD[1][0];
 	}
 	else
 	  GroundAD100Ms[1][ADTime]=GroundAD[1][0]-GroundAD[1][1];
 
-    if(GroundAD[2][1]>GroundAD[2][0])
+    if(GroundAD[2][1]>GroundAD[2][0]) 
 	{
 
        GroundAD100Ms[2][ADTime]=GroundAD[2][1]-GroundAD[2][0];
@@ -238,21 +247,22 @@ void CheckGround()
    if(ADTime>7)
    {
    	  ADTime=0;
-	  GroundDp[0]=(GroundAD100Ms[0][0]+GroundAD100Ms[0][2]+GroundAD100Ms[0][4]+GroundAD100Ms[0][6])/4;
-	  GroundDp[1]=(GroundAD100Ms[1][0]+GroundAD100Ms[1][2]+GroundAD100Ms[1][4]+GroundAD100Ms[1][6])/4;
-	  GroundDp[2]=(GroundAD100Ms[2][0]+GroundAD100Ms[2][2]+GroundAD100Ms[2][4]+GroundAD100Ms[2][6])/4;
+	  GroundDp[0]=(GroundAD100Ms[0][0]+GroundAD100Ms[0][2]+GroundAD100Ms[0][4]+GroundAD100Ms[0][6])/4; //ir_L_wall
+      //ir_M_wall
+	  GroundDp[1]=(GroundAD100Ms[1][0]+GroundAD100Ms[1][2]+GroundAD100Ms[1][4]+GroundAD100Ms[1][6])/4; //ir_M_wall
+	  //ir_R_wall
+	  GroundDp[2]=(GroundAD100Ms[2][0]+GroundAD100Ms[2][2]+GroundAD100Ms[2][4]+GroundAD100Ms[2][6])/4; //ir_R_wall
 
    }
-   //SBUF=AD5ms[5]/16;
-   	LCurrentAD[ADTime]=AD5ms[4]; //L_speed
+   //SBUF=AD5ms[5]/16;//ADC 转换结果寄存器,ADCC[7]={2,3,4,5,6,7,13};
+   	LCurrentAD[ADTime]=AD5ms[4]; //L_speed current value 
 	RCurrentAD[ADTime]=AD5ms[5]; //R_speed
 	  
    }
    else
    {
 
-
-   	   GroundAD[0][1]=(AD5ms[3]>>4);
+	   GroundAD[0][1]=(AD5ms[3]>>4); 
 	   GroundAD[1][1]=(AD5ms[2]>>4);
 	   GroundAD[2][1]=(AD5ms[1]>>4);
 	   ADFlashFlag=0;
@@ -263,7 +273,8 @@ void CheckGround()
 /*************************************************************
 	*
 	*Function Name:void CheckEdgeCurrent()
-	*Function :
+	*Function :
+
 	*Input Ref: NO
 	*Return Ref: NO
 	*
@@ -291,7 +302,8 @@ void CheckEdgeCurrent()
 /*************************************************************
 	*
 	*Function Name:void CheckLCurrent()
-	*Function :
+	*Function :
+
 	*Input Ref: NO
 	*Return Ref: NO
 	*
@@ -300,7 +312,7 @@ void CheckLCurrent()
 {
  INT16U	LCurrentADAvg;
  LCurrentADAvg=(LCurrentAD[0]+LCurrentAD[2]+LCurrentAD[4]+LCurrentAD[6])/4;
- //SBUF= (INT8U)LCurrentADAvg;
+ //SBUF= (INT8U)LCurrentADAvg;////ADC 转换结果寄存器,ADCC[7]={2,3,4,5,6,7,13};
  LCurrent=(LCurrent*9+(LCurrentADAvg*9.6))/10;
 				
 }
@@ -316,14 +328,15 @@ void CheckRCurrent()
 /*************************************************************
 	*
 	*Function Name:void CheckEdgeCurrent()
-	*Function :
+	*Function :
+batter of voltage 
 	*Input Ref: NO
 	*Return Ref: NO
 	*
 *************************************************************/
 void CheckVoltage()
 {
-   Voltage=(Voltage*19+(AD5ms[0]/2.56))/20;
+   Voltage=(Voltage*19+(AD5ms[0]/2.56))/20; //电池本身电量检测
    //4000*4/4096/10
 
 }
@@ -341,3 +354,113 @@ void ADC_Rpt() interrupt ADC_VECTOR
     ADCC0 &=~ 0x20;						//清除ADC中断标志位
 
 } 
+/*************************************************************
+	*
+	*Function Name :void SelfChecking(void)
+	*Function : It self check for mass product
+	*Iinput Ref:NO
+	*Return Ref:NO
+	*
+*************************************************************/
+void SelfChecking(void)
+{
+      INT8U ir_Left,ir_Mid,ir_Right,i=0;
+
+	  ir_Left =GroundDp[0]; //ir_L
+	  ir_Mid = GroundDp[1];  //ir_M
+	  ir_Right = GroundDp[2];  //ir_R 
+
+	   LedBlueOff();
+	   LedRedOff();
+
+	  if(ir_Left !=0){
+
+		 GroundDp[0]=0;
+		
+          LedBlueOff();
+		  LedRedOff();
+		  LedRedON();
+		  Delay_ms(100);
+ 		  LedRedOff();
+		  LedBlueON();
+		  Delay_ms(100);
+		  LedBlueOff();
+		  LedRedON();
+		  Delay_ms(100);
+ 		  LedBlueON();
+		  LedRedOff();
+		  Delay_ms(100);
+		  LedBlueOff();
+		  LedRedON();
+		  Delay_ms(100);
+ 		  LedBlueOff();
+		  LedRedON();
+		  Delay_ms(100);
+		  LedBlueOff();
+		  LedRedOff();
+	     Delay_ms(200);
+		 
+
+       }
+     if(ir_Mid != 0){
+	 	GroundDp[1]=0;
+     
+		   LedBlueOff();
+		  LedRedOff();
+          LedBlueON();
+		 Delay_ms(100);
+ 		 LedBlueOff();
+		   Delay_ms(100);
+		  LedBlueON();
+		 Delay_ms(100);
+ 		 LedBlueOff();
+		   Delay_ms(100);
+		  LedBlueON();
+		   Delay_ms(100);
+ 		 LedBlueOff();
+		   Delay_ms(100);
+		  LedBlueON();
+		  Delay_ms(100);
+ 		 LedBlueOff();
+		 LedRedOff();
+		 Delay_ms(200);
+	     	
+		
+
+     }
+
+	 if(ir_Right != 0){
+	 	GroundDp[2]=0;
+          
+ 		 
+		
+             LedBlueOff();
+		    LedRedOff();
+			LedRedON();
+			Delay_ms(100);
+		
+			LedRedOff();
+			Delay_ms(200);
+			
+			LedRedON();
+			Delay_ms(100);
+			
+		    LedRedOff();
+			Delay_ms(1200);
+			
+			LedRedON();
+			Delay_ms(100);
+			LedRedOff();
+		
+			Delay_ms(100);
+			LedRedON();
+			Delay_ms(100);
+			LedBlueOff();
+		    LedRedOff();
+			Delay_ms(200);
+	   
+		
+     }
+
+
+}
