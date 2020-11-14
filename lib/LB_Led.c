@@ -111,7 +111,7 @@ INT8U ReadKey(void)
 {
 
   static INT16U  abc;
-   INT16U  selftimer;
+   INT16U  selftimer,rec=0;
 
   if(P0_0==0)
   {
@@ -121,8 +121,8 @@ INT8U ReadKey(void)
    	 abc++;
 	 selftimer++ ; //itself check programm times
      if(selftimer > 4000){
-			
-			selftimer =0;
+			rec=1;
+		   selftimer =0;
 		   return(2); //itself check flag =2
 			 	
 	 	
@@ -134,6 +134,7 @@ INT8U ReadKey(void)
     //LedBlueOff();
    	abc=0;
 	selftimer=0;
+	rec =0;
   }
   #if 1
   if((abc>190)&&(abc<200))
@@ -148,6 +149,7 @@ INT8U ReadKey(void)
   {
    LedBlueOff();
    LedRedOff();
+   rec =0;
    return(0);
   } 
   #endif 
