@@ -64,7 +64,6 @@ void main(void)
  
 	INT8U kk;
 	INT8U  abc;
-	INT8U Lc,Rc;
 	InitSysclk(1);
 
 	InitT1();
@@ -94,9 +93,7 @@ void main(void)
 	while(1)
 	{
          CheckGround();
-		 CheckLCurrent();
-	     CheckRCurrent();
-		 if(CurrentValue==0){//if((Usart1Send[6] < 0x1f) || ( Usart1Send[7]< 0x1f)){ //WT.EDIT.2020.11.16
+		 if(CurrentValue==0){
 		     CheckRun();
 		 }
 		 else AllStop();

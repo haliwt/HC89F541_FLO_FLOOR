@@ -52,7 +52,7 @@ void  CheckRun()
 		case 1: //power on inital RunStep =1 
 		{
 
-            if(Usart1Send[6]  <LeftMotorCurrent || Usart1Send[7]  < RightMotorCurrent){ //WT.EDIT.2020.11.16
+            if(CurrentValue ==0){ //WT.EDIT.2020.11.16
 				SetXMotor(1,20,40,1,1,20,40,1);
 				
 				//SetXMotor(1,20,25,1,1,20,40,1);//1--???????
@@ -79,7 +79,7 @@ void  CheckRun()
 			}
 			if((RightMoveMotorData.Flag==1)||(LeftMoveMotorData.Flag==1))
 			{
- 				 if(Usart1Send[6] <LeftMotorCurrent || Usart1Send[7] /10 < RightMotorCurrent){ //WT.EDIT.2020.11.16
+ 				 if(CurrentValue ==0){ //WT.EDIT.2020.11.16
 					SetXMotor(1,20,40,1,1,20,40,1);  //???
 					//SetXMotor(1,20,25,1,1,20,40,1);//1--???????
 					//SetXMotor(1,20,25,1,1,20,60,1);//2--???????
@@ -103,7 +103,7 @@ void  CheckRun()
 		   if(RunMs>20)
 		   {
 			 
-			 if(Usart1Send[6]  <LeftMotorCurrent || Usart1Send[7] < RightMotorCurrent){ //WT.EDIT.2020.11.16
+			 if(CurrentValue ==0){ //WT.EDIT.2020.11.16
 					SetXMotor(2,20,40,1,2,20,40,1); //????
 					SetMotorcm(2,1000);
 					RunStep=4;
@@ -129,7 +129,7 @@ void  CheckRun()
 		  {
 			if(RunMs>20)
 			{
-				if(Usart1Send[6]  <LeftMotorCurrent || Usart1Send[7]  < RightMotorCurrent){ //WT.EDIT.2020.11.16
+				if(CurrentValue ==0){ //WT.EDIT.2020.11.16
 					SetXMotor(2,20,40,1,1,20,40,1); //???
 				    SetMotorcm(3,9000);
 					RunMs=0;
@@ -164,7 +164,7 @@ void  CheckRun()
 				   RunMs=0;
 				   RunStep=8;//??? //RunStep=12;
 				   WaterPump(); 
-				   if(Usart1Send[6]  <LeftMotorCurrent || Usart1Send[7]  < RightMotorCurrent){ //WT.EDIT.2020.11.16
+				   if(CurrentValue ==0){ //WT.EDIT.2020.11.16
 					   SetXMotor(1,20,40,1,2,20,40,1);
 						//SetXMotor(1,20,25,1,1,20,40,1);//1--???????
 						//SetXMotor(1,20,25,1,1,20,60,1);//2--???????
@@ -175,7 +175,7 @@ void  CheckRun()
 				else{
 					RunMs=0;
 					RunStep=2;//??? //RunStep=12;
-					if(Usart1Send[6] <LeftMotorCurrent || Usart1Send[7] < RightMotorCurrent){ //WT.EDIT.2020.11.16
+					if(CurrentValue ==0){ //WT.EDIT.2020.11.16
 					   SetXMotor(1,20,40,1,1,20,40,1);//SetXMotor(1,20,25,1,1,20,40,1); //???
 	                  // SetXMotor(1,20,25,1,1,20,40,1);//1--???????
 	                   SetXMotor(1,20,25,1,1,20,60,1);//2--???????
@@ -204,7 +204,7 @@ void  CheckRun()
 			    PumpTime=0;
 			    RunMs=0;
 			    RunStep=2; 
-				if(Usart1Send[6]  <LeftMotorCurrent || Usart1Send[7]  < RightMotorCurrent){ //WT.EDIT.2020.11.16
+				if(CurrentValue ==0){ //WT.EDIT.2020.11.16
 					SetXMotor(1,20,40,1,1,20,40,1);//SetXMotor(1,20,25,1,1,20,40,1);//SetXMotor(1,20,25,1,1,20,40,1); //???
 					// SetXMotor(1,20,25,1,1,20,40,1);//1--???????
 					//SetXMotor(1,20,25,1,1,20,60,1);//2--???????
