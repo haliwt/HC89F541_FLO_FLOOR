@@ -28,6 +28,8 @@ version  : ¼ûÎÄ¼þÎ²¶Ë
 #define  KAKA_Led_EXT extern
 #endif
 
+KAKA_Led_EXT INT16U SelfKeyTime;
+
 KAKA_Led_EXT  void InitLed(void);
 
 KAKA_Led_EXT  void LedBlueOff();

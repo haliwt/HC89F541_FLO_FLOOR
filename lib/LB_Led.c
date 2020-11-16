@@ -17,6 +17,8 @@ version  : ¼ûÎÄ¼þÎ²¶Ë
 #include "..\include\HC89F0541.h"
 #include "..\include\PJ_TypeRedefine.h"
 #include "LB_Led.h"
+#include "LB_Motor.h"
+#include "LB_Run.h"
 
 #endif
 
@@ -110,50 +112,54 @@ void InitKey(void)
 INT8U ReadKey(void)
 {
 
-  static INT16U  abc;
-   INT16U  selftimer,rec=0;
+  static INT16U  abc=0,key,poweron=0;
+ 
+   if(poweron ==0){
+     Delay_ms(3000);
+    
+	 if(P0_0==0)
+		{
+		
+			 Delay_ms(20);
+			 if(P0_0==0){
+				powerTime=1;
+				return(2); //itself check flag =2
+			 }
+			 
 
-  if(P0_0==0)
-  {
-    // LedBlueON();
-    if(abc<200)
-	
-   	 abc++;
-	 selftimer++ ; //itself check programm times
-     if(selftimer > 4000){
-			rec=1;
-		   selftimer =0;
-		   return(2); //itself check flag =2
-			 	
-	 	
 	 }
-	
-  }
-  else	
-  {	  
-    //LedBlueOff();
-   	abc=0;
-	selftimer=0;
-	rec =0;
-  }
-  #if 1
-  if((abc>190)&&(abc<200))
-  {
-    //
-    abc=201;
-	//LedBlueON();
-    return(1);
 
+       poweron ++ ;
+
+   }
+   else{
+     if(P0_0==0){
+
+       Delay_ms(5);
+	   key = key ^ 0x01;
+	   if(P0_0==0){
+	  
+	        if(key==1){
+			    abc =0;
+		   	 //   powerTime =0;
+				LedBlueON();
+		         return(1);	
+	         }
+		   else{
+			    abc =0;
+		   	 //   powerTime =0;
+				LedBlueOff();
+		        return(0);	
+
+		   }
+  	  }
+    }
+   }
+	
+    return (0);	
   }
-  else 
-  {
-   LedBlueOff();
-   LedRedOff();
-   rec =0;
-   return(0);
-  } 
-  #endif 
-}
+	
+ 
 /************************************************
 	*
 	*Function Name:void InitKey(void)

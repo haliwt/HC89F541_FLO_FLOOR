@@ -33,6 +33,7 @@ KAKA_Run_EXT outdata INT8U Step;
 KAKA_Run_EXT outdata INT8U RunMode;
 KAKA_Run_EXT outdata INT8U RunStep;
 KAKA_Run_EXT outdata INT8U PumpTime; //WT.EDIT
+KAKA_Run_EXT outdata INT8U powerTime; //WT.EDIT
 
 KAKA_Run_EXT outdata INT16U RunSecond;
 KAKA_Run_EXT outdata INT16U NoImpSecond;

@@ -199,17 +199,14 @@ void  CheckRun()
 ***************************************************************/
 void CheckMode(INT8U Key)
 {
-  static INT8U keylock=0;
+ 
   if(Key ==2){
 
-        //  ADFlag=1;
-		 CheckGround();
-	    // SelfChecking();
-		 if(GroundDp[0]!=0){
-          
+       
              Mode = 40;
-			 ADFlag=0;
-			 keylock =1;
+			
+	
+		
 			 Delay_ms(100);
 	 		 LedBlueOff();
 			  LedRedON();
@@ -223,7 +220,7 @@ void CheckMode(INT8U Key)
 			  LedBlueON();
 			  LedRedOff();
 			 
-		 }
+		 
   }
   else  if(Key==1)
   {
@@ -573,6 +570,7 @@ void CheckMode(INT8U Key)
 		  LedRedON();
 		 CheckGround();
 	     SelfChecking();
+		
 		
 
 

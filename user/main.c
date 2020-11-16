@@ -61,7 +61,7 @@ void InitSysclk(INT8U SYS)
 ***************************************************************************************/
 void main(void)
 {
-
+ 
 	INT8U kk;
 	INT8U  abc;
 	InitSysclk(1);
@@ -93,15 +93,13 @@ void main(void)
 	while(1)
 	{
        
+
 		 CheckGround();
 		 CheckRun();
+	     kk=ReadKey();
 	   
-       kk=ReadKey();
-	   
-       CheckMode(kk);
-	   
-	  
-	  }
+          CheckMode(kk);
+	}
 
 }
 /***********************************************************
@@ -143,6 +141,7 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
 	if(t_1s>99) //100 * 10ms = 1000ms =1s
 	{
 	  t_1s=0;
+	//  powerTime++;
 	  PumpTime++;
       RunSecond++;
 	  ///*
