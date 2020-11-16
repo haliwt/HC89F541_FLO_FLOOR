@@ -64,6 +64,7 @@ void main(void)
  
 	INT8U kk;
 	INT8U  abc;
+	INT8U Lc,Rc;
 	InitSysclk(1);
 
 	InitT1();
@@ -92,13 +93,15 @@ void main(void)
 
 	while(1)
 	{
-       
-
-		 CheckGround();
-		 CheckRun();
+         CheckGround();
+		 CheckLCurrent();
+	     CheckRCurrent();
+		 if(CurrentValue==0){//if((Usart1Send[6] < 0x1f) || ( Usart1Send[7]< 0x1f)){ //WT.EDIT.2020.11.16
+		     CheckRun();
+		 }
+		 else AllStop();
 	     kk=ReadKey();
-	   
-          CheckMode(kk);
+	     CheckMode(kk);
 	}
 
 }
@@ -141,7 +144,7 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
 	if(t_1s>99) //100 * 10ms = 1000ms =1s
 	{
 	  t_1s=0;
-	//  powerTime++;
+	
 	  PumpTime++;
       RunSecond++;
 	  ///*
@@ -165,6 +168,10 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
 	  Usart1Send[15]=Step;
 	  SendCount=1;
 	  SBUF=Usart1Send[SendCount];
+
+	  if(Usart1Send[6] > 0xD1 || Usart1Send[7]> 0xD1)
+	  	 CurrentValue =1;
+	  else CurrentValue =0;
 	 //*/
 	  /*
 	  Usart1Send[0]=13;

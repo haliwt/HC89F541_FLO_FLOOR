@@ -112,52 +112,55 @@ void InitKey(void)
 INT8U ReadKey(void)
 {
 
-  static INT16U  abc=0,key,poweron=0;
- 
+  static INT16U  poweron=0,abc;
+   
    if(poweron ==0){
-     Delay_ms(3000);
+   	 
+    
+	 Delay_ms(3000);
     
 	 if(P0_0==0)
-		{
+	 {
 		
 			 Delay_ms(20);
 			 if(P0_0==0){
-				powerTime=1;
+			 	LedBlueON();
+				LedBlueON();
 				return(2); //itself check flag =2
 			 }
 			 
-
-	 }
-
-       poweron ++ ;
+     }
+     poweron ++ ;
+       
 
    }
    else{
-     if(P0_0==0){
+		  if(P0_0==0)
+		  {
+		    if(abc<200)
+		   	 abc++;
+		  }
+		  else	
+		  {	  
+		   	abc=0;
+		  }
 
-       Delay_ms(5);
-	   key = key ^ 0x01;
-	   if(P0_0==0){
-	  
-	        if(key==1){
-			    abc =0;
-		   	 //   powerTime =0;
-				LedBlueON();
-		         return(1);	
-	         }
-		   else{
-			    abc =0;
-		   	 //   powerTime =0;
-				LedBlueOff();
-		        return(0);	
+		  if((abc>190)&&(abc<200))
+		  {
+		    
+		    abc=201;
+			LedBlueON();
+		    return(1);
 
-		   }
-  	  }
-    }
+		  }
+		  else 
+		  {
+		   LedBlueOff();
+		   return(0);
+		  }  
    }
-	
-    return (0);	
-  }
+	return(0);
+ }
 	
  
 /************************************************

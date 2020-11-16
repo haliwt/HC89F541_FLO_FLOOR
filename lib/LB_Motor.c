@@ -849,7 +849,7 @@ void SetXMotor(
 	   *Retrn Ref: NO
 	   *
 **************************************************************/
-#if 1
+#if 0
 void AdjustSpeed(void)
 {
   if(RightMoveMotorData.RunSpeed==40 && LeftMoveMotorData.RunSpeed==40){ 
@@ -877,7 +877,7 @@ void AdjustSpeed(void)
 
  #endif 
 /**********************DEFAULT***************************************/
-#if 0
+#if 1
 void AdjustSpeed()
 {
   if(LeftMoveMotorData.RunSpeed>LeftMoveMotorData.EndSpeed)

@@ -28,12 +28,19 @@ version  : ¼ûÎÄ¼þÎ²¶Ë
 #define  KAKA_Run_EXT extern
 #endif
 #define  GroundMin 8
+#define  RightMotorCurrent 0xD0
+
+#define  LeftMotorCurrent 0xD0
+
+
+
 KAKA_Run_EXT outdata INT8U Mode;
 KAKA_Run_EXT outdata INT8U Step;
 KAKA_Run_EXT outdata INT8U RunMode;
 KAKA_Run_EXT outdata INT8U RunStep;
 KAKA_Run_EXT outdata INT8U PumpTime; //WT.EDIT
-KAKA_Run_EXT outdata INT8U powerTime; //WT.EDIT
+KAKA_Run_EXT outdata INT8U CurrentValue; //WT.EDIT
+
 
 KAKA_Run_EXT outdata INT16U RunSecond;
 KAKA_Run_EXT outdata INT16U NoImpSecond;

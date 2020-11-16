@@ -328,8 +328,7 @@ void CheckRCurrent()
 /*************************************************************
 	*
 	*Function Name:void CheckEdgeCurrent()
-	*Function :
-batter of voltage 
+	*Function :batter of voltage 
 	*Input Ref: NO
 	*Return Ref: NO
 	*

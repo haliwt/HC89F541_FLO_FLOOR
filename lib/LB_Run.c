@@ -20,6 +20,7 @@ version  : ?????β??
 #include "LB_AD.h"
 #include "LB_Led.h"
 #include "LB_IR.h"
+#include "LB_Usart.h"
 
 #endif
 
@@ -51,13 +52,19 @@ void  CheckRun()
 		case 1: //power on inital RunStep =1 
 		{
 
-			SetXMotor(1,20,40,1,1,20,40,1);
+            if(Usart1Send[6]  <LeftMotorCurrent || Usart1Send[7]  < RightMotorCurrent){ //WT.EDIT.2020.11.16
+				SetXMotor(1,20,40,1,1,20,40,1);
+				
+				//SetXMotor(1,20,25,1,1,20,40,1);//1--???????
+				//SetXMotor(1,20,25,1,1,20,60,1);//2--???????
+				SetMotorcm(1,5000);
+				RunStep=2;
+				RunMs=0;
+            }
+			else
+			   AllStop();	
+
 			
-			//SetXMotor(1,20,25,1,1,20,40,1);//1--???????
-			//SetXMotor(1,20,25,1,1,20,60,1);//2--???????
-			SetMotorcm(1,5000);
-			RunStep=2;
-			RunMs=0;
 		}
 		break;
 		case 2:
@@ -72,10 +79,13 @@ void  CheckRun()
 			}
 			if((RightMoveMotorData.Flag==1)||(LeftMoveMotorData.Flag==1))
 			{
-				SetXMotor(1,20,40,1,1,20,40,1);  //???
-				//SetXMotor(1,20,25,1,1,20,40,1);//1--???????
-				//SetXMotor(1,20,25,1,1,20,60,1);//2--???????
-				SetMotorcm(1,5000);			
+ 				 if(Usart1Send[6] <LeftMotorCurrent || Usart1Send[7] /10 < RightMotorCurrent){ //WT.EDIT.2020.11.16
+					SetXMotor(1,20,40,1,1,20,40,1);  //???
+					//SetXMotor(1,20,25,1,1,20,40,1);//1--???????
+					//SetXMotor(1,20,25,1,1,20,60,1);//2--???????
+					SetMotorcm(1,5000);
+ 				}
+				else  AllStop();
 			}
 			
 			if(RunMs>2000)//if(RunMs>3000)
@@ -92,9 +102,13 @@ void  CheckRun()
 		{
 		   if(RunMs>20)
 		   {
-			SetXMotor(2,20,40,1,2,20,40,1); //????
-			SetMotorcm(2,1000);
-			RunStep=4;		   
+			 
+			 if(Usart1Send[6]  <LeftMotorCurrent || Usart1Send[7] < RightMotorCurrent){ //WT.EDIT.2020.11.16
+					SetXMotor(2,20,40,1,2,20,40,1); //????
+					SetMotorcm(2,1000);
+					RunStep=4;
+				}
+			    else AllStop();
 		   }
 		    
 		}
@@ -115,10 +129,16 @@ void  CheckRun()
 		  {
 			if(RunMs>20)
 			{
-				SetXMotor(2,20,40,1,1,20,40,1); //???
-			    SetMotorcm(3,9000);
-				RunMs=0;
-				RunStep=6;
+				if(Usart1Send[6]  <LeftMotorCurrent || Usart1Send[7]  < RightMotorCurrent){ //WT.EDIT.2020.11.16
+					SetXMotor(2,20,40,1,1,20,40,1); //???
+				    SetMotorcm(3,9000);
+					RunMs=0;
+					RunStep=6;
+				}
+				else{
+					AllStop();
+
+				}
 			}	
 			
 		  }
@@ -138,24 +158,30 @@ void  CheckRun()
 			if(RunMs>20) //20 * 10ms =200ms
 			{
 
-				if(PumpTime >119 ){
+				if(PumpTime >20){
 
 					
 				   RunMs=0;
 				   RunStep=8;//??? //RunStep=12;
 				   WaterPump(); 
-					SetXMotor(1,20,40,1,2,20,40,1);
-					//SetXMotor(1,20,25,1,1,20,40,1);//1--???????
-					//SetXMotor(1,20,25,1,1,20,60,1);//2--???????
-					SetMotorcm(4,9000); //??
+				   if(Usart1Send[6]  <LeftMotorCurrent || Usart1Send[7]  < RightMotorCurrent){ //WT.EDIT.2020.11.16
+					   SetXMotor(1,20,40,1,2,20,40,1);
+						//SetXMotor(1,20,25,1,1,20,40,1);//1--???????
+						//SetXMotor(1,20,25,1,1,20,60,1);//2--???????
+						SetMotorcm(4,9000); //??
+				   	}
+				    else AllStop();
 		    	}
 				else{
 					RunMs=0;
 					RunStep=2;//??? //RunStep=12;
-				   SetXMotor(1,20,40,1,1,20,40,1);//SetXMotor(1,20,25,1,1,20,40,1); //???
-                  // SetXMotor(1,20,25,1,1,20,40,1);//1--???????
-                   SetXMotor(1,20,25,1,1,20,60,1);//2--???????
-				   SetMotorcm(1,5000);				
+					if(Usart1Send[6] <LeftMotorCurrent || Usart1Send[7] < RightMotorCurrent){ //WT.EDIT.2020.11.16
+					   SetXMotor(1,20,40,1,1,20,40,1);//SetXMotor(1,20,25,1,1,20,40,1); //???
+	                  // SetXMotor(1,20,25,1,1,20,40,1);//1--???????
+	                   SetXMotor(1,20,25,1,1,20,60,1);//2--???????
+					   SetMotorcm(1,5000);	
+					}
+					else AllStop();
 				}
 
 				
@@ -178,10 +204,13 @@ void  CheckRun()
 			    PumpTime=0;
 			    RunMs=0;
 			    RunStep=2; 
-				SetXMotor(1,20,40,1,1,20,40,1);//SetXMotor(1,20,25,1,1,20,40,1);//SetXMotor(1,20,25,1,1,20,40,1); //???
-				// SetXMotor(1,20,25,1,1,20,40,1);//1--???????
-				//SetXMotor(1,20,25,1,1,20,60,1);//2--???????
-				SetMotorcm(1,5000);		   
+				if(Usart1Send[6]  <LeftMotorCurrent || Usart1Send[7]  < RightMotorCurrent){ //WT.EDIT.2020.11.16
+					SetXMotor(1,20,40,1,1,20,40,1);//SetXMotor(1,20,25,1,1,20,40,1);//SetXMotor(1,20,25,1,1,20,40,1); //???
+					// SetXMotor(1,20,25,1,1,20,40,1);//1--???????
+					//SetXMotor(1,20,25,1,1,20,60,1);//2--???????
+					SetMotorcm(1,5000);	
+				}
+				else AllStop();
 		   }
 		 }
 		 break;
@@ -204,9 +233,6 @@ void CheckMode(INT8U Key)
 
        
              Mode = 40;
-			
-	
-		
 			 Delay_ms(100);
 	 		 LedBlueOff();
 			  LedRedON();
@@ -218,14 +244,16 @@ void CheckMode(INT8U Key)
 			  LedRedON();
 			   Delay_ms(100);
 			  LedBlueON();
-			  LedRedOff();
+			  LedRedON();
 			 
 		 
   }
   else  if(Key==1)
   {
-    
-    if(Mode==0)  //初始化Mode =1
+
+	
+    LedBlueON();
+	if(Mode==0)  //初始化Mode =1
 	{
 	  //????
 	  Mode=1;
@@ -236,6 +264,7 @@ void CheckMode(INT8U Key)
 	  if(Step==0)
 	  {
 	    //20
+	   
 	  	Step=1; //
 	    ADCtl=1;
         RunSecond=0; //第一次，按key Power On
@@ -253,6 +282,7 @@ void CheckMode(INT8U Key)
 	  }
 	}
   }
+
  
   switch(Mode)
   {
@@ -274,7 +304,7 @@ void CheckMode(INT8U Key)
 		    //if(RunSecond==20)
 			{
 			  RunSecond=0;
-		 
+		      LedBlueON();
 			  //Step=2;
 			}
 		 }
@@ -285,7 +315,7 @@ void CheckMode(INT8U Key)
 		   {
 		   	   Step=0;
 			   RunSecond=0;
-			   
+			   LedBlueON(); 
 		   }
 		 }
 		 break;
