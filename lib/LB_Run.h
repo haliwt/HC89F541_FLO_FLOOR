@@ -40,6 +40,10 @@ KAKA_Run_EXT outdata INT8U RunMode;
 KAKA_Run_EXT outdata INT8U RunStep;
 KAKA_Run_EXT outdata INT8U PumpTime; //WT.EDIT
 KAKA_Run_EXT outdata INT8U CurrentValue; //WT.EDIT
+KAKA_Run_EXT outdata INT8U BatterCharge; //WT.EDIT
+KAKA_Run_EXT outdata INT8U BatterTime; //WT.EDIT
+
+
 
 
 KAKA_Run_EXT outdata INT16U RunSecond;

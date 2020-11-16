@@ -282,7 +282,7 @@ void CheckGround()
 void CheckEdgeCurrent()
 {
 
- EdgeCurrent=(EdgeCurrent*9+((AD5ms[6]*13)/5))/10;
+ EdgeCurrent=(EdgeCurrent*9+((AD5ms[6]*13)/5))/10;//ADCC[7]={2,3,4,5,6,7,13};
  if(EdgeCurrent>0x80)
  EdgeCurrentOverCount++;
  else 
@@ -303,7 +303,6 @@ void CheckEdgeCurrent()
 	*
 	*Function Name:void CheckLCurrent()
 	*Function :
-
 	*Input Ref: NO
 	*Return Ref: NO
 	*

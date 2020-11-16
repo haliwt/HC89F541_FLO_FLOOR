@@ -112,7 +112,7 @@ void InitKey(void)
 INT8U ReadKey(void)
 {
 
-  static INT16U  poweron=0,abc;
+  static INT16U  poweron=0,abc,key=0,cba;
    
    if(poweron ==0){
    	 
@@ -125,8 +125,8 @@ INT8U ReadKey(void)
 			 Delay_ms(20);
 			 if(P0_0==0){
 			 	LedBlueON();
-				LedBlueON();
-				return(2); //itself check flag =2
+				LedRedON();
+			    return(2); //itself check flag =2
 			 }
 			 
      }
@@ -135,32 +135,38 @@ INT8U ReadKey(void)
 
    }
    else{
-		  if(P0_0==0)
+		 if(P0_0==0)
 		  {
+		    // LedBlueON();
 		    if(abc<200)
 		   	 abc++;
 		  }
-		  else	
+	      else	
 		  {	  
+		    //LedBlueOff();
 		   	abc=0;
 		  }
 
 		  if((abc>190)&&(abc<200))
 		  {
-		    
+		    //
 		    abc=201;
-			LedBlueON();
+			//LedBlueON();
 		    return(1);
 
 		  }
 		  else 
 		  {
-		   LedBlueOff();
-		   return(0);
-		  }  
-   }
-	return(0);
- }
+			 return(0);
+		  }
+		}
+}  
+			
+
+	    
+
+	
+ 
 	
  
 /************************************************
@@ -194,6 +200,14 @@ void InitPowerStatus(void)
 {
   return(P1_0); // 检查电池掉电，电池电量低于5V.
 }
+ /************************************************
+	*
+	*Function Name: INT8U ReadPowerStatus(void)
+	*Function : 充电结束，P1_7=1,充电时：P1_7 = 0 
+	*Input Ref:NO
+	*Return Ref:NO
+	*
+************************************************/
  INT8U ReadPowerStatus(void)
 {
   return(P1_7); //电池充电判断,是否需要充电

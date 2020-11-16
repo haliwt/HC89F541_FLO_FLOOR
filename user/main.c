@@ -93,8 +93,21 @@ void main(void)
 	while(1)
 	{
          CheckGround();
+		 if(BatterCharge ==1){
+		 	if(BatterTime >1 && BatterTime <3){
+			 //BatterTime =0;
+		 	 LedBlueOff();
+             LedRedON();
+		 	}
+            if(BatterTime >=3 && BatterTime < 5){
+		       BatterTime =0;
+		       LedRedOff();
+			   LedBlueOff();
+             }
+		 }
 		 if(CurrentValue==0){
-		     CheckRun();
+		      CheckRun();
+			
 		 }
 		 else AllStop();
 	     kk=ReadKey();
@@ -122,14 +135,15 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
   	t_10ms=0;
 	t_100ms++;
 	t_1s++;
-	RunMs++;
+	
+	 RunMs++;
  	 CheckLeftMotorSpeed(); //控制一定速度
 	 CheckRightMotorSpeed(); //
 	 AdjustSpeed(); //调节速度
 	if(t_100ms>9)//10 *10ms =100ms
 	{
-	  if(ReadPowerStatus()) //P1_7 ==1 OK 电池管理芯片，
-	    PowerCountOK++;
+	  if(ReadPowerStatus()) //P1_7 ==1(charge batter is over) OK 电池管理芯片，
+	    PowerCountOK++; //charge batter is over flag.
 	  t_100ms=0;
 	  CheckLCurrent();
 	  CheckRCurrent();
@@ -141,7 +155,7 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
 	if(t_1s>99) //100 * 10ms = 1000ms =1s
 	{
 	  t_1s=0;
-	
+	  BatterTime++;
 	  PumpTime++;
       RunSecond++;
 	  ///*
@@ -166,9 +180,16 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
 	  SendCount=1;
 	  SBUF=Usart1Send[SendCount];
 
-	  if(Usart1Send[6] > 0xD1 || Usart1Send[7]> 0xD1)
+	  if(Usart1Send[6] > 0xC1 || Usart1Send[7]> 0xC1)
 	  	 CurrentValue =1;
 	  else CurrentValue =0;
+	  if(Usart1Send[1] ==0x09){
+	  	if(Usart1Send[2]>0x40)
+			BatterCharge =1;
+		else BatterCharge =0;
+		
+	  }
+	  else BatterCharge =0;
 	 //*/
 	  /*
 	  Usart1Send[0]=13;
@@ -221,7 +242,7 @@ void INT8_17_Rpt() interrupt INT8_17_VECTOR
 	  ReadRightPulsed();
 	  
 	}
-	else if(PINTF1&0x80)			 //判断INT15中断标志位--电池充电
+	else if(PINTF1&0x80)			 //判断INT15中断标志位--P1_7 电池充电
 	{
 	  PINTF1 &=0X7f;				//清除INT15中断标志位---电池充电状态值		
 	  PowerCountErr++;

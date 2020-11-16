@@ -60,6 +60,7 @@ void  CheckRun()
 				SetMotorcm(1,5000);
 				RunStep=2;
 				RunMs=0;
+			//	LedBlueON();
             }
 			else
 			   AllStop();	
@@ -107,6 +108,7 @@ void  CheckRun()
 					SetXMotor(2,20,40,1,2,20,40,1); //????
 					SetMotorcm(2,1000);
 					RunStep=4;
+				//	LedBlueON();
 				}
 			    else AllStop();
 		   }
@@ -121,6 +123,7 @@ void  CheckRun()
 				//SetXMotor(2,20,1,1,2,20,1,1);
 				RunMs=0;
 				RunStep=5;
+			//	LedBlueON();
 			}
 			
 		}
@@ -134,6 +137,7 @@ void  CheckRun()
 				    SetMotorcm(3,9000);
 					RunMs=0;
 					RunStep=6;
+				//	LedBlueON();
 				}
 				else{
 					AllStop();
@@ -150,6 +154,7 @@ void  CheckRun()
 				//SetXMotor(2,20,1,1,1,20,1,1);
 				RunMs=0;
 				RunStep=7;
+			//	LedBlueON();
 			}
 			
 			break;
@@ -164,6 +169,7 @@ void  CheckRun()
 				   RunMs=0;
 				   RunStep=8;//??? //RunStep=12;
 				   WaterPump(); 
+				 //  LedBlueON();
 				   if(CurrentValue ==0){ //WT.EDIT.2020.11.16
 					   SetXMotor(1,20,40,1,2,20,40,1);
 						//SetXMotor(1,20,25,1,1,20,40,1);//1--???????
@@ -178,7 +184,7 @@ void  CheckRun()
 					if(CurrentValue ==0){ //WT.EDIT.2020.11.16
 					   SetXMotor(1,20,40,1,1,20,40,1);//SetXMotor(1,20,25,1,1,20,40,1); //???
 	                  // SetXMotor(1,20,25,1,1,20,40,1);//1--???????
-	                   SetXMotor(1,20,25,1,1,20,60,1);//2--???????
+	                  // SetXMotor(1,20,25,1,1,20,60,1);//2--???????
 					   SetMotorcm(1,5000);	
 					}
 					else AllStop();
@@ -195,13 +201,15 @@ void  CheckRun()
 						WaterPumpStop();
 				        RunMs=0;
 					    RunStep=9;//??? //RunStep=12;
+					   // LedBlueON();
 			        }
 		 break;
 		 case 9:
 		 {
 		   if(RunMs > 240)
 		   {
-			    PumpTime=0;
+			//	LedBlueON();
+				PumpTime=0;
 			    RunMs=0;
 			    RunStep=2; 
 				if(CurrentValue ==0){ //WT.EDIT.2020.11.16
@@ -295,6 +303,7 @@ void CheckMode(INT8U Key)
 		 {
 
 			AllStop();
+			LedBlueOff();
 
 		 }
 		 break;
@@ -304,7 +313,7 @@ void CheckMode(INT8U Key)
 		    //if(RunSecond==20)
 			{
 			  RunSecond=0;
-		      LedBlueON();
+		     // LedBlueON();
 			  //Step=2;
 			}
 		 }
@@ -315,7 +324,7 @@ void CheckMode(INT8U Key)
 		   {
 		   	   Step=0;
 			   RunSecond=0;
-			   LedBlueON(); 
+			    
 		   }
 		 }
 		 break;
@@ -332,7 +341,7 @@ void CheckMode(INT8U Key)
 	   	 case 0:
 		 {
 		   //ADCtl=1;
-		 //5????§Ñ???????,????????
+		  //
 		   if(RunSecond>15) //16 * 1s = 16s
 		   {
 		     //Step=0;
@@ -490,7 +499,7 @@ void CheckMode(INT8U Key)
 			 Step=5;
 			 RunSecond=0;
 		   }
-		   else if(PowerCountOK>20)
+		   else if(PowerCountOK>20) //batter charge is over 
 		   {
 		   	  Step=7;
 		   }		   
