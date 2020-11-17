@@ -105,7 +105,7 @@ void  CheckRun()
 		   {
 			 
 			 if(CurrentValue ==0){ //WT.EDIT.2020.11.16
-					SetXMotor(2,20,40,1,2,20,40,1); //????
+					SetXMotor(2,20,40,1,2,20,40,1); //back 
 					SetMotorcm(2,1000);
 					RunStep=4;
 				//	LedBlueON();
@@ -133,7 +133,7 @@ void  CheckRun()
 			if(RunMs>20)
 			{
 				if(CurrentValue ==0){ //WT.EDIT.2020.11.16
-					SetXMotor(2,20,40,1,1,20,40,1); //???
+					SetXMotor(2,20,40,1,1,20,40,1); //right turn 
 				    SetMotorcm(3,9000);
 					RunMs=0;
 					RunStep=6;
@@ -158,7 +158,7 @@ void  CheckRun()
 			}
 			
 			break;
-		case 7:
+		case 7: //water pump
 			
 			if(RunMs>20) //20 * 10ms =200ms
 			{
@@ -171,11 +171,11 @@ void  CheckRun()
 				   WaterPump(); 
 				 //  LedBlueON();
 				   if(CurrentValue ==0){ //WT.EDIT.2020.11.16
-					   SetXMotor(1,20,40,1,2,20,40,1);
-						//SetXMotor(1,20,25,1,1,20,40,1);//1--???????
-						//SetXMotor(1,20,25,1,1,20,60,1);//2--???????
-						SetMotorcm(4,9000); //??
-				   	}
+					   SetXMotor(1,20,40,1,2,20,40,1); //תȦ
+						SetMotorcm(4,4000);//WT.EDIT 2020.11.17//SetMotorcm(4,9000); //??
+						SetXMotor(2,20,40,1,1,20,40,1); //right turn 
+				        SetMotorcm(3,9000);
+				   }
 				    else AllStop();
 		    	}
 				else{
@@ -197,7 +197,7 @@ void  CheckRun()
 			break;
 		 case 8: // water pump
 
-			        if(RunMs > 9){
+			        if(RunMs > 13){ //9
 						WaterPumpStop();
 				        RunMs=0;
 					    RunStep=9;//??? //RunStep=12;

@@ -112,7 +112,7 @@ void InitKey(void)
 INT8U ReadKey(void)
 {
 
-  static INT16U  poweron=0,abc,key=0,cba;
+  static INT16U  poweron=0,abc;
    
    if(poweron ==0){
    	 

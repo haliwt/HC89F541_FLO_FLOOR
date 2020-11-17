@@ -933,7 +933,7 @@ void SetMotorcm(INT8U mode,INT16U Setcm)
 {
   switch(mode)
   {
-     case 1:
+     case 1: //直线
 	 {
 	   LeftMoveMotorData.RunCm=0;
 	   
@@ -961,7 +961,7 @@ void SetMotorcm(INT8U mode,INT16U Setcm)
        RightMoveMotorData.SetCm=Setcm/6;
      }
 	 break;
-	 case 4:
+	 case 4://转圈 右转
 	 {
 	   LeftMoveMotorData.RunCm=0;
        RightMoveMotorData.RunCm=0;

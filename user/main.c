@@ -180,7 +180,7 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
 	  SendCount=1;
 	  SBUF=Usart1Send[SendCount];
 
-	  if(Usart1Send[6] > 0xC1 || Usart1Send[7]> 0xC1)
+	  if(Usart1Send[6] > 0xC1 || Usart1Send[7]> 0xC1) //normal 0xD1
 	  	 CurrentValue =1;
 	  else CurrentValue =0;
 	  if(Usart1Send[1] ==0x09){
