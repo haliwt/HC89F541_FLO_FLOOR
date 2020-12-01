@@ -2,8 +2,8 @@
 
 ---------- file information -----------------------------------------------
 file name: 
-define   : <ï¿½Ä¼ï¿½Ëµï¿½ï¿½>
-version  : ï¿½ï¿½ï¿½Ä¼ï¿½Î²ï¿½ï¿½
+define   : <ÎÄ¼þËµÃ÷>
+version  : ¼ûÎÄ¼þÎ²¶Ë
 ---------------------------------------------------------------------------
 */
 #ifndef  LB_Run_h
@@ -21,13 +21,13 @@ version  : ï¿½ï¿½ï¿½Ä¼ï¿½Î²ï¿½ï¿½
 #endif
 
 
-//È«ï¿½Ö±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+//È«¾Ö±äÁ¿ÉùÃ÷
 #ifdef  KAKA_Run_GB
 #define KAKA_Run_EXT
 #else
 #define  KAKA_Run_EXT extern
 #endif
-#define  GroundMin  2  //WT.EDIT   //8
+#define  GroundMin 8
 #define  RightMotorCurrent 0xD0
 
 #define  LeftMotorCurrent 0xD0
