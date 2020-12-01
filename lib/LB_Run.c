@@ -223,9 +223,26 @@ void  CheckRun()
 		 }
 		 break;
 		}
-	}
-  }
+		}
+	
+		case 3: //RunMode =3
+
+			if(RunMs > 50){
+			ADFlag=1;
+			AllStop();
+			RunMs =0;
+			RunMode=3;
+			LedBlueON();
+			LedRedON();
+			CheckGround();
+			SelfChecking();
+			
 }
+
+		break ;
+	}
+}
+
 /***************************************************************
 	*
 	*Function Name:void CheckMode(INT8U Key)
@@ -242,7 +259,7 @@ void CheckMode(INT8U Key)
        
              Mode = 40;
 			 Delay_ms(100);
-	 		 LedBlueOff();
+	 		  LedBlueON();
 			  LedRedON();
 			   Delay_ms(100);
 			  LedBlueON();
@@ -602,18 +619,14 @@ void CheckMode(INT8U Key)
       
 	case 40 :
 
-          ADFlag=1;
-		  AllStop();
-	       RunStep=0;
+		
+		  RunMode=3;
 		  LedBlueON();
 		  LedRedON();
-		 CheckGround();
-	     SelfChecking();
 		
-		
-
-
 	break;
+
+
 
   }
 }

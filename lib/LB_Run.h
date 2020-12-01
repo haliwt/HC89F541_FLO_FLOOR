@@ -2,8 +2,8 @@
 
 ---------- file information -----------------------------------------------
 file name: 
-define   : <文件说明>
-version  : 见文件尾端
+define   : <锟侥硷拷说锟斤拷>
+version  : 锟斤拷锟侥硷拷尾锟斤拷
 ---------------------------------------------------------------------------
 */
 #ifndef  LB_Run_h
@@ -21,13 +21,13 @@ version  : 见文件尾端
 #endif
 
 
-//全局变量声明
+//全锟街憋拷锟斤拷锟斤拷锟斤拷
 #ifdef  KAKA_Run_GB
 #define KAKA_Run_EXT
 #else
 #define  KAKA_Run_EXT extern
 #endif
-#define  GroundMin 8
+#define  GroundMin  2  //WT.EDIT   //8
 #define  RightMotorCurrent 0xD0
 
 #define  LeftMotorCurrent 0xD0
