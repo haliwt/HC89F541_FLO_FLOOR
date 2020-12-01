@@ -2,12 +2,12 @@
 
 ---------- file information -----------------------------------------------
 file name: 
-define   : <ÎÄ¼þËµÃ÷>
-version  : ¼ûÎÄ¼þÎ²¶Ë
+define   : <ï¿½Ä¼ï¿½Ëµï¿½ï¿½>
+version  : ï¿½ï¿½ï¿½Ä¼ï¿½Î²ï¿½ï¿½
 ---------------------------------------------------------------------------
 */
 
-//È«¾Ö±äÁ¿ÉùÃ÷
+//È«ï¿½Ö±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 #define  KAKA_AD_GB
 
 #ifdef   CodeC_Includes
@@ -21,10 +21,10 @@ version  : ¼ûÎÄ¼þÎ²¶Ë
 
 #endif
 /**
-  * @ËµÃ÷  	ÑÓÊ±º¯Êý
-  * @²ÎÊý  	fui_i : ÑÓÊ±Ê±¼ä
-  * @·µ»ØÖµ ÎÞ
-  * @×¢ 	Fcpu = 16MHz,fui_i = 1Ê±,ÑÓÊ±Ê±¼äÔ¼Îª2us
+  * @Ëµï¿½ï¿½  	ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½
+  * @ï¿½ï¿½ï¿½ï¿½  	fui_i : ï¿½ï¿½Ê±Ê±ï¿½ï¿½
+  * @ï¿½ï¿½ï¿½ï¿½Öµ ï¿½ï¿½
+  * @×¢ 	Fcpu = 16MHz,fui_i = 1Ê±,ï¿½ï¿½Ê±Ê±ï¿½ï¿½Ô¼Îª2us
   */
 void Delay_2us(unsigned int fui_i)
 {
@@ -42,17 +42,17 @@ void Delay_2us(unsigned int fui_i)
 *************************************************************/
 void InitADIO(void)
 {
-	P0M2 = 0x02;				        //P02ÉèÖÃÎªÄ£ÄâÊäÈë---µç³ØµçÑ¹¼ì²â£¨µç³Ø±¾Ìå£©
+	P0M2 = 0x02;				        //P02ï¿½ï¿½ï¿½ï¿½ÎªÄ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½---ï¿½ï¿½Øµï¿½Ñ¹ï¿½ï¿½â£¨ï¿½ï¿½Ø±ï¿½ï¿½å£©
 
-	P0M3 = 0x02;				        //P03ÉèÖÃÎªÄ£ÄâÊäÈë---IR_MID_WALL ÖÐ¼äIR
-	P0M4 = 0x02;				        //P04ÉèÖÃÎªÄ£ÄâÊäÈë---IR_L_WALL
-	P0M5 = 0x02;				        //P05ÉèÖÃÎªÄ£ÄâÊäÈë---IR_R_WALL
+	P0M3 = 0x02;				        //P03ï¿½ï¿½ï¿½ï¿½ÎªÄ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½---IR_MID_WALL ï¿½Ð¼ï¿½IR
+	P0M4 = 0x02;				        //P04ï¿½ï¿½ï¿½ï¿½ÎªÄ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½---IR_L_WALL
+	P0M5 = 0x02;				        //P05ï¿½ï¿½ï¿½ï¿½ÎªÄ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½---IR_R_WALL
 
-	P0M6 = 0x02;				        //P06ÉèÖÃÎªÄ£ÄâÊäÈë---MOTOR_L_CURRENT_
-	P0M7 = 0x02;				        //P07ÉèÖÃÎªÄ£ÄâÊäÈë---MOTOR_R_CURRENT
-	P2M5 = 0x02;				        //P25ÉèÖÃÎªÄ£ÄâÊäÈë---È÷Ë®MOTOR_CURRENT
+	P0M6 = 0x02;				        //P06ï¿½ï¿½ï¿½ï¿½ÎªÄ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½---MOTOR_L_CURRENT_
+	P0M7 = 0x02;				        //P07ï¿½ï¿½ï¿½ï¿½ÎªÄ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½---MOTOR_R_CURRENT
+	P2M5 = 0x02;				        //P25ï¿½ï¿½ï¿½ï¿½ÎªÄ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½---ï¿½ï¿½Ë®MOTOR_CURRENT
 
-	P0M1 = 0X80;                        //IR_WALL_PW Êä³öGPIO 
+	P0M1 = 0X80;                        //IR_WALL_PW ï¿½ï¿½ï¿½GPIO 
 }
 /*************************************************************
 	*
@@ -65,9 +65,9 @@ void InitADIO(void)
 *************************************************************/
 void SeleADChanel(INT8U ADChanel)
 {
-	ADCC0 = 0x81;						//´ò¿ªADC×ª»»µçÔ´
-	ADCC1 = (ADChanel&0X0F);			//Ñ¡ÔñÍâ²¿Í¨µÀ0
-	ADCC2 = 0x4f;						//×ª»»½á¹û12Î»Êý¾Ý£¬Êý¾ÝÓÒ¶ÔÆë£¬ADCÊ±ÖÓ16·ÖÆµ
+	ADCC0 = 0x81;						//ï¿½ï¿½ADC×ªï¿½ï¿½ï¿½ï¿½Ô´
+	ADCC1 = (ADChanel&0X0F);			//Ñ¡ï¿½ï¿½ï¿½â²¿Í¨ï¿½ï¿½0
+	ADCC2 = 0x4f;						//×ªï¿½ï¿½ï¿½ï¿½ï¿½12Î»ï¿½ï¿½ï¿½Ý£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò¶ï¿½ï¿½ë£¬ADCÊ±ï¿½ï¿½16ï¿½ï¿½Æµ
 
 }
 /*************************************************************
@@ -82,7 +82,7 @@ void SeleADChanel(INT8U ADChanel)
 void StartAD()
 {
 	ADCC0&=0XDF;
-	ADCC0 |= 0x40;					//Æô¶¯ADC×ª»»
+	ADCC0 |= 0x40;					//ï¿½ï¿½ï¿½ï¿½ADC×ªï¿½ï¿½
 }
 /*************************************************************
 	*
@@ -95,7 +95,7 @@ void StartAD()
 *************************************************************/
 void SetADINT(void)
 {
-    EADC = 1;                                   //Ê¹ÄÜADCÖÐ¶Ï
+    EADC = 1;                                   //Ê¹ï¿½ï¿½ADCï¿½Ð¶ï¿½
     EA = 1;
 }
 
@@ -119,7 +119,7 @@ void  SetAD(INT8U ADChanel)
 	*
 	*Function Name:void ReadAD5ms()
 	*Function :
-¶ÁÈ¡½ÓÊÕIRµÄÖµ
+ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½IRï¿½ï¿½Öµ
 	*Input Ref: NO
 	*Return Ref: NO
 	*
@@ -129,7 +129,7 @@ void ReadAD5ms()
   static INT8U i=0;
   static INT8U chanel=5;
   static INT16U ADtemp[5];                        
-  ADtemp[i]=ADCR; //ADC ×ª»»½á¹û¼Ä´æÆ÷,ADCC[7]={2,3,4,5,6,7,13};
+  ADtemp[i]=ADCR; //ADC ×ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä´ï¿½ï¿½ï¿½,ADCC[7]={2,3,4,5,6,7,13};
   i++;
   if(i>2)
   {
@@ -143,7 +143,7 @@ void ReadAD5ms()
 	   {
 		   if(ADFlag) //IR turn on _ turn off 
 		   {
-			 P0_1 = 1; //IR ¹©µçGPIO  ,IR_POWER output +5V IR works
+			 P0_1 = 1; //IR ï¿½ï¿½ï¿½ï¿½GPIO  ,IR_POWER output +5V IR works
 			 ADFlag=0; //IR_WorksFlag =1
 			 ADFlashFlag=1;
 		   }
@@ -163,7 +163,7 @@ void ReadAD5ms()
   }
   else
   {
-  	 SetAD(chanel); //ADC×ª»»
+  	 SetAD(chanel); //ADC×ªï¿½ï¿½
   }
 }
 /*************************************************************
@@ -216,8 +216,8 @@ void CheckGround()
  {
    if(ADFlag)
    {
-   	   GroundAD[0][0]=(AD5ms[2]>>4); // L_WALL //ADtemp[i]=ADCR; //ADC ×ª»»½á¹û¼Ä´æÆ÷,ADCC[7]={2,3,4,5,6,7,13};
-	   GroundAD[1][0]=(AD5ms[1]>>4); //M_WALL IR_WALL ÅÐ¶ÏÖµ
+   	   GroundAD[0][0]=(AD5ms[2]>>4); // L_WALL //ADtemp[i]=ADCR; //ADC ×ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä´ï¿½ï¿½ï¿½,ADCC[7]={2,3,4,5,6,7,13};
+	   GroundAD[1][0]=(AD5ms[1]>>4); //M_WALL IR_WALL ï¿½Ð¶ï¿½Öµ
 	   GroundAD[2][0]=(AD5ms[3]>>4); //R_WALL 
 	   ADFlashFlag=0;
 	 //SBUF=GroundAD[0][0];
@@ -254,7 +254,7 @@ void CheckGround()
 	  GroundDp[2]=(GroundAD100Ms[2][0]+GroundAD100Ms[2][2]+GroundAD100Ms[2][4]+GroundAD100Ms[2][6])/4; //ir_R_wall
 
    }
-   //SBUF=AD5ms[5]/16;//ADC ×ª»»½á¹û¼Ä´æÆ÷,ADCC[7]={2,3,4,5,6,7,13};
+   //SBUF=AD5ms[5]/16;//ADC ×ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä´ï¿½ï¿½ï¿½,ADCC[7]={2,3,4,5,6,7,13};
    	LCurrentAD[ADTime]=AD5ms[4]; //L_speed current value 
 	RCurrentAD[ADTime]=AD5ms[5]; //R_speed
 	  
@@ -311,7 +311,7 @@ void CheckLCurrent()
 {
  INT16U	LCurrentADAvg;
  LCurrentADAvg=(LCurrentAD[0]+LCurrentAD[2]+LCurrentAD[4]+LCurrentAD[6])/4;
- //SBUF= (INT8U)LCurrentADAvg;////ADC ×ª»»½á¹û¼Ä´æÆ÷,ADCC[7]={2,3,4,5,6,7,13};
+ //SBUF= (INT8U)LCurrentADAvg;////ADC ×ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä´ï¿½ï¿½ï¿½,ADCC[7]={2,3,4,5,6,7,13};
  LCurrent=(LCurrent*9+(LCurrentADAvg*9.6))/10;
 				
 }
@@ -334,22 +334,22 @@ void CheckRCurrent()
 *************************************************************/
 void CheckVoltage()
 {
-   Voltage=(Voltage*19+(AD5ms[0]/2.56))/20; //µç³Ø±¾ÉíµçÁ¿¼ì²â
+   Voltage=(Voltage*19+(AD5ms[0]/2.56))/20; //ï¿½ï¿½Ø±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
    //4000*4/4096/10
 
 }
 
 /***************************************************************************************
-  * @ËµÃ÷  	ADCÖÐ¶Ï·þÎñº¯Êý
-  *	@²ÎÊý	ÎÞ
-  * @·µ»ØÖµ ÎÞ
-  * @×¢		ÎÞ
+  * @Ëµï¿½ï¿½  	ADCï¿½Ð¶Ï·ï¿½ï¿½ï¿½ï¿½ï¿½
+  *	@ï¿½ï¿½ï¿½ï¿½	ï¿½ï¿½
+  * @ï¿½ï¿½ï¿½ï¿½Öµ ï¿½ï¿½
+  * @×¢		ï¿½ï¿½
 ***************************************************************************************/
 void ADC_Rpt() interrupt ADC_VECTOR
 {
 
-    IE1 &=~ 0x40;                       //¹Ø±ÕADCÖÐ¶Ï
-    ADCC0 &=~ 0x20;						//Çå³ýADCÖÐ¶Ï±êÖ¾Î»
+    IE1 &=~ 0x40;                       //ï¿½Ø±ï¿½ADCï¿½Ð¶ï¿½
+    ADCC0 &=~ 0x20;						//ï¿½ï¿½ï¿½ADCï¿½Ð¶Ï±ï¿½Ö¾Î»
 
 } 
 /*************************************************************
@@ -382,22 +382,22 @@ void SelfChecking(void)
  		  LedRedOff();
 		  LedBlueON();
 		  Delay_ms(100);
+		  if(ir_Left !=0){
 		  LedBlueOff();
 		  LedRedON();
 		  Delay_ms(100);
  		  LedBlueON();
 		  LedRedOff();
 		  Delay_ms(100);
+		  }
+		  if(ir_Left !=0){
 		  LedBlueOff();
 		  LedRedON();
 		  Delay_ms(100);
  		  LedBlueOff();
 		  LedRedON();
 		  Delay_ms(100);
-		  LedBlueOff();
-		  LedRedOff();
-	     Delay_ms(200);
-		 
+		  }		 
 
        }
      if(ir_Mid != 0){
@@ -409,19 +409,25 @@ void SelfChecking(void)
 		 Delay_ms(100);
  		 LedBlueOff();
 		   Delay_ms(100);
+		if(ir_Mid != 0){
 		  LedBlueON();
 		 Delay_ms(100);
  		 LedBlueOff();
 		   Delay_ms(100);
+		}
+		if(ir_Mid != 0){
 		  LedBlueON();
 		   Delay_ms(100);
  		 LedBlueOff();
 		   Delay_ms(100);
+		}
+		if(ir_Mid != 0){
 		  LedBlueON();
 		  Delay_ms(100);
  		 LedBlueOff();
 		 LedRedOff();
-		 Delay_ms(200);
+		 Delay_ms(100);
+		}
 	     	
 		
 
@@ -430,33 +436,34 @@ void SelfChecking(void)
 	 if(ir_Right != 0){
 	 	GroundDp[2]=0;
           
- 		 
-		
-             LedBlueOff();
+ 		    LedBlueON();
 		    LedRedOff();
 			LedRedON();
 			Delay_ms(100);
 		
 			LedRedOff();
-			Delay_ms(200);
-			
+			Delay_ms(100);
+			 if(ir_Right != 0){
 			LedRedON();
 			Delay_ms(100);
 			
 		    LedRedOff();
-			Delay_ms(1200);
-			
+			Delay_ms(100);
+			 }
+			 if(ir_Right != 0){
 			LedRedON();
 			Delay_ms(100);
 			LedRedOff();
 		
 			Delay_ms(100);
+			 }
+			 if(ir_Right != 0){
 			LedRedON();
 			Delay_ms(100);
-			LedBlueOff();
+			LedBlueON();
 		    LedRedOff();
-			Delay_ms(200);
-	   
+			Delay_ms(100);
+			 }
 		
      }
 
