@@ -93,9 +93,9 @@ void main(void)
 	while(1)
 	{
          CheckGround();
-		 CheckRun();
 		 kk=ReadKey();
 	     CheckMode(kk);
+		 CheckRun();
 	}
 
 }

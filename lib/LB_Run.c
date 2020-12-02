@@ -237,28 +237,25 @@ void  CheckRun()
 void CheckMode(INT8U Key)
 {
  
+
   if(Key ==2){
 
        
 	Mode = 40;
 	Delay_ms(100);
 	LedBlueOff();
-	LedRedON();
+	LedRedOff();
 	Delay_ms(100);
 	LedBlueON();
 	LedRedON();
-	Delay_ms(100);
-	LedBlueOff();
-	LedRedON();
-	Delay_ms(100);
-	LedBlueON();
-	LedRedON();
+
   }
   else  if(Key==1)
   {
 
 	
     LedBlueON();
+	LedRedOff();
 	if(Mode==0)  //≥ı ºªØMode =1
 	{
 	  //????

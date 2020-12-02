@@ -18,6 +18,7 @@ version  : ���ļ�β��
 #include "..\lib\LB_Led.h"
 #include "LB_AD.h"
 #include "LB_Motor.h"
+#include "LB_Usart.h"
 
 #endif
 /**
@@ -42,17 +43,17 @@ void Delay_2us(unsigned int fui_i)
 *************************************************************/
 void InitADIO(void)
 {
-	P0M2 = 0x02;				        //P02����Ϊģ������---��ص�ѹ��⣨��ر���?
+	P0M2 = 0x02;				        //P02 setup analog input GPIO---��ص�ѹ��⣨��ر���?
 
-	P0M3 = 0x02;				        //P03����Ϊģ������---IR_MID_WALL �м�IR
-	P0M4 = 0x02;				        //P04����Ϊģ������---IR_L_WALL
-	P0M5 = 0x02;				        //P05����Ϊģ������---IR_R_WALL
+	P0M3 = 0x02;				        //P03 setup analog input GPIO---IR_MID_WALL �м�IR
+	P0M4 = 0x02;				        //P04 setup analog input ---IR_L_WALL
+	P0M5 = 0x02;				        //P05 setup analog input ---IR_R_WALL
 
-	P0M6 = 0x02;				        //P06����Ϊģ������---MOTOR_L_CURRENT_
-	P0M7 = 0x02;				        //P07����Ϊģ������---MOTOR_R_CURRENT
-	P2M5 = 0x02;				        //P25����Ϊģ������---��ˮMOTOR_CURRENT
+	P0M6 = 0x02;				        //P06 setup analog input GPIO---MOTOR_L_CURRENT_
+	P0M7 = 0x02;				        //P07 setup analog input GPIO---MOTOR_R_CURRENT
+	P2M5 = 0x02;				        //P25 setup analog input GPIO---��ˮMOTOR_CURRENT
 
-	P0M1 = 0X80;                        //IR_WALL_PW ���GPIO 
+	P0M1 = 0X80;                        //P01 IR_WALL_PW Control PWM  --setup OUTPUT GPIO
 }
 /*************************************************************
 	*
@@ -368,8 +369,13 @@ void SelfChecking(void)
 	  ir_Mid = GroundDp[1];  //ir_M
 	  ir_Right = GroundDp[2];  //ir_R 
 
-	 //  LedBlueOff();
-	 //  LedRedOff();
+	  Usart1Send[0]=4; //printf 15 number output
+	  Usart1Send[1]=ir_Left;
+	  Usart1Send[2]=ir_Mid;
+	  Usart1Send[3]=ir_Right;
+	  Usart1Send[4]=0xAB;
+	  SendCount=1;
+	  SBUF=Usart1Send[SendCount];
 
 	  if(ir_Left !=0){
 
@@ -464,8 +470,5 @@ void SelfChecking(void)
 		    LedRedOff();
 			Delay_ms(100);
 			 }
-		
-     }
-
-
+		}
 }
