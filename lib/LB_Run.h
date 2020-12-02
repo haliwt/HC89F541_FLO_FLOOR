@@ -27,7 +27,7 @@ version  : ¼ûÎÄ¼şÎ²¶Ë
 #else
 #define  KAKA_Run_EXT extern
 #endif
-#define  GroundMin 8
+#define  GroundMin  2 //  8 //WT.EDIT 2020.12.02
 #define  RightMotorCurrent 0xD0
 
 #define  LeftMotorCurrent 0xD0

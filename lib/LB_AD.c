@@ -42,7 +42,7 @@ void Delay_2us(unsigned int fui_i)
 *************************************************************/
 void InitADIO(void)
 {
-	P0M2 = 0x02;				        //P02����Ϊģ������---��ص�ѹ��⣨��ر��壩
+	P0M2 = 0x02;				        //P02����Ϊģ������---��ص�ѹ��⣨��ر���?
 
 	P0M3 = 0x02;				        //P03����Ϊģ������---IR_MID_WALL �м�IR
 	P0M4 = 0x02;				        //P04����Ϊģ������---IR_L_WALL
@@ -67,7 +67,7 @@ void SeleADChanel(INT8U ADChanel)
 {
 	ADCC0 = 0x81;						//��ADCת����Դ
 	ADCC1 = (ADChanel&0X0F);			//ѡ���ⲿͨ��0
-	ADCC2 = 0x4f;						//ת�����12λ���ݣ������Ҷ��룬ADCʱ��16��Ƶ
+	ADCC2 = 0x4f;						//ת�����?2λ���ݣ������Ҷ��룬ADCʱ��16��Ƶ
 
 }
 /*************************************************************
@@ -129,7 +129,7 @@ void ReadAD5ms()
   static INT8U i=0;
   static INT8U chanel=5;
   static INT16U ADtemp[5];                        
-  ADtemp[i]=ADCR; //ADC ת������Ĵ���,ADCC[7]={2,3,4,5,6,7,13};
+  ADtemp[i]=ADCR; //ADC ת������Ĵ���?ADCC[7]={2,3,4,5,6,7,13};
   i++;
   if(i>2)
   {
@@ -216,7 +216,7 @@ void CheckGround()
  {
    if(ADFlag)
    {
-   	   GroundAD[0][0]=(AD5ms[2]>>4); // L_WALL //ADtemp[i]=ADCR; //ADC ת������Ĵ���,ADCC[7]={2,3,4,5,6,7,13};
+   	   GroundAD[0][0]=(AD5ms[2]>>4); // L_WALL //ADtemp[i]=ADCR; //ADC ת������Ĵ���?ADCC[7]={2,3,4,5,6,7,13};
 	   GroundAD[1][0]=(AD5ms[1]>>4); //M_WALL IR_WALL �ж�ֵ
 	   GroundAD[2][0]=(AD5ms[3]>>4); //R_WALL 
 	   ADFlashFlag=0;
@@ -254,7 +254,7 @@ void CheckGround()
 	  GroundDp[2]=(GroundAD100Ms[2][0]+GroundAD100Ms[2][2]+GroundAD100Ms[2][4]+GroundAD100Ms[2][6])/4; //ir_R_wall
 
    }
-   //SBUF=AD5ms[5]/16;//ADC ת������Ĵ���,ADCC[7]={2,3,4,5,6,7,13};
+   //SBUF=AD5ms[5]/16;//ADC ת������Ĵ���?ADCC[7]={2,3,4,5,6,7,13};
    	LCurrentAD[ADTime]=AD5ms[4]; //L_speed current value 
 	RCurrentAD[ADTime]=AD5ms[5]; //R_speed
 	  
@@ -311,7 +311,7 @@ void CheckLCurrent()
 {
  INT16U	LCurrentADAvg;
  LCurrentADAvg=(LCurrentAD[0]+LCurrentAD[2]+LCurrentAD[4]+LCurrentAD[6])/4;
- //SBUF= (INT8U)LCurrentADAvg;////ADC ת������Ĵ���,ADCC[7]={2,3,4,5,6,7,13};
+ //SBUF= (INT8U)LCurrentADAvg;////ADC ת������Ĵ���?ADCC[7]={2,3,4,5,6,7,13};
  LCurrent=(LCurrent*9+(LCurrentADAvg*9.6))/10;
 				
 }
@@ -368,8 +368,8 @@ void SelfChecking(void)
 	  ir_Mid = GroundDp[1];  //ir_M
 	  ir_Right = GroundDp[2];  //ir_R 
 
-	   LedBlueOff();
-	   LedRedOff();
+	 //  LedBlueOff();
+	 //  LedRedOff();
 
 	  if(ir_Left !=0){
 

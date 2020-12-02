@@ -240,21 +240,19 @@ void CheckMode(INT8U Key)
   if(Key ==2){
 
        
-             Mode = 40;
-			 Delay_ms(100);
-	 		 LedBlueOff();
-			  LedRedON();
-			   Delay_ms(100);
-			  LedBlueON();
-			  LedRedON();
-			   Delay_ms(100);
-	 		 LedBlueOff();
-			  LedRedON();
-			   Delay_ms(100);
-			  LedBlueON();
-			  LedRedON();
-			 
-		 
+	Mode = 40;
+	Delay_ms(100);
+	LedBlueOff();
+	LedRedON();
+	Delay_ms(100);
+	LedBlueON();
+	LedRedON();
+	Delay_ms(100);
+	LedBlueOff();
+	LedRedON();
+	Delay_ms(100);
+	LedBlueON();
+	LedRedON();
   }
   else  if(Key==1)
   {
@@ -383,8 +381,8 @@ void CheckMode(INT8U Key)
 		 {
 
 		  
-		  if(Voltage<960)
-			{
+		  if(Voltage<960) //Batter of detected voltage
+		  {
 
 			     ADCtl=0;
 			     RunStep=0;
@@ -394,7 +392,7 @@ void CheckMode(INT8U Key)
 
 				 Step=8;
 			 
-				} 
+			} 
 			else  if(ReadPowerDCIn())
 			  {
 			     ADCtl=0;
@@ -611,7 +609,7 @@ void CheckMode(INT8U Key)
 			LedRedON();
 			CheckGround();
 			SelfChecking();
-		}
+		  }
 		
 		
 
