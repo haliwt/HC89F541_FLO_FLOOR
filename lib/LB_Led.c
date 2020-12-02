@@ -113,6 +113,12 @@ INT8U ReadKey(void)
 {
 
   static INT16U  poweron,abc;
+
+
+  if(PowerSavingFlag ==1){
+  	     PowerSavingFlag=0;
+  	     AgainInitial();
+  	}
    
    if(poweron ==0){
    	 

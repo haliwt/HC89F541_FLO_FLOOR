@@ -368,7 +368,7 @@ void SelfChecking(void)
 	  ir_Left =GroundDp[0]; //ir_L
 	  ir_Mid = GroundDp[1];  //ir_M
 	  ir_Right = GroundDp[2];  //ir_R 
-
+#if 0
 	  Usart1Send[0]=4; //printf 15 number output
 	  Usart1Send[1]=ir_Left;
 	  Usart1Send[2]=ir_Mid;
@@ -376,6 +376,7 @@ void SelfChecking(void)
 	  Usart1Send[4]=0xAB;
 	  SendCount=1;
 	  SBUF=Usart1Send[SendCount];
+#endif 
 
 	  if(ir_Left !=0){
 
@@ -434,10 +435,7 @@ void SelfChecking(void)
 		 LedRedOff();
 		 Delay_ms(100);
 		}
-	     	
-		
-
-     }
+	   }
 
 	 if(ir_Right != 0){
 	 	GroundDp[2]=0;

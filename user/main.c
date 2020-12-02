@@ -92,10 +92,35 @@ void main(void)
 
 	while(1)
 	{
-         CheckGround();
+          CheckGround();
+		 if(BatterCharge ==1){
+		 	if(BatterTime >1 && BatterTime <3){
+			 //BatterTime =0;
+		 	 LedBlueOff();
+             LedRedON();
+		 	}
+            if(BatterTime >=3 && BatterTime < 5){
+		       BatterTime =0;
+		       LedRedOff();
+			   LedBlueOff();
+             }
+		 }
+		 if(CurrentValue==0){
+		      CheckRun();
+			
+		 }
+		 else AllStop();
+	     kk=ReadKey();
+	     CheckMode(kk);
+
+
+	#if 0
+
+		 CheckGround();
 		 kk=ReadKey();
 	     CheckMode(kk);
 		 CheckRun();
+	#endif 
 	}
 
 }

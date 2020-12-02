@@ -297,8 +297,8 @@ void CheckMode(INT8U Key)
 	     case 0:
 		 {
 
-			AllStop();
-			LedBlueOff();
+			//AllStop();
+			//LedBlueOff();
 
 		 }
 		 break;
@@ -327,33 +327,37 @@ void CheckMode(INT8U Key)
 	  }
 	}
 	break;
-	
-	case 1:  //Power On the first  Mode =1,Step =1 
+	//default dont't keypress Mode =1 ,Step=0;
+	case 1: 
 	{
-	   switch(Step) //step =1
+	   switch(Step) 
 	   {
-	     //?????????1????2??
+	     //don't key pressed Step=0 
 	   	 case 0:
 		 {
 		   //ADCtl=1;
 		  //
-		   if(RunSecond>15) //16 * 1s = 16s
+		   if(RunSecond>15) //16 * 1s = 16s PowerSaving 
 		   {
 		     //Step=0;
 			 //Mode=0;
 			 RunSecond=0;
 			 LedBlueOff();
              ADCtl=0;
+			 PowerSavingFlag =1;
+			 PowerSaving(); //WT.EDIT 
+			 
 		   }
-		 // ADCtl=1;
-
+          #if 0
 	   		if(ReadPowerDCIn())
 			{
 				Step=5;
 
 			}
+		   #endif 
 		 } 
 		 break;
+		 //power on don't keypress Step =1,
 		 case 1: //The first power on Step=1; RundSecond =0 
 		 {
 		   if(RunSecond>0)  //在TIMER 1 中，0.1ms interrupt
@@ -378,7 +382,7 @@ void CheckMode(INT8U Key)
 		 {
 
 		  
-		  if(Voltage<960) //Batter of detected voltage
+		  if(Voltage<960) //Batter of detected voltage,POWER =12.6V
 		  {
 
 			     ADCtl=0;
@@ -391,7 +395,7 @@ void CheckMode(INT8U Key)
 			 
 			} 
 			else  if(ReadPowerDCIn())
-			  {
+		    {
 			     ADCtl=0;
 			     RunStep=0;
 			  	 AllStop();
@@ -415,7 +419,6 @@ void CheckMode(INT8U Key)
 			  
 			 }
 		 break;
-		 //???????????????????2Hz
 
 		 case 3:
 		 {
@@ -461,9 +464,7 @@ void CheckMode(INT8U Key)
 		     RunStep=5;
 		  	 AllStop();
 			 SetEdge(0);
-
-
-		  }	
+			}	
 
 		 }
 		 break;
@@ -506,7 +507,7 @@ void CheckMode(INT8U Key)
 		   }
 		 }
 		 break;
-		 //???粻??
+		
 		 case 7:
 		 if(0==ReadPowerDCIn())
 		   {
@@ -615,3 +616,91 @@ void CheckMode(INT8U Key)
 
   }
 }
+/***************************************************************
+	*
+	*Function void PowerSaving(void)
+	*Function :
+	*Input Ref: NO
+	*Return Ref: No
+	*
+***************************************************************/
+void PowerSaving(void)
+{
+      #if 0
+	//		   P0M0 = 0x02; 		   //P25????????????
+			   P0M1 = 0x02; 		   //P26????????????
+			   P0M2 = 0x02; 		   //P27????????????
+			   P0M3 = 0x02; 		   //P25????????????
+			   P0M4 = 0x02; 		   //P26????????????
+			   P0M5 = 0x02; 		   //P25????????????
+			   P0M6 = 0x02; 		   //P26????????????
+			   P0M7 = 0x02; 		   //P27????????????
+	
+			   P1M0 = 0x02; 		   //P25????????????
+			   P1M1 = 0x02; 		   //P26????????????
+			   P1M2 = 0x02; 		   //P27????????????
+			   P1M3 = 0x02; 		   //P25????????????
+			   P1M4 = 0x02; 		   //P26????????????
+			   P1M5 = 0x02; 		   //P25????????????
+			   P1M6 = 0x02; 		   //P26????????????
+	
+			   P2M0 = 0x02; 		   //P25????????????
+			   P2M1 = 0x02; 		   //P26????????????
+			   P2M2 = 0x02; 		   //P27????????????
+			   P2M3 = 0x02; 		   //P25????????????
+			   P2M4 = 0x02; 		   //P26????????????
+			   P2M5 = 0x02; 		   //P25????????????
+			   P2M6 = 0x02; 		   //P26????????????
+			   P2M7 = 0x02; 		   //P27????????????
+	
+			   P3M0 = 0x02; 		   //P25????????????
+			   P3M1 = 0x02; 		   //P26????????????
+			   P3M2 = 0x02; 		   //P27????????????
+			   P3M3 = 0x02; 		   //P25????????????
+			   P3M4 = 0x02; 		   //P25????????????
+			   P3M5 = 0x02;
+	
+	#endif 
+			   IE = 0x81;	
+			   TCON  = 0x00;						//???T1
+			   BORC &=~ 0x80;                      //关闭BOR节省功耗
+	           ADCC0 |= 0x03;						//ADC参考电压选择非VDD电压
+			   EA=1;
+			   PCON |= 0x02;						//?????????
+
+
+
+
+
+}
+/***************************************************************
+	*
+	*Function void PowerSaving(void)
+	*Function :
+	*Input Ref: NO
+	*Return Ref: No
+	*
+***************************************************************/
+void AgainInitial(void)
+{
+   
+	    InitSysclk(1);
+	
+		InitT1();
+		InitADIO();
+		Init_MotorSpeed();
+		InitMotorIO();
+		Init_Usart1();
+		InitFanEdgeIO(); //锟斤拷水锟斤拷锟斤拷
+		InitLed();
+		InitKey();
+		InitPowerIn();
+		InitPowerStatus();
+	
+	
+
+
+
+
+}
+
