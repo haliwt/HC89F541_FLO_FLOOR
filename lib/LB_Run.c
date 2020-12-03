@@ -32,9 +32,6 @@ version  : 见文件尾端
 ***************************************************************/
 void  CheckRun()
 {
-	
-
-   
 	switch(RunMode)
 	{
 
@@ -53,8 +50,8 @@ void  CheckRun()
 
 			//SetXMotor(1,20,40,1,1,20,40,1);
 			
-			SetXMotor(1,20,25,1,1,20,40,1);//1--号机参数
-			//SetXMotor(1,20,22,1,1,20,60,1);//2--号机参数
+			//SetXMotor(1,20,40,1,1,20,40,1);//1--鍙锋満鍙傛暟SetXMotor(1,20,25,1,1,20,40,1);
+			SetXMotor(1,20,22,1,1,20,60,1);//2--鍙锋満鍙傛暟
 			SetMotorcm(1,5000);
 			RunStep=2;
 			RunMs=0;
@@ -72,9 +69,9 @@ void  CheckRun()
 			}
 			if((RightMoveMotorData.Flag==1)||(LeftMoveMotorData.Flag==1))
 			{
-				//SetXMotor(1,20,40,1,1,20,40,1);  //直行
-				SetXMotor(1,20,25,1,1,20,40,1);//1--号机参数
-				//SetXMotor(1,20,22,1,1,20,60,1);//2--号机参数
+				//SetXMotor(1,20,40,1,1,20,40,1);  //鐩磋
+				//SetXMotor(1,20,40,1,1,20,40,1);//1--鍙锋満鍙傛暟SetXMotor(1,20,35,1,1,20,40,1);
+				SetXMotor(1,20,22,1,1,20,60,1);//2--鍙锋満鍙傛暟
 				SetMotorcm(1,5000);			
 			}
 			
@@ -92,7 +89,7 @@ void  CheckRun()
 		{
 		   if(RunMs>20)
 		   {
-			SetXMotor(2,20,40,1,2,20,40,1); //后退
+			SetXMotor(2,20,40,1,2,20,40,1); //鍚庨��
 			SetMotorcm(2,1000);
 			RunStep=4;		   
 		   }
@@ -115,7 +112,7 @@ void  CheckRun()
 		  {
 			if(RunMs>20)
 			{
-				SetXMotor(2,20,40,1,1,20,40,1); //右转
+				SetXMotor(2,20,40,1,1,20,40,1); //鍙宠浆
 			    SetMotorcm(3,9000);
 				RunMs=0;
 				RunStep=6;
@@ -138,23 +135,23 @@ void  CheckRun()
 			if(RunMs>20) //20 * 10ms =200ms
 			{
 
-				if(PumpTime >119 ){
+				if(PumpTime >19 ){ //WT.EDIT
 
 					
 				   RunMs=0;
-				   RunStep=8;//直线 //RunStep=12;
+				   RunStep=8;//鐩寸嚎 //RunStep=12;
 				   WaterPump(); 
-					//SetXMotor(1,20,40,1,2,20,40,1);
-					SetXMotor(1,20,25,1,1,20,40,1);//1--号机参数
-					//SetXMotor(1,20,22,1,1,20,60,1);//2--号机参数
-					SetMotorcm(4,9000); //转圈
+					SetXMotor(1,20,40,1,2,20,40,1);
+				    SetMotorcm(4,9000); //杞湀
+					SetXMotor(2,20,40,2,1,20,40,2);//2--鍙锋満鍙傛暟
+					SetMotorcm(4,1000); //杞湀
 		    	}
 				else{
 					RunMs=0;
-					RunStep=2;//直线 //RunStep=12;
-				   //SetXMotor(1,20,25,1,1,20,40,1);//SetXMotor(1,20,25,1,1,20,40,1); //直行
-                   SetXMotor(1,20,25,1,1,20,40,1);//1--号机参数
-                  // SetXMotor(1,20,22,1,1,20,60,1);//2--号机参数
+					RunStep=2;//鐩寸嚎 //RunStep=12;
+				  // SetXMotor(1,20,40,1,1,20,40,1);//SetXMotor(1,20,25,1,1,20,40,1); //鐩磋
+                  // SetXMotor(1,20,35,1,1,20,40,1);//1--鍙锋満鍙傛暟
+                   SetXMotor(1,20,22,1,1,20,160,1);//2--鍙锋満鍙傛暟
 				   SetMotorcm(1,5000);				
 				}
 
@@ -168,7 +165,7 @@ void  CheckRun()
 			        if(RunMs > 9){
 						WaterPumpStop();
 				        RunMs=0;
-					    RunStep=9;//直线 //RunStep=12;
+					    RunStep=9;//鐩寸嚎 //RunStep=12;
 			        }
 		 break;
 		 case 9:
@@ -178,20 +175,13 @@ void  CheckRun()
 			    PumpTime=0;
 			    RunMs=0;
 			    RunStep=2; 
-				//SetXMotor(1,20,25,1,1,20,60,1);//SetXMotor(1,20,25,1,1,20,40,1);//SetXMotor(1,20,25,1,1,20,40,1); //直行
-				 SetXMotor(1,20,25,1,1,20,40,1);//1--号机参数
-				//SetXMotor(1,20,22,1,1,20,60,1);//2--号机参数
+				//SetXMotor(1,20,40,1,1,20,60,1);//SetXMotor(1,20,25,1,1,20,40,1);//SetXMotor(1,20,25,1,1,20,40,1); //鐩磋
+				// SetXMotor(1,20,35,1,1,20,40,1);//1--鍙锋満鍙傛暟
+				SetXMotor(1,20,22,1,1,20,160,1);//2--鍙锋満鍙傛暟
 				SetMotorcm(1,5000);		   
 		   }
 		 }
 		 break;
-		
-
-		
-			
-
-
-
 		}
 	}
   }

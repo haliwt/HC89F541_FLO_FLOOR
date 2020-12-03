@@ -27,12 +27,13 @@ version  : ¼ûÎÄ¼þÎ²¶Ë
 #else
 #define  KAKA_Run_EXT extern
 #endif
-#define  GroundMin 8
+#define  GroundMin  0 //WT.EDIT  8
 KAKA_Run_EXT outdata INT8U Mode;
 KAKA_Run_EXT outdata INT8U Step;
 KAKA_Run_EXT outdata INT8U RunMode;
 KAKA_Run_EXT outdata INT8U RunStep;
 KAKA_Run_EXT outdata INT8U PumpTime; //WT.EDIT
+KAKA_Run_EXT outdata INT8U PowerSavingTime; //WT.EDIT,2020.11.30
 
 KAKA_Run_EXT outdata INT16U RunSecond;
 KAKA_Run_EXT outdata INT16U NoImpSecond;
