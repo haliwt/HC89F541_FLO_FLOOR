@@ -39,7 +39,7 @@
 #include "..\lib\LB_Usart.h"
 #include "..\lib\LB_eeprom.h"
 #include "..\lib\LB_Motor.h"
-
+#include "..\lib\LB_IR.h"
 #include "..\lib\LB_Run.h"
 
 void InitSysclk(INT8U SYS)
@@ -92,10 +92,12 @@ void main(void)
 while(1)
 	{
 
-	   
 	   CheckGround();
 	   CheckRun();
 	   kk=ReadKey();
+	   if(kk==0){
+	     kk=CheckHandsetIR();
+	   }
        CheckMode(kk);
 	  
 	  }
@@ -202,7 +204,7 @@ void WDT_Rpt() interrupt WDT_VECTOR
 ***************************************************************************************/
 void INT8_17_Rpt() interrupt INT8_17_VECTOR 
 {
-	if(PINTF2&0x01)						//�ж�INT16�жϱ�־λ----L MOTOR SPEED
+   if(PINTF2&0x01)						//�ж�INT16�жϱ�־λ----L MOTOR SPEED
 	{
 	 // LmotorSpeedNum ++ ;
 	  PINTF2 &=0XFE;				//���INT16�жϱ�־λ	--motor L speed ���?
@@ -221,6 +223,11 @@ void INT8_17_Rpt() interrupt INT8_17_VECTOR
 	  PINTF1 &=0X7f;				//���INT15�жϱ�־λ---��س��״ֵ̬		
 	  PowerCountErr++;
 	  PowerCountOK=0;
+	}
+	else if(PINTF1&0x20)						//�ж�INT13�жϱ�־λ
+	{
+		PINTF1 &=~ 0x20;				//���INT13�жϱ�־λ	
+		Read_LeftIR();
 	}
 	else
     {

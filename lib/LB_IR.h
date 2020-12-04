@@ -49,23 +49,21 @@ typedef struct
 } ReadIRTcount ;
 
 KAKA_IR_EXT	 xdata ReadIRByte Left_ReadIR;
-KAKA_IR_EXT	 xdata ReadIRByte Mid_ReadIR;
-KAKA_IR_EXT	 xdata ReadIRByte Right_ReadIR;
+
 
 KAKA_IR_EXT  ReadIRTcount  LeftIR;
-KAKA_IR_EXT  ReadIRTcount  RightIR;
 
-KAKA_IR_EXT  ReadIRTcount  MidIR;
+
+
 
 KAKA_IR_EXT void Init_IR();
 
 KAKA_IR_EXT void LeftIR_Count(void);
-KAKA_IR_EXT void RightIR_Count(void);
-KAKA_IR_EXT void MidIR_Count(void);
-KAKA_IR_EXT void CheckHandsetIR();
+
+
 KAKA_IR_EXT void CheckRechargeIR();
 KAKA_IR_EXT void ClearAllIR();
-KAKA_IR_EXT void Read_RightIR();
-KAKA_IR_EXT void Read_MidIR();
+
+KAKA_IR_EXT INT8U CheckHandsetIR();
 KAKA_IR_EXT void Read_LeftIR();	
 #endif

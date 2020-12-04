@@ -1038,21 +1038,6 @@ void WaterPump(void)
     
 
 }
-/**
-  * @?米?¯  	?車那㊣o‘那y
-  * @2?那y  	fui_i : ?車那㊣那㊣??
-  * @﹞米???米 ?T
-  * @℅⊿ 	Fcpu = 16MHz㏒?fui_i = 1那㊣㏒??車那㊣那㊣?????a1Ms
-  */
-void Delay_ms(unsigned int fui_i)
-{
-	unsigned int fui_j;
-	for(;fui_i > 0;fui_i --)
-	for(fui_j = 1596;fui_j > 0;fui_j --)
-	{
-		;
-	}
-}
 
 
 

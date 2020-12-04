@@ -42,4 +42,5 @@ KAKA_Led_EXT void InitPowerIn(void);
 KAKA_Led_EXT void InitPowerStatus(void);
 KAKA_Led_EXT INT8U ReadPowerDCIn(void);
 KAKA_Led_EXT INT8U ReadPowerStatus(void);
+KAKA_Led_EXT void Delay_ms(INT16U fui_i);
 #endif

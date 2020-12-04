@@ -17,8 +17,26 @@ version  : º˚Œƒº˛Œ≤∂À
 #include "..\include\HC89F0541.h"
 #include "..\include\PJ_TypeRedefine.h"
 #include "LB_Led.h"
+#include "LB_AD.h"
 
 #endif
+
+/**
+  * @?Œº?√∑  	?√≥√™¬±oÀâ√™y
+  * @2?√™y  	fui_i : ?√≥√™¬±√™¬±??
+  * @¬∑Œº???Œº ?T
+  * @√óÔø† 	Fcpu = 16MHzÔø°?fui_i = 1√™¬±Ôø°??√≥√™¬±√™¬±?????a1Ms
+  */
+void Delay_ms(unsigned int fui_i)
+{
+	unsigned int fui_j;
+	for(;fui_i > 0;fui_i --)
+	for(fui_j = 1596;fui_j > 0;fui_j --)
+	{
+		;
+	}
+}
+
 
 void InitT1(void)
 {
@@ -110,8 +128,22 @@ void InitKey(void)
 INT8U ReadKey(void)
 {
 
-  static INT16U  abc;
-
+  static INT16U  poweron ,abc;
+  if(poweron ==0){
+   	 
+      poweron ++ ;
+	 Delay_ms(1000);//Delay_ms(2000);
+    
+	 if(P0_0==0)
+	 {
+		LedBlueON();
+		LedRedON();
+		return(2); //itself check flag =2
+			 
+			 
+     }
+   }
+  else{
   if(P0_0==0)
   {
     // LedBlueON();
@@ -137,6 +169,7 @@ INT8U ReadKey(void)
    //LedBlueOff();
    return(0);
   }  
+  	}
 }
 /************************************************
 	*
@@ -173,3 +206,123 @@ void InitPowerStatus(void)
 {
   return(P1_7); //µÁ≥ÿ≥‰µÁ≈–∂œ, «∑Ò–Ë“™≥‰µÁ
 }
+
+/*************************************************************
+	*
+	*Function Name :void SelfChecking(void)
+	*Function : It self check for mass product
+	*Iinput Ref:NO
+	*Return Ref:NO
+	*
+*************************************************************/
+void SelfChecking(void)
+{
+      INT8U ir_Left,ir_Mid,ir_Right,i=0;
+
+	  ir_Left =GroundDp[0]; //ir_L
+	  ir_Mid = GroundDp[1];  //ir_M
+	  ir_Right = GroundDp[2];  //ir_R 
+
+	 //  LedBlueOff();
+	 //  LedRedOff();
+
+	  if(ir_Left !=0){
+
+		 GroundDp[0]=0;
+		
+          LedBlueOff();
+		  LedRedOff();
+		  LedRedON();
+		  Delay_ms(100);
+ 		  LedRedOff();
+		  LedBlueON();
+		  Delay_ms(100);
+		  if(ir_Left !=0){
+		  LedBlueOff();
+		  LedRedON();
+		  Delay_ms(100);
+ 		  LedBlueON();
+		  LedRedOff();
+		  Delay_ms(100);
+		  }
+		  if(ir_Left !=0){
+		  LedBlueOff();
+		  LedRedON();
+		  Delay_ms(100);
+ 		  LedBlueOff();
+		  LedRedON();
+		  Delay_ms(100);
+		  }		 
+
+       }
+     if(ir_Mid != 0){
+	 	GroundDp[1]=0;
+     
+		   LedBlueOff();
+		  LedRedOff();
+          LedBlueON();
+		 Delay_ms(100);
+ 		 LedBlueOff();
+		   Delay_ms(100);
+		if(ir_Mid != 0){
+		  LedBlueON();
+		 Delay_ms(100);
+ 		 LedBlueOff();
+		   Delay_ms(100);
+		}
+		if(ir_Mid != 0){
+		  LedBlueON();
+		   Delay_ms(100);
+ 		 LedBlueOff();
+		   Delay_ms(100);
+		}
+		if(ir_Mid != 0){
+		  LedBlueON();
+		  Delay_ms(100);
+ 		 LedBlueOff();
+		 LedRedOff();
+		 Delay_ms(100);
+		}
+	     	
+		
+
+     }
+
+	 if(ir_Right != 0){
+	 	GroundDp[2]=0;
+          
+ 		    LedBlueON();
+		    LedRedOff();
+			LedRedON();
+			Delay_ms(100);
+		
+			LedRedOff();
+			Delay_ms(100);
+			 if(ir_Right != 0){
+			LedRedON();
+			Delay_ms(100);
+			
+		    LedRedOff();
+			Delay_ms(100);
+			 }
+			 if(ir_Right != 0){
+			LedRedON();
+			Delay_ms(100);
+			LedRedOff();
+		
+			Delay_ms(100);
+			 }
+			 if(ir_Right != 0){
+			LedRedON();
+			Delay_ms(100);
+			LedBlueON();
+		    LedRedOff();
+			Delay_ms(100);
+			 }
+		
+     }
+
+
+}
+
+

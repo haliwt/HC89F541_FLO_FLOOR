@@ -196,7 +196,25 @@ void  CheckRun()
 ***************************************************************/
 void CheckMode(INT8U Key)
 {
- if(Key==1)
+
+ if(Key ==2){
+
+       
+	Mode = 40;
+	Delay_ms(100);
+	LedBlueOff();
+	LedRedON();
+	Delay_ms(100);
+	LedBlueON();
+	LedRedON();
+	Delay_ms(100);
+	LedBlueOff();
+	LedRedON();
+	Delay_ms(100);
+	LedBlueON();
+	LedRedON();
+  }
+ else if(Key==1)
   {
     
     if(Mode==0) 
@@ -534,6 +552,24 @@ void CheckMode(INT8U Key)
 
 	   }
 	}
+	break;
+
+	case 40 :
+         
+		  if(RunMs >10){
+			ADFlag=1;
+			RunMs =0;
+			AllStop();
+			RunStep=0;
+			LedBlueON();
+			LedRedON();
+			CheckGround();
+			SelfChecking();
+		  }
+		
+		
+
+
 	break;
 
   }
