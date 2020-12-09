@@ -39,7 +39,7 @@
 #include "..\lib\LB_Usart.h"
 #include "..\lib\LB_eeprom.h"
 #include "..\lib\LB_Motor.h"
-
+#include "..\lib\LB_IR.h"
 #include "..\lib\LB_Run.h"
 
 void InitSysclk(INT8U SYS)
@@ -98,6 +98,7 @@ void main(void)
 					RunMs=0;
 					RunStep=6;
 		#endif 
+		CheckHandsetIR();//WT.EDIT 
 		CheckGround();
 		 CheckRun();
 		 kk=ReadKey();
@@ -118,7 +119,7 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
   static INT8U idata t_1s;
   t_10ms++;
   ReadAD5ms();//���IR �ϰ���, IR pmw power
-
+  Remote1_Count();//IR count
 
   if(t_10ms>99) //100 * 0.1ms = 10ms
   {
@@ -149,7 +150,7 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
 	  PumpTime++;
       RunSecond++;
 	  ///*
-	  
+	  #if 0
 	  Usart1Send[0]=15; //printf 15 number output
 	  Usart1Send[1]=Voltage/100;
 	  Usart1Send[2]=Voltage%100;
@@ -180,6 +181,7 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
 		
 	  }
 	  else BatterCharge =0;
+	  #endif 
 	 //*/
 	  /*
 	  Usart1Send[0]=13;
@@ -218,6 +220,7 @@ void WDT_Rpt() interrupt WDT_VECTOR
 ***************************************************************************************/
 void INT8_17_Rpt() interrupt INT8_17_VECTOR 
 {
+	#if 0
 	if(PINTF2&0x01)						//�ж�INT16�жϱ�־λ----L MOTOR SPEED
 	{
 	  LmotorSpeedNum ++ ;
@@ -238,7 +241,13 @@ void INT8_17_Rpt() interrupt INT8_17_VECTOR
 	  PowerCountErr++;
 	  PowerCountOK=0;
 	}
-	else
+	#endif 
+	if(PINTF1&0x20)						//??INT13?????
+	{
+		PINTF1 &=~ 0x20;				//??INT13?????	
+		Read_Remote1IR();
+	}
+     else
     {
 	  //PINTF1 =0;
 	  //PINTF2 =0;

@@ -602,6 +602,7 @@ void CheckMode(INT8U Key)
 			LedRedON();
 			CheckGround();
 			SelfChecking();
+			CheckHandsetIR();//WT.EDIT .2020.12.09
 		  }
 		
 		
