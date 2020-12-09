@@ -92,35 +92,16 @@ void main(void)
 
 	while(1)
 	{
-          CheckGround();
-		 if(BatterCharge ==1){
-		 	if(BatterTime >1 && BatterTime <3){
-			 //BatterTime =0;
-		 	 LedBlueOff();
-             LedRedON();
-		 	}
-            if(BatterTime >=3 && BatterTime < 5){
-		       BatterTime =0;
-		       LedRedOff();
-			   LedBlueOff();
-             }
-		 }
-		 if(CurrentValue==0){
-		      CheckRun();
-			
-		 }
-		 else AllStop();
-	     kk=ReadKey();
-	     CheckMode(kk);
-
-
-	#if 0
-
-		 CheckGround();
+#if 0
+		SetXMotor(1,20,40,2,1,20,40,2);//ºóÍËÄ£Ê½ £¬back run
+				    SetMotorcm(3,9000);
+					RunMs=0;
+					RunStep=6;
+		#endif 
+		CheckGround();
+		 CheckRun();
 		 kk=ReadKey();
 	     CheckMode(kk);
-		 CheckRun();
-	#endif 
 	}
 
 }

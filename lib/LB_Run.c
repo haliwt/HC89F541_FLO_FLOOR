@@ -34,10 +34,13 @@ version  : ?????β??
 ***************************************************************/
 void  CheckRun()
 {
-    switch(RunMode) //initial RunMode =0
+    //开机执行 ,没有按下按键 ，初始化Step =0  Mode=1;Step=0;RunStep=0,RunMode =0 
+	//  RunMode=2;  RunStep=1; KEY press 
+	switch(RunMode) //initial RunMode =0
 	{
-
-	case 2:
+		
+	//RunMode =1 ,RunMode =0 ,don't run every one program .		
+    case 2:
 	{
 	  switch(RunStep)
 	  {
@@ -49,14 +52,12 @@ void  CheckRun()
 			}
 			break;
 
-		case 1: //power on inital RunStep =1 
+		case 1: //KEY press  RunStep =1 
 		{
 
             if(CurrentValue ==0){ //WT.EDIT.2020.11.16
-				SetXMotor(1,20,40,1,1,20,40,1);
+				SetXMotor(2,40,160,2,2,40,160,2);//SetXMotor(2,5,20,2,2,5,20,2);//WT.EDIT //SetXMotor(2,20,40,2,2,20,40,2);//new line SetXMotor(1,20,40,1,1,20,40,1);
 				
-				//SetXMotor(1,20,25,1,1,20,40,1);//1--???????
-				//SetXMotor(1,20,25,1,1,20,60,1);//2--???????
 				SetMotorcm(1,5000);
 				RunStep=2;
 				RunMs=0;
@@ -81,9 +82,8 @@ void  CheckRun()
 			if((RightMoveMotorData.Flag==1)||(LeftMoveMotorData.Flag==1))
 			{
  				 if(CurrentValue ==0){ //WT.EDIT.2020.11.16
-					SetXMotor(1,20,40,1,1,20,40,1);  //???
-					//SetXMotor(1,20,25,1,1,20,40,1);//1--???????
-					//SetXMotor(1,20,25,1,1,20,60,1);//2--???????
+					SetXMotor(2,40,160,2,2,40,160,2);//SetXMotor(2,5,20,2,2,5,20,2);//WT.EDIT //SetXMotor(2,20,40,2,2,20,40,2);//new line SetXMotor(1,20,40,1,1,20,40,1);  //???
+					
 					SetMotorcm(1,5000);
  				}
 				else  AllStop();
@@ -101,11 +101,11 @@ void  CheckRun()
 			break;
 		case 3:
 		{
-		   if(RunMs>20)
+		   if(RunMs>20)  //Back run 
 		   {
 			 
 			 if(CurrentValue ==0){ //WT.EDIT.2020.11.16
-					SetXMotor(2,20,40,1,2,20,40,1); //back 
+					SetXMotor(1,40,160,2,1,40,160,2);//SetXMotor(1,5,20,2,1,5,20,2);//WT.EDIT //SetXMotor(1,20,40,2,1,20,40,2);//new line //SetXMotor(2,20,40,1,2,20,40,1); //back 
 					SetMotorcm(2,1000);
 					RunStep=4;
 				//	LedBlueON();
@@ -130,11 +130,11 @@ void  CheckRun()
 			break;
 	    case 5:
 		  {
-			if(RunMs>20)
+			if(RunMs>20) //right run  --
 			{
 				if(CurrentValue ==0){ //WT.EDIT.2020.11.16
-					SetXMotor(2,20,40,1,1,20,40,1); //right turn 
-				    SetMotorcm(3,9000);
+					SetXMotor(1,40,160,2,2,40,160,2);//SetXMotor(1,5,20,2,2,5,20,2);//SetXMotor(1,20,40,2,2,20,40,2);//new line SetXMotor(2,20,40,1,1,20,40,1); //right turn 
+				    SetMotorcm(3,5000);//SetMotorcm(3,9000);
 					RunMs=0;
 					RunStep=6;
 				//	LedBlueON();
@@ -151,7 +151,6 @@ void  CheckRun()
 			if(RunMs > 100)//if(RunMs>100)
 			{
 				AllStop();
-				//SetXMotor(2,20,1,1,1,20,1,1);
 				RunMs=0;
 				RunStep=7;
 			//	LedBlueON();
@@ -171,9 +170,9 @@ void  CheckRun()
 				   WaterPump(); 
 				 //  LedBlueON();
 				   if(CurrentValue ==0){ //WT.EDIT.2020.11.16
-					   SetXMotor(1,20,40,1,2,20,40,1); //转圈
+					    SetXMotor(2,40,160,2,1,40,160,2);//SetXMotor(2,5,20,2,1,5,20,2);//WT.EDIT  //SetXMotor(2,20,40,2,1,20,40,2);//SetXMotor(1,20,40,1,2,20,40,1); //left turn run 转圈
 						SetMotorcm(4,4000);//WT.EDIT 2020.11.17//SetMotorcm(4,9000); //??
-						SetXMotor(2,20,40,1,1,20,40,1); //right turn 
+						SetXMotor(1,40,160,2,2,40,160,2);//SetXMotor(1,5,20,2,2,5,20,2); //WT.EDIT //SetXMotor(1,20,40,2,2,20,40,2); //SetXMotor(2,20,40,1,1,20,40,1); //right turn 
 				        SetMotorcm(3,9000);
 				   }
 				    else AllStop();
@@ -182,9 +181,8 @@ void  CheckRun()
 					RunMs=0;
 					RunStep=2;//??? //RunStep=12;
 					if(CurrentValue ==0){ //WT.EDIT.2020.11.16
-					   SetXMotor(1,20,40,1,1,20,40,1);//SetXMotor(1,20,25,1,1,20,40,1); //???
-	                  // SetXMotor(1,20,25,1,1,20,40,1);//1--???????
-	                  // SetXMotor(1,20,25,1,1,20,60,1);//2--???????
+					  SetXMotor(2,40,160,2,2,40,160,2);//SetXMotor(2,5,20,2,2,5,20,2); //SetXMotor(2,20,40,2,2,20,40,2);//new line //SetXMotor(1,20,40,1,1,20,40,1);//SetXMotor(1,20,25,1,1,20,40,1); //???
+	                
 					   SetMotorcm(1,5000);	
 					}
 					else AllStop();
@@ -213,9 +211,8 @@ void  CheckRun()
 			    RunMs=0;
 			    RunStep=2; 
 				if(CurrentValue ==0){ //WT.EDIT.2020.11.16
-					SetXMotor(1,20,40,1,1,20,40,1);//SetXMotor(1,20,25,1,1,20,40,1);//SetXMotor(1,20,25,1,1,20,40,1); //???
-					// SetXMotor(1,20,25,1,1,20,40,1);//1--???????
-					//SetXMotor(1,20,25,1,1,20,60,1);//2--???????
+					SetXMotor(2,40,160,2,2,40,160,2);//SetXMotor(2,5,20,2,2,5,20,2);//WT.EDIT //SetXMotor(2,20,40,2,2,20,40,2);//new line //SetXMotor(1,20,40,1,1,20,40,1);//SetXMotor(1,20,25,1,1,20,40,1);//SetXMotor(1,20,25,1,1,20,40,1); //???
+					
 					SetMotorcm(1,5000);	
 				}
 				else AllStop();
@@ -224,7 +221,9 @@ void  CheckRun()
 		 break;
 		}
 	}
+	
   }
+	
 }
 /***************************************************************
 	*
@@ -236,8 +235,7 @@ void  CheckRun()
 ***************************************************************/
 void CheckMode(INT8U Key)
 {
- 
-
+   //开机执行 ,没有按下按键 ，初始化Step =0  Mode=1;Step=0;RunStep=0,RunMode =0 
   if(Key ==2){
 
        
@@ -248,14 +246,13 @@ void CheckMode(INT8U Key)
 	Delay_ms(100);
 	LedBlueON();
 	LedRedON();
-
+	
   }
   else  if(Key==1)
   {
 
 	
     LedBlueON();
-	LedRedOff();
 	if(Mode==0)  //初始化Mode =1
 	{
 	  //????
@@ -263,12 +260,10 @@ void CheckMode(INT8U Key)
 	  Step=1;
 	 
 	}
-	else { //开机执行 ,初始化Step =0
+	else { //开机执行 ,没有按下按键 ，初始化Step =0  Mode=1;Step=0;RunStep=0,RunMode =0 
 	  if(Step==0)
 	  {
-	    //20
-	   
-	  	Step=1; //
+	    Step=1; 
 	    ADCtl=1;
         RunSecond=0; //第一次，按key Power On
 	  }
@@ -286,7 +281,7 @@ void CheckMode(INT8U Key)
 	}
   }
 
- 
+ //开机执行 ,没有按下按键 ，初始化 Mode=1;Step=0;RunStep=0,RunMode =0 
   switch(Mode)
   {
   	case 0:
@@ -297,8 +292,8 @@ void CheckMode(INT8U Key)
 	     case 0:
 		 {
 
-			//AllStop();
-			//LedBlueOff();
+			AllStop();
+			LedBlueOff();
 
 		 }
 		 break;
@@ -327,43 +322,40 @@ void CheckMode(INT8U Key)
 	  }
 	}
 	break;
-	//default dont't keypress Mode =1 ,Step=0;
-	case 1: 
-	{
-	   switch(Step) 
+	//开机执行 ,没有按下按键 ，初始化Step =0  Mode=1;Step=0;RunStep=0,RunMode =0 
+	case 1:  //Key press   Mode =1,Step =1  
+    {
+	   switch(Step) //step =1
 	   {
-	     //don't key pressed Step=0 
+	     //?????????1????2??
 	   	 case 0:
 		 {
 		   //ADCtl=1;
 		  //
-		   if(RunSecond>15) //16 * 1s = 16s PowerSaving 
+		   if(RunSecond>15) //16 * 1s = 16s---
 		   {
 		     //Step=0;
 			 //Mode=0;
 			 RunSecond=0;
 			 LedBlueOff();
              ADCtl=0;
-			 PowerSavingFlag =1;
-			 PowerSaving(); //WT.EDIT 
-			 
 		   }
-          #if 0
+		 // ADCtl=1;
+
 	   		if(ReadPowerDCIn())
 			{
 				Step=5;
 
 			}
-		   #endif 
 		 } 
 		 break;
-		 //power on don't keypress Step =1,
-		 case 1: //The first power on Step=1; RundSecond =0 
+		 //Step =1 ,key press the first
+		 case 1: //The first key press  Step=1; RundSecond =0 
 		 {
 		   if(RunSecond>0)  //在TIMER 1 中，0.1ms interrupt
 		   {
 		   	  Step=2; //Next run 2
-			   LedBlueON();
+			  LedBlueON();
 			  ADCtl=1;
 
 			  
@@ -382,7 +374,7 @@ void CheckMode(INT8U Key)
 		 {
 
 		  
-		  if(Voltage<960) //Batter of detected voltage,POWER =12.6V
+		  if(Voltage<960) //Batter of detected voltage
 		  {
 
 			     ADCtl=0;
@@ -395,7 +387,7 @@ void CheckMode(INT8U Key)
 			 
 			} 
 			else  if(ReadPowerDCIn())
-		    {
+			  {
 			     ADCtl=0;
 			     RunStep=0;
 			  	 AllStop();
@@ -419,6 +411,7 @@ void CheckMode(INT8U Key)
 			  
 			 }
 		 break;
+		 //???????????????????2Hz
 
 		 case 3:
 		 {
@@ -464,7 +457,9 @@ void CheckMode(INT8U Key)
 		     RunStep=5;
 		  	 AllStop();
 			 SetEdge(0);
-			}	
+
+
+		  }	
 
 		 }
 		 break;
@@ -507,7 +502,7 @@ void CheckMode(INT8U Key)
 		   }
 		 }
 		 break;
-		
+		 //???粻??
 		 case 7:
 		 if(0==ReadPowerDCIn())
 		   {
@@ -616,91 +611,3 @@ void CheckMode(INT8U Key)
 
   }
 }
-/***************************************************************
-	*
-	*Function void PowerSaving(void)
-	*Function :
-	*Input Ref: NO
-	*Return Ref: No
-	*
-***************************************************************/
-void PowerSaving(void)
-{
-      #if 0
-	//		   P0M0 = 0x02; 		   //P25????????????
-			   P0M1 = 0x02; 		   //P26????????????
-			   P0M2 = 0x02; 		   //P27????????????
-			   P0M3 = 0x02; 		   //P25????????????
-			   P0M4 = 0x02; 		   //P26????????????
-			   P0M5 = 0x02; 		   //P25????????????
-			   P0M6 = 0x02; 		   //P26????????????
-			   P0M7 = 0x02; 		   //P27????????????
-	
-			   P1M0 = 0x02; 		   //P25????????????
-			   P1M1 = 0x02; 		   //P26????????????
-			   P1M2 = 0x02; 		   //P27????????????
-			   P1M3 = 0x02; 		   //P25????????????
-			   P1M4 = 0x02; 		   //P26????????????
-			   P1M5 = 0x02; 		   //P25????????????
-			   P1M6 = 0x02; 		   //P26????????????
-	
-			   P2M0 = 0x02; 		   //P25????????????
-			   P2M1 = 0x02; 		   //P26????????????
-			   P2M2 = 0x02; 		   //P27????????????
-			   P2M3 = 0x02; 		   //P25????????????
-			   P2M4 = 0x02; 		   //P26????????????
-			   P2M5 = 0x02; 		   //P25????????????
-			   P2M6 = 0x02; 		   //P26????????????
-			   P2M7 = 0x02; 		   //P27????????????
-	
-			   P3M0 = 0x02; 		   //P25????????????
-			   P3M1 = 0x02; 		   //P26????????????
-			   P3M2 = 0x02; 		   //P27????????????
-			   P3M3 = 0x02; 		   //P25????????????
-			   P3M4 = 0x02; 		   //P25????????????
-			   P3M5 = 0x02;
-	
-	#endif 
-			   IE = 0x81;	
-			   TCON  = 0x00;						//???T1
-			   BORC &=~ 0x80;                      //关闭BOR节省功耗
-	           ADCC0 |= 0x03;						//ADC参考电压选择非VDD电压
-			   EA=1;
-			   PCON |= 0x02;						//?????????
-
-
-
-
-
-}
-/***************************************************************
-	*
-	*Function void PowerSaving(void)
-	*Function :
-	*Input Ref: NO
-	*Return Ref: No
-	*
-***************************************************************/
-void AgainInitial(void)
-{
-   
-	    InitSysclk(1);
-	
-		InitT1();
-		InitADIO();
-		Init_MotorSpeed();
-		InitMotorIO();
-		Init_Usart1();
-		InitFanEdgeIO(); //锟斤拷水锟斤拷锟斤拷
-		InitLed();
-		InitKey();
-		InitPowerIn();
-		InitPowerStatus();
-	
-	
-
-
-
-
-}
-

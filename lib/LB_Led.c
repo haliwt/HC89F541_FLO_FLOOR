@@ -112,19 +112,13 @@ void InitKey(void)
 INT8U ReadKey(void)
 {
 
-  static INT16U  poweron,abc;
-
-
-  if(PowerSavingFlag ==1){
-  	     PowerSavingFlag=0;
-  	     AgainInitial();
-  	}
+  static INT16U  poweron=0,abc;
    
    if(poweron ==0){
    	 
-     poweron ++ ;
+      poweron ++ ;
 	 Delay_ms(1000);//Delay_ms(2000);
-     
+    
 	 if(P0_0==0)
 	 {
 		LedBlueON();
@@ -133,7 +127,6 @@ INT8U ReadKey(void)
 			 
 			 
      }
-	 abc=0;//WT.EDIT 
    }
    else{
 		 if(P0_0==0)

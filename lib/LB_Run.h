@@ -27,7 +27,7 @@ version  : ¼ûÎÄ¼þÎ²¶Ë
 #else
 #define  KAKA_Run_EXT extern
 #endif
-#define  GroundMin 0 //  2 //  8 //WT.EDIT 2020.12.02
+#define  GroundMin  2 //  8 //WT.EDIT 2020.12.02
 #define  RightMotorCurrent 0xD0
 
 #define  LeftMotorCurrent 0xD0
@@ -42,9 +42,6 @@ KAKA_Run_EXT outdata INT8U PumpTime; //WT.EDIT
 KAKA_Run_EXT outdata INT8U CurrentValue; //WT.EDIT
 KAKA_Run_EXT outdata INT8U BatterCharge; //WT.EDIT
 KAKA_Run_EXT outdata INT8U BatterTime; //WT.EDIT
-KAKA_Run_EXT outdata INT8U PowerSavingFlag; //WT.EDIT
-
-
 
 
 
@@ -65,9 +62,5 @@ KAKA_Run_EXT  void  CheckRun();
 KAKA_Run_EXT  INT8U  LowVoltageFlag;
 KAKA_Run_EXT  void CheckMode(INT8U Key);
 KAKA_Run_EXT  void InitSysclk(INT8U SYS);
-KAKA_Run_EXT  void PowerSaving(void); //WT.EDIT 2020.12.02
-KAKA_Run_EXT  void AgainInitial(void); //WT.EDIT 2020.12.02
-
-
 
 #endif
