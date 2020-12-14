@@ -503,7 +503,7 @@ void CheckLeftMotorSpeed(void)
 					if(LeftMoveMotorData.OutPWM>0xfb) //PWM_T =251 ;
 						LeftMoveMotorData.OutPWM=0xfb; //
 					else 
-                    LeftMoveMotorData.OutPWM+=5;	//4 WT.EDIT  *************					
+                    LeftMoveMotorData.OutPWM+=4;	//4 WT.EDIT  *************					
 				}
 				else
 				if((LeftMoveMotorData.RunSpeed-LeftMoveMotorData.AvgSpeed)>2)
@@ -649,7 +649,7 @@ void CheckRightMotorSpeed(void)
  					if(RightMoveMotorData.OutPWM>0xfb)
 						RightMoveMotorData.OutPWM=0xfb;
 					else
-						RightMoveMotorData.OutPWM+=4;//4WT.EDIT //RightMoveMotorData.OutPWM+=4;		          
+						RightMoveMotorData.OutPWM+=1;//4WT.EDIT //RightMoveMotorData.OutPWM+=4;		          
 				}
 				else
 				if((RightMoveMotorData.RunSpeed-RightMoveMotorData.AvgSpeed)>2)

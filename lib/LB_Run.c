@@ -51,7 +51,7 @@ void  CheckRun()
 			//SetXMotor(1,20,40,1,1,20,40,1);
 			
 			//SetXMotor(1,20,40,1,1,20,40,1);//1--号机参数SetXMotor(1,20,25,1,1,20,40,1);
-			SetXMotor(1,20,160,1,1,20,160,1);//2--号机参数
+			SetXMotor(2,40,160,2,2,40,160,2);//SetXMotor(1,20,160,1,1,20,160,1);//2--号机参数
 			SetMotorcm(1,5000);
 			RunStep=2;
 			RunMs=0;
@@ -71,7 +71,7 @@ void  CheckRun()
 			{
 				//SetXMotor(1,20,40,1,1,20,40,1);  //直行
 				//SetXMotor(1,20,40,1,1,20,40,1);//1--号机参数SetXMotor(1,20,35,1,1,20,40,1);
-				SetXMotor(1,20,160,1,1,20,160,1);//2--号机参数
+				SetXMotor(2,40,160,2,2,40,160,2);//SetXMotor(1,20,160,1,1,20,160,1);//2--号机参数
 				SetMotorcm(1,5000);			
 			}
 			
@@ -89,7 +89,7 @@ void  CheckRun()
 		{
 		   if(RunMs>20)
 		   {
-			SetXMotor(2,20,160,1,2,20,160,1); //后退
+			SetXMotor(1,40,160,2,1,40,160,2);//SetXMotor(2,20,160,1,2,20,160,1); //后退
 			SetMotorcm(2,1000);
 			RunStep=4;		   
 		   }
@@ -112,7 +112,7 @@ void  CheckRun()
 		  {
 			if(RunMs>20)
 			{
-				SetXMotor(2,20,160,1,1,20,160,1); //右转
+				SetXMotor(1,40,160,2,2,40,160,2);//SetXMotor(2,20,160,1,1,20,160,1); //右转
 			    SetMotorcm(3,9000);
 				RunMs=0;
 				RunStep=6;
@@ -141,17 +141,21 @@ void  CheckRun()
 				   RunMs=0;
 				   RunStep=8;//直线 //RunStep=12;
 				   WaterPump(); 
-					SetXMotor(1,20,160,1,2,20,160,1);
+					SetXMotor(2,40,160,2,1,40,160,2);//SetXMotor(1,20,160,1,2,20,160,1);
 				    SetMotorcm(4,9000); //转圈
-					SetXMotor(2,20,160,2,1,20,160,2);//2--号机参数
+					SetXMotor(1,40,160,1,2,40,160,1);//SetXMotor(2,20,160,2,1,20,160,2);//2--号机参数
 					SetMotorcm(4,1000); //转圈
+					SetXMotor(1,40,160,2,2,40,160,2);//SetXMotor(2,20,160,1,1,20,160,1); //右转
+			         SetMotorcm(3,9000);
+					
+					
 		    	}
 				else{
 					RunMs=0;
 					RunStep=2;//直线 //RunStep=12;
 				  // SetXMotor(1,20,40,1,1,20,40,1);//SetXMotor(1,20,25,1,1,20,40,1); //直行
                   // SetXMotor(1,20,35,1,1,20,40,1);//1--号机参数
-                   SetXMotor(1,20,160,1,1,20,160,1);//2--号机参数
+                    SetXMotor(2,40,160,2,2,40,160,2);//SetXMotor(1,20,160,1,1,20,160,1);//2--号机参数
 				   SetMotorcm(1,5000);				
 				}
 
@@ -177,7 +181,7 @@ void  CheckRun()
 			    RunStep=2; 
 				//SetXMotor(1,20,40,1,1,20,60,1);//SetXMotor(1,20,25,1,1,20,40,1);//SetXMotor(1,20,25,1,1,20,40,1); //直行
 				// SetXMotor(1,20,35,1,1,20,40,1);//1--号机参数
-				SetXMotor(1,20,160,1,1,20,160,1);//2--号机参数
+				SetXMotor(2,40,160,2,2,40,160,2);//(1,20,160,1,1,20,160,1);//2--号机参数
 				SetMotorcm(1,5000);		   
 		   }
 		 }
