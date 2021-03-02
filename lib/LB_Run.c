@@ -25,7 +25,7 @@ version  : ���ļ�β��
 /***************************************************************
 	*
 	*Function Name:void CheckRun()
-	*Function : 
+	*Function : mop the floor run model
 	*Input Ref: NO
 	*Return Ref: No
 	*
@@ -45,7 +45,7 @@ void  CheckRun()
 			}
 			break;
 
-		case 1:
+		case 1: //straight line 
 		{
 
 			//SetXMotor(1,20,40,1,1,20,40,1);
@@ -60,22 +60,22 @@ void  CheckRun()
 		case 2:
         {
 			
-         if((GroundDp[0]>GroundMin)||(GroundDp[1]>GroundMin)||(GroundDp[2]>GroundMin))
+           if((GroundDp[0]>GroundMin)||(GroundDp[1]>GroundMin)||(GroundDp[2]>GroundMin))
 			{
 				 AllStop();
 				 //SetXMotor(1,20,1,1,1,20,1,1);
-				  RunStep=3;
+				 RunStep=3;
 				RunMs=0;			
 			}
-			if((RightMoveMotorData.Flag==1)||(LeftMoveMotorData.Flag==1))
+			else if((RightMoveMotorData.Flag==1)||(LeftMoveMotorData.Flag==1))
 			{
-				//SetXMotor(1,20,40,1,1,20,40,1);  //直行
+				//SetXMotor(1,20,40,1,1,20,40,1);  //直�??
 				//SetXMotor(1,20,40,1,1,20,40,1);//1--号机参数SetXMotor(1,20,35,1,1,20,40,1);
 				SetXMotor(2,40,160,2,2,40,160,2);//SetXMotor(1,20,160,1,1,20,160,1);//2--号机参数
-				SetMotorcm(1,5000);			
+				SetMotorcm(1,5000);	
+				
 			}
-			
-			if(RunMs>2000)//if(RunMs>3000)
+			else if(RunMs>2000)//if(RunMs>3000)
 			{
 				 AllStop();
 				 //SetXMotor(1,20,1,1,1,20,1,1);
@@ -87,10 +87,11 @@ void  CheckRun()
 			break;
 		case 3:
 		{
-		   if(RunMs>20)
+		   if(RunMs>=0)
 		   {
 			SetXMotor(1,40,160,2,1,40,160,2);//SetXMotor(2,20,160,1,2,20,160,1); //后退
 			SetMotorcm(2,1000);
+			RunMs = 0;
 			RunStep=4;		   
 		   }
 		    
@@ -101,14 +102,18 @@ void  CheckRun()
 			if(RunMs>120)
 			{
 				AllStop();
-				//SetXMotor(2,20,1,1,2,20,1,1);
+				if( gPumpWater_flag==1){
+				   gPumpWater_flag =0;
+				   WaterPumpStop();
+				   PumpTime = 0;
+				}
 				RunMs=0;
 				RunStep=5;
 			}
 			
 		}
-			break;
-	    case 5:
+		break;
+	    case 5: //turn right
 		  {
 			if(RunMs>20)
 			{
@@ -124,7 +129,6 @@ void  CheckRun()
 			if(RunMs > 100)//if(RunMs>100)
 			{
 				AllStop();
-				//SetXMotor(2,20,1,1,1,20,1,1);
 				RunMs=0;
 				RunStep=7;
 			}
@@ -132,31 +136,30 @@ void  CheckRun()
 			break;
 		case 7:
 			
-			if(RunMs>20) //20 * 10ms =200ms
+			if(RunMs>30) //20 * 10ms =200ms
 			{
 
 				if(PumpTime >19 ){ //WT.EDIT
 
-					
-				   RunMs=0;
-				   RunStep=8;//直线 //RunStep=12;
-				   WaterPump(); 
-					SetXMotor(2,40,160,2,1,40,160,2);//SetXMotor(1,20,160,1,2,20,160,1);
-				    SetMotorcm(4,9000); //转圈
-					SetXMotor(1,40,160,1,2,40,160,1);//SetXMotor(2,20,160,2,1,20,160,2);//2--号机参数
-					SetMotorcm(4,1000); //转圈
-					SetXMotor(1,40,160,2,2,40,160,2);//SetXMotor(2,20,160,1,1,20,160,1); //右转
-			         SetMotorcm(3,9000);
+					WaterPump(); //spray water
+					gPumpWater_flag=1;
+                    SetXMotor(2,40,160,2,2,40,160,2);//straight line
+                    SetMotorcm(1,5000);	
+					 RunMs=0;
+				    RunStep=8;//直线 
+//					SetXMotor(2,40,160,2,1,40,160,2);//SetXMotor(1,20,160,1,2,20,160,1);
+//				    SetMotorcm(4,9000); //�?�?
+//					SetXMotor(1,40,160,1,2,40,160,1);//SetXMotor(2,20,160,2,1,20,160,2);//2--号机参数
+//					SetMotorcm(4,1000); //�?�?
+//					SetXMotor(1,40,160,2,2,40,160,2);//SetXMotor(2,20,160,1,1,20,160,1); //右转
+//			        SetMotorcm(3,9000);
 					
 					
 		    	}
 				else{
 					RunMs=0;
-					RunStep=2;//直线 //RunStep=12;
-				  // SetXMotor(1,20,40,1,1,20,40,1);//SetXMotor(1,20,25,1,1,20,40,1); //直行
-                  // SetXMotor(1,20,35,1,1,20,40,1);//1--号机参数
-                    SetXMotor(2,40,160,2,2,40,160,2);//SetXMotor(1,20,160,1,1,20,160,1);//2--号机参数
-				   SetMotorcm(1,5000);				
+					RunStep=1;//直线 
+             		
 				}
 
 				
@@ -164,28 +167,37 @@ void  CheckRun()
 		
 	
 			break;
+	
 		 case 8: // water pump
 
-			        if(RunMs > 9){
+				if((GroundDp[0]>GroundMin)||(GroundDp[1]>GroundMin)||(GroundDp[2]>GroundMin))
+				{
+					 AllStop();
+					 //WaterPumpStop();
+					 //SetXMotor(1,20,1,1,1,20,1,1);
+					 RunStep=3;
+					RunMs=0;			
+				}
+				else if(RunMs > 100){ //200
+					    AllStop();
 						WaterPumpStop();
-				        RunMs=0;
-					    RunStep=9;//直线 //RunStep=12;
-			        }
+				        PumpTime=0;
+				  	    RunMs=0;
+					    RunStep=9;//直线 
+					    gPumpWater_flag=0;
+			      }
 		 break;
+
 		 case 9:
-		 {
-		   if(RunMs > 240)
-		   {
-			    PumpTime=0;
-			    RunMs=0;
-			    RunStep=2; 
-				//SetXMotor(1,20,40,1,1,20,60,1);//SetXMotor(1,20,25,1,1,20,40,1);//SetXMotor(1,20,25,1,1,20,40,1); //直行
-				// SetXMotor(1,20,35,1,1,20,40,1);//1--号机参数
-				SetXMotor(2,40,160,2,2,40,160,2);//(1,20,160,1,1,20,160,1);//2--号机参数
-				SetMotorcm(1,5000);		   
-		   }
-		 }
+		 	if(RunMs >30){
+				
+  				RunMs =0;
+				RunStep = 1;
+
+            }
+
 		 break;
+		
 		}
 	}
   }
@@ -244,7 +256,7 @@ void CheckMode(INT8U Key)
 	  Step=0;
 	  RunSecond=0;
 	  AllStop();
-
+	  WaterPumpStop();//WT.EDIT 2021.02.27
 			  SetEdge(0);
 			  RunStep=0;
 			  //SetBuzzerTime(2);
@@ -263,6 +275,7 @@ void CheckMode(INT8U Key)
 		 {
 
 			AllStop();
+			WaterPumpStop();//WT.EDIT 2021.02.27
 
 		 }
 		 break;
@@ -348,6 +361,7 @@ void CheckMode(INT8U Key)
 			     ADCtl=0;
 			     RunStep=0;
 			  	 AllStop();
+				 WaterPumpStop();//WT.EDIT 2021.02.27
 
 				 SetEdge(0);
 
@@ -359,7 +373,7 @@ void CheckMode(INT8U Key)
 			     ADCtl=0;
 			     RunStep=0;
 			  	 AllStop();
-
+				 WaterPumpStop();//WT.EDIT 2021.02.27
 				 SetEdge(0);
 
 				 Step=5;
@@ -398,6 +412,7 @@ void CheckMode(INT8U Key)
 		     ADCtl=0;
 		     RunStep=0;
 		  	 AllStop();
+			 WaterPumpStop();//WT.EDIT 2021.02.27
 			 SetEdge(0);
 
 			 Step=5;
@@ -424,6 +439,7 @@ void CheckMode(INT8U Key)
 		     ADCtl=0;
 		     RunStep=5;
 		  	 AllStop();
+			 WaterPumpStop();//WT.EDIT 2021.02.27
 			 SetEdge(0);
 
 
@@ -564,6 +580,7 @@ void CheckMode(INT8U Key)
 			ADFlag=1;
 			RunMs =0;
 			AllStop();
+			WaterPumpStop();//WT.EDIT 2021.02.27
 			RunStep=0;
 			LedBlueON();
 			LedRedON();

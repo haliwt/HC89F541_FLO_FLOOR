@@ -71,7 +71,7 @@ void main(void)
 	Init_MotorSpeed();
     InitMotorIO();
 	Init_Usart1();
-	InitFanEdgeIO(); //��ˮ����
+	InitFanEdgeIO(); //
 	InitLed();
 	InitKey();
 	InitPowerIn();
@@ -218,7 +218,7 @@ void INT8_17_Rpt() interrupt INT8_17_VECTOR
 	  ReadRightPulsed();
 	  
 	}
-	else if(PINTF1&0x80)			 //�ж�INT15�жϱ�־λ--��س��
+	else if(PINTF1&0x80)			 //P1_7 GPIO INT15 interrupt number #15 -CHARGE_SATA
 	{
 	  PINTF1 &=0X7f;				//���INT15�жϱ�־λ---��س��״ֵ̬		
 	  PowerCountErr++;

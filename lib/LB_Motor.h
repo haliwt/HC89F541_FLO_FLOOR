@@ -87,5 +87,6 @@ KAKA_Motor_EXT  void AdjustSpeed();
 KAKA_Motor_EXT  void SetMotorcm(INT8U mode,INT16U Setcm);
 KAKA_Motor_EXT  void WaterPump(); //WT.EDIT 2020.11.10
 KAKA_Motor_EXT  void WaterPumpStop(void); //WT.EDIT
+KAKA_Motor_EXT void WaterPumpStop(void);
 
 #endif

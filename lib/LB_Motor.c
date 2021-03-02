@@ -53,12 +53,14 @@ void InitMotorIO(void)
     P1M2 = 0xC2;                        //P12设置为推挽输出
     P1M3 = 0xC2;                        //P13设置为推挽输出
     P1M4 = 0xC2;                        //P14设置为推挽输出
-    P1M6 = 0xC2;                        //P14设置为推挽输出，马达速度控制IO
+    P1M6 = 0xC2;                        //P16设置为推挽输出，马达速度控制IO
+    
   P1_1=0;
   P1_2=0;
   P1_3=0;
   P1_4=0;
   P1_6=0;
+ 
 
 }
 /**************************************************************
@@ -84,8 +86,8 @@ void SetEdge(INT8U status)
 	 *
 	 *Function Name:void InitMotorRightForward(void)
 	 *Function : motor run forward 
-	 *
-	 *
+	 *Input Ref:NO
+	 *Return Ref:NO
 	 *
 **************************************************************/
 void InitMotorLeftForward(void)
@@ -95,8 +97,8 @@ void InitMotorLeftForward(void)
     P1_4=0; //IN1 //Left motor
 	///*
 	PWM0_MAP = 0x14;					//PWM0通道映射P14口
-    PWM0C = 0x00;   //motor 快			//PWM0高有效，PWM01高有效，00: 1分频 01：时钟8分频 
-    PWMM |= 0x10;						//PWM0工作于互补模式						
+    PWM0C = 0x01;   //PWM0C = 0x00;			//PWM0高有效，PWM01高有效，00: 1分频 01：时钟8分频 
+    PWMM |= 0x10;						//PWM0工作于独立模式，PWM0禁止自动重装载						
 
 	//独立模式下，PWM0和PWM01共用一个周期寄存器
 	//PWM0的占空比调节使用			PWM0组的占空比寄存器
@@ -116,9 +118,9 @@ void InitMotorLeftForward(void)
 	// 			= 341 	 / 2000000
 	//			= 170.5us		   占空比为 170.5/511.5 = 33.3%
 
-	PWM0DH = 0x00;		//left				//PWM0高4位占空比0x01
-	PWM0DL = 0x60; //WT.EDIT //PWM0DL = 0x60;						//PWM0低8位占空比0x55
-	PWMEN |= 0x01;						//使能PWM0以及PWM01
+	PWM0DH = 0x00;				//PWM0高4位占空比0x01
+	PWM0DL = 0x80; 				//PWM0低8位占空比0x55
+	PWMEN |= 0x01;				//使能PWM0以及PWM01
    //*/
    //P1_4=1;
 }
@@ -136,8 +138,8 @@ void InitMotorLeftForward(void)
     P1_2=0; //IN1 
 	///*
 	PWM01_MAP = 0x11;					//PWM01通道映射P11口
-    PWM0C = 0x00;						//PWM0高有效，PWM01高有效，时钟8分频 
-    PWMM |= 0x10;						//PWM0工作于互补模式						
+    PWM0C = 0x01;						//PWM0高有效，PWM01高有效，时钟8分频 
+    PWMM |= 0x10;						//PWM0工作于独立模式						
 
 	//独立模式下，PWM0和PWM01共用一个周期寄存器
 	//PWM0的占空比调节使用			PWM0组的占空比寄存器
@@ -158,7 +160,7 @@ void InitMotorLeftForward(void)
 
 
 	PWM0DTH = 0x00;						//PWM01高4位占空比0x01
-	PWM0DTL = 0x80 ; //WT.EDIT //0x60;						//PWM01低8位占空比0x55
+	PWM0DTL = 0x80 ; 	//PWM01低8位占空比0x55
 	PWMEN |= 0x10;						//使能PWM0以及PWM01
    	//*/
 	//P1_1=1;
@@ -178,7 +180,7 @@ void InitMotorLeftRetreat(void)
     P1_4=0; //IN1
 	///*
 	PWM0_MAP = 0x13;					//PWM0通道映射P13口
-    PWM0C = 0x00;						//PWM0高有效，PWM01高有效，时钟8分频 
+    PWM0C = 0x01;	//PWM0C = 0x00;						//PWM0高有效，PWM01高有效，时钟8分频 
     PWMM |= 0x10;						//PWM0工作于独立模式			
 
 	//独立模式下，PWM0和PWM01共用一个周期寄存器
@@ -218,8 +220,8 @@ void InitMotorRightRetreat(void)
     P1_2=0; //IN1  ---forward 
 	///*
 	PWM01_MAP = 0x12;					//PWM01通道映射P12口
-    PWM0C = 0x00;                      //WT.EDIT 2020.22.20//0x00; //PWM0高有效，PWM01高有效，时钟8分频 
-    PWMM |= 0x10;						//PWM0工作于互补模式						
+    PWM0C = 0x01;//PWM0C = 0x00;       //PWM0高有效，PWM01高有效，时钟8分频 
+    PWMM |= 0x10;						//PWM0工作于独立模式					
 
 	//独立模式下，PWM0和PWM01共用一个周期寄存器
 	//PWM0的占空比调节使用			PWM0组的占空比寄存器
@@ -265,19 +267,7 @@ void RightStop()
     P1_2=0;
 
 }
-/**************************************************************
-	  *
-	  *Function Name:void WaterPumpStop(void)
-	  *Function : motor return run
-	  *
-	  *
-	  *
-**************************************************************/
-void WaterPumpStop(void)
-{
-   //PWMEN &= 0xe5;
-   P3_3 =0;
-}
+
 /**************************************************************
 	  *
 	  *Function Name:void WaterPumpStop(void)
@@ -293,6 +283,7 @@ void AllStop()
     P1_2=0;
     P1_3=0;
     P1_4=0;
+	//P3_3=0;  //pump water
 }
 
 /**************************************************************
@@ -745,7 +736,6 @@ void SetXMotor(
 	}
 	else 
 	{
-
 		if(Leftmotor==1)  //CW 电机方向
 		{
 			//if(LeftMoveMotorData.MotorMode!=Leftmotor)
@@ -801,7 +791,7 @@ void SetXMotor(
 	else 
 	{
 
-		if(Rightmotor==1) //motor CW 
+		if(Rightmotor==1) //motor CW  ,
 		{
 			//if(RightMoveMotorData.MotorMode!=Rightmotor)
 			{
@@ -1002,42 +992,20 @@ void SetMotorcm(INT8U mode,INT16U Setcm)
 **************************************************************/
 void WaterPump(void)
 {
-   P3M3 = 0xC2;                        //P33设置为推挽输出,喷水马达，	
+  // P3M3 = 0xC2;                        //P33设置为推挽输出,喷水马达，	
    P3_3=1; //喷水
-	/*
-   P3M3 = 0xC2;                        //P33设置为推挽输出,喷水马达，
-  // P3_3=1; //喷水
-  
-   PWM1_MAP = 0x33;					//PWM1通道映射P33口
-
-    PWM1C = 0x01;//WT.EDIT	//0x00					//PWM1高有效，PWM11高有效，时钟8分频 
-    PWMM |= 0x10;						//PWM1工作于						
-
-	//独立模式下，PWM0和PWM01共用一个周期寄存器
-	//PWM0的占空比调节使用			PWM0组的占空比寄存器
-	//PWM01的占空比调节使用			PWM0组的死区寄存器
-
-	//周期计算 	= 0x03ff / (Fosc / PWM分频系数)		（Fosc见系统时钟配置的部分）
-	//			= 0x03ff / (16000000 / 8)			
-	// 			= 1023   /2000000
-	//			= 511.5us		   		约1.955kHz
-
-	PWM1PH = 0x03;						//周期高4位设置为0x03
-	PWM1PL = 0xff;						//周期低8位设置为0xFF
-
-	//占空比计算= 0x0155 / (Fosc / PWM分频系数)		（Fosc见系统时钟配置的部分）
-	//			= 0x0155 / (16000000 / 8)			
-	// 			= 341 	 / 2000000
-	//			= 170.5us		   占空比为 170.5/511.5 = 33.3%
-
-	PWM1DH = 0x01;						//PWM1高4位占空比0x01
-	PWM1DL = 0xff;	//WT.EDIT					//PWM1低8位占空比0x55													    
-
-	PWMEN |= 0x02;						//使能PWM1以及PWM11
-*/
-    
-
 }
 
-
+/**************************************************************
+	   *
+	   *Function Name:void WaterPumpStop()
+	   *Function : 水泵电机工作
+	   *Input Ref: NO
+	   *Retrn Ref: NO
+	   *
+**************************************************************/
+void WaterPumpStop(void)
+{
+  P3_3=0; //STOP
+}
 
