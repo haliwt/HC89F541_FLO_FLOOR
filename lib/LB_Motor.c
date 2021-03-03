@@ -898,7 +898,7 @@ void AdjustSpeed()
   {
    LeftMoveMotorData.SlopeTime=0;
    if(LeftMoveMotorData.RunSpeed>0)
-    LeftMoveMotorData.RunSpeed=LeftMoveMotorData.RunSpeed-5;//LeftMoveMotorData.RunSpeed--;//WT.EDIT
+    LeftMoveMotorData.RunSpeed=LeftMoveMotorData.RunSpeed-5;//LeftMoveMotorData.RunSpeed-5;//WT.EDIT
   }
  }
  else if(LeftMoveMotorData.RunSpeed<LeftMoveMotorData.EndSpeed)
@@ -926,7 +926,7 @@ void AdjustSpeed()
   if(RightMoveMotorData.SlopeTime>RightMoveMotorData.Slope)
   {
    RightMoveMotorData.SlopeTime=0;
-   RightMoveMotorData.RunSpeed=RightMoveMotorData.RunSpeed +5;//WT.EDIT //RightMoveMotorData.RunSpeed++;
+   RightMoveMotorData.RunSpeed=RightMoveMotorData.RunSpeed +10;//WT.EDIT //RightMoveMotorData.RunSpeed+5;
   }
  }
 

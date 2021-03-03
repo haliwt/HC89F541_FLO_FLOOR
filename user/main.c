@@ -92,7 +92,7 @@ void main(void)
 while(1)
 	{
 
-	  // CheckGround();
+	   CheckGround();
 	   CheckRun();
 	   kk=ReadKey();
 	   if(kk==0){
