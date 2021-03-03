@@ -97,7 +97,7 @@ void InitMotorLeftForward(void)
     P1_4=0; //IN1 //Left motor
 	///*
 	PWM0_MAP = 0x14;					//PWM0通道映射P14口
-    PWM0C = 0x01;   //PWM0C = 0x00;			//PWM0高有效，PWM01高有效，00: 1分频 01：时钟8分频 
+    PWM0C = 0x00;			//PWM0高有效，PWM01高有效，00: 1分频 01：时钟8分频 
     PWMM |= 0x10;						//PWM0工作于独立模式，PWM0禁止自动重装载						
 
 	//独立模式下，PWM0和PWM01共用一个周期寄存器
@@ -138,7 +138,7 @@ void InitMotorLeftForward(void)
     P1_2=0; //IN1 
 	///*
 	PWM01_MAP = 0x11;					//PWM01通道映射P11口
-    PWM0C = 0x01;						//PWM0高有效，PWM01高有效，时钟8分频 
+    PWM0C = 0x00;						//PWM0高有效，PWM01高有效，时钟8分频 
     PWMM |= 0x10;						//PWM0工作于独立模式						
 
 	//独立模式下，PWM0和PWM01共用一个周期寄存器
@@ -180,7 +180,7 @@ void InitMotorLeftRetreat(void)
     P1_4=0; //IN1
 	///*
 	PWM0_MAP = 0x13;					//PWM0通道映射P13口
-    PWM0C = 0x01;	//PWM0C = 0x00;						//PWM0高有效，PWM01高有效，时钟8分频 
+    PWM0C = 0x00;						//PWM0高有效，PWM01高有效，时钟8分频 
     PWMM |= 0x10;						//PWM0工作于独立模式			
 
 	//独立模式下，PWM0和PWM01共用一个周期寄存器
@@ -220,7 +220,7 @@ void InitMotorRightRetreat(void)
     P1_2=0; //IN1  ---forward 
 	///*
 	PWM01_MAP = 0x12;					//PWM01通道映射P12口
-    PWM0C = 0x01;//PWM0C = 0x00;       //PWM0高有效，PWM01高有效，时钟8分频 
+    PWM0C = 0x00;       //PWM0高有效，PWM01高有效，时钟8分频 
     PWMM |= 0x10;						//PWM0工作于独立模式					
 
 	//独立模式下，PWM0和PWM01共用一个周期寄存器

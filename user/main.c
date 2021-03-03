@@ -92,11 +92,11 @@ void main(void)
 while(1)
 	{
 
-	   CheckGround();
+	  // CheckGround();
 	   CheckRun();
 	   kk=ReadKey();
 	   if(kk==0){
-	     kk=CheckHandsetIR();
+	    // kk=CheckHandsetIR();
 	   }
        CheckMode(kk);
 	  
